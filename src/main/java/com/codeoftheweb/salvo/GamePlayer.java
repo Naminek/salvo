@@ -18,7 +18,7 @@ public class GamePlayer {
     private long playerId;
     private Date date;
 
-    public GamePlayer(Player user1, Game game, Date date) {
+    public GamePlayer() {
     }
 
     public GamePlayer(long game, long player, Date currentDate) {
@@ -33,5 +33,29 @@ public class GamePlayer {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public long getGameId() {
+        return gameId;
+    }
+
+    public void setGameId(long gameId) {
+        this.gameId = gameId;
+    }
+
+    public long getPlayerId() {
+        return playerId;
+    }
+
+    public void setPlayerId(long playerId) {
+        this.playerId = playerId;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
 }

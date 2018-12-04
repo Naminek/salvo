@@ -39,7 +39,7 @@ public class SalvoApplication {
             gameRepository.save(new Game(date1));
             gameRepository.save(new Game(date2));
 
-//            gamePlayerRepository.save(new GamePlayer(user1, new Game(date), date));
+            gamePlayerRepository.save(new GamePlayer(user1.getPlayerId(), new Game(date).getGameId(), date));
 
 
 
