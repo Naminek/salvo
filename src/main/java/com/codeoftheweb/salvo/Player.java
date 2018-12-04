@@ -21,8 +21,8 @@ public class Player {
     public Player() {
     }
 
-    public Player(String user) {
-        userName = user;
+    public Player(String email) {
+        userName = email;
     }
 
     public String getUserName() {
