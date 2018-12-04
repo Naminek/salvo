@@ -16,13 +16,19 @@ public class SalvoApplication {
     }
 
     @Bean
-    public CommandLineRunner initData(PlayerRepository playerRepository, GameRepository gameRepository) {
+    public CommandLineRunner initData(PlayerRepository playerRepository, GameRepository gameRepository, GamePlayerRepository gamePlayerRepository) {
         return (args) -> {
-            playerRepository.save(new Player("aaa@aaaaa"));
-            playerRepository.save(new Player("bbb@bbbbb"));
-            playerRepository.save(new Player("ccc@ccccc"));
-            playerRepository.save(new Player("ddd@ddddd"));
-            playerRepository.save(new Player("eee@eeeee"));
+            Player user1 = new Player("aaa@aaaaa");
+            Player user2 = new Player("bbb@bbbbb");
+            Player user3 = new Player("ccc@ccccc");
+            Player user4 = new Player("ddd@ddddd");
+            Player user5 = new Player("eee@eeeee");
+
+            playerRepository.save(user1);
+            playerRepository.save(user2);
+            playerRepository.save(user3);
+            playerRepository.save(user4);
+            playerRepository.save(user5);
 
 
             Date date = new Date();
@@ -32,6 +38,11 @@ public class SalvoApplication {
             gameRepository.save(new Game(date));
             gameRepository.save(new Game(date1));
             gameRepository.save(new Game(date2));
+
+//            gamePlayerRepository.save(new GamePlayer(user1, new Game(date), date));
+
+
+
         };
     }
 }

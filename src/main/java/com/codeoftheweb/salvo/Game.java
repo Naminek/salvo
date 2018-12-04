@@ -2,10 +2,8 @@ package com.codeoftheweb.salvo;
 
 
 import org.hibernate.annotations.GenericGenerator;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+
+import javax.persistence.*;
 
 import java.util.Date;
 
@@ -17,30 +15,33 @@ public class Game {
     @GenericGenerator(name = "native", strategy = "native")
     private long id;
 
-    private Date currentDate;
+    private Date date;
+
+//    @OneToMany(mappedBy = "game", fetch = FetchType.EAGER)
+//    Set<GamePlayer> gamePlayer;
 
     public Game() {
     }
 
-    public Game(Date date) {
-        currentDate = date;
+    public Game(Date currentDate) {
+        date = currentDate;
     }
 
-    public long getId() {
+    public long getGameId() {
         return id;
     }
 
     public Date getCurrentDate(){
-        return currentDate;
+        return date;
     }
 
 
-    public void setId(long id) {
+    public void setGameId(long id) {
         this.id = id;
     }
 
-    public void setCurrentDate(Date date) {
-        this.currentDate = date;
+    public void setCurrentDate(Date currentDate) {
+        this.date = currentDate;
     }
 }
 
