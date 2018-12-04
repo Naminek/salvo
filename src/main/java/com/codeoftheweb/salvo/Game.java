@@ -7,38 +7,40 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-import java.time.format.DateTimeFormatter;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 @Entity
 public class Game {
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native", strategy = "native")
     private long id;
-    private String currentDate;
+
+    private Date currentDate;
 
     public Game() {
     }
 
-    public static void main(String[] args) {
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
-        LocalDateTime now = LocalDateTime.now();
-        System.out.println(dtf.format(now));
+    public Game(Date date) {
+        currentDate = date;
     }
 
-    public String getCurrentDate() {
+    public long getId() {
+        return id;
+    }
+
+    public Date getCurrentDate(){
         return currentDate;
     }
 
-    public void setCurrentDate(String currentDate) {
-        this.currentDate = currentDate;
+
+    public void setId(long id) {
+        this.id = id;
     }
 
-    public String toString() {
-        return currentDate;
+    public void setCurrentDate(Date date) {
+        this.currentDate = date;
     }
 }
 
