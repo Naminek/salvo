@@ -31,15 +31,30 @@ public class SalvoApplication {
             playerRepository.save(user5);
 
 
-            Date date = new Date();
-            Date date1 = date.from(date.toInstant().plusSeconds(3600));
-            Date date2 = date.from(date.toInstant().plusSeconds(7200));
+            Date date1 = new Date();
+            Date date2 = date1.from(date1.toInstant().plusSeconds(3600));
+            Date date3 = date1.from(date1.toInstant().plusSeconds(7200));
 
-            gameRepository.save(new Game(date));
-            gameRepository.save(new Game(date1));
-            gameRepository.save(new Game(date2));
+            Game game1 = new Game(date1);
+            Game game2 = new Game(date2);
+            Game game3 = new Game(date3);
 
-            gamePlayerRepository.save(new GamePlayer(user1, new Game(date), new Game((date))));
+            gameRepository.save(game1);
+            gameRepository.save(game2);
+            gameRepository.save(game3);
+
+            GamePlayer gamePlayer1 = new GamePlayer(date1);
+            user1.addGamePlayer(gamePlayer1);
+            game1.addGamePlayer(gamePlayer1);
+
+            GamePlayer gamePlayer2 = new GamePlayer(date2);
+            user3.addGamePlayer(gamePlayer2);
+            game1.addGamePlayer(gamePlayer2);
+
+            game1.getPlayers();
+
+            gamePlayerRepository.save(gamePlayer1);
+            gamePlayerRepository.save(gamePlayer2);
 
 
 

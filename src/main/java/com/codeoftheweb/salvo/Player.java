@@ -7,6 +7,13 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import java.util.List;
+import java.util.Set;
+import javax.persistence.FetchType;
+import java.util.HashSet;
+import java.util.stream.Collectors;
+
 
 @Entity
 public class Player {
@@ -17,12 +24,19 @@ public class Player {
     @GenericGenerator(name = "native", strategy = "native")
     private long id;
     private String userName;
+    @OneToMany(mappedBy="player", fetch=FetchType.EAGER)
+    private Set<GamePlayer> gamePlayers = new HashSet<>();
 
     public Player() {
     }
 
     public Player(String email) {
         userName = email;
+    }
+
+    public void addGamePlayer(GamePlayer gamePlayer) {
+        gamePlayer.setPlayer(this);
+        gamePlayers.add(gamePlayer);
     }
 
     public long getPlayerId() {
@@ -44,4 +58,10 @@ public class Player {
     public String toString() {
         return userName;
     }
+
+    public List<Game> getGames() {
+        return gamePlayers.stream().map(per -> per.getGame()).collect(Collectors.toList());
+    }
+
+
 }
