@@ -51,7 +51,8 @@ public class SalvoApplication {
             user3.addGamePlayer(gamePlayer2);
             game1.addGamePlayer(gamePlayer2);
 
-            game1.getPlayers();
+//            game1.getPlayers();
+//            user1.getGames();
 
             gamePlayerRepository.save(gamePlayer1);
             gamePlayerRepository.save(gamePlayer2);
