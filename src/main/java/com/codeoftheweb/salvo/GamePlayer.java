@@ -7,6 +7,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.util.Date;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.FetchType;
 
 @Entity
 public class GamePlayer {
@@ -18,13 +21,24 @@ public class GamePlayer {
     private long playerId;
     private Date date;
 
+//    @ManyToOne(fetch = FetchType.EAGER)
+//    @JoinColumn(name="player_id")
+//    private long player;
+//
+//    @ManyToOne(fetch = FetchType.EAGER)
+//    @JoinColumn(name="game_id")
+//    private long game;
+//    @JoinColumn(name="date")
+//    private Date date;
+
+
     public GamePlayer() {
     }
 
-    public GamePlayer(long game, long player, Date currentDate) {
-        gameId = game;
-        playerId = player;
-        date = currentDate;
+    public GamePlayer(Player player, Game game, Game date) {
+        this.gameId = player.getPlayerId();
+        this.playerId = game.getGameId();
+        this.date = date.getCurrentDate();
     }
 
     public long getId() {
@@ -34,6 +48,9 @@ public class GamePlayer {
     public void setId(long id) {
         this.id = id;
     }
+
+
+
 
     public long getGameId() {
         return gameId;
