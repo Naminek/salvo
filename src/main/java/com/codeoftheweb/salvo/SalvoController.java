@@ -10,7 +10,6 @@ import java.util.stream.Collectors;
 import java.util.List;
 
 
-
 @RestController
 @RequestMapping("/api")
 public class SalvoController {
@@ -20,11 +19,11 @@ public class SalvoController {
 
 
     @RequestMapping("/games")
-//    public Map<List<Long>, Integer> getGames() {
-//        return gameRepo.findAll().stream().map(game -> game.getGameId()).collect(Collectors.toList());
-//    }
-    public List<Long> getGames() {
-        return gameRepo.findAll().stream().map(game -> game.getGameId()).collect(Collectors.toList());
+    public List<Map<String, Object>> getGames() {
+        return gameRepo.findAll().stream().map(game -> new HashMap<String, Object>() {{
+            put("gameId", game.getGameId());
+            put("created", game.getCreatedDate());
+        }}).collect(Collectors.toList());
     }
 
 
