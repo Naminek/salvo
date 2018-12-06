@@ -37,7 +37,7 @@ public class Game {
         return id;
     }
 
-    public Date getCurrentDate(){
+    public Date getCreatedDate(){
         return date;
     }
 
@@ -46,8 +46,8 @@ public class Game {
         this.id = id;
     }
 
-    public void setCurrentDate(Date currentDate) {
-        this.date = currentDate;
+    public void setCreatedDate(Date createdDate) {
+        this.date = createdDate;
     }
 
     public void addGamePlayer(GamePlayer gamePlayer) {
