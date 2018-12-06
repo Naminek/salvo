@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Salvo</title>
+</head>
+<body>
+    <div v-if="loading"></div>
+    <div v-else id="gameList">
+        <div v-for="(game, index) in games" :key="index">
+        <ol>
+        <li>Game{{game.gameId}}:
+            <ol>
+            <li>id: {{game.gameId}}</li>
+            <li>created date: {{game.created}}</li>
+            <li>created date: {{game.gamePlayers}}</li>
+            </ol>
+        </li>
+        
+        </ol>
+
+        </div>
+        
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <!-- <script src="https://code.jquery.com/jquery-2.2.0.js"></script> -->
+    <script src="games.js"></script>
+
+</body>
+
+</html>

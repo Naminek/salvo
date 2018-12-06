@@ -44,15 +44,20 @@ public class SalvoApplication {
             gameRepository.save(game3);
 
             GamePlayer gamePlayer1 = new GamePlayer(date1);
+            GamePlayer gamePlayer2 = new GamePlayer(date1);
             user1.addGamePlayer(gamePlayer1);
             game1.addGamePlayer(gamePlayer1);
-
-            GamePlayer gamePlayer2 = new GamePlayer(date2);
-            user3.addGamePlayer(gamePlayer2);
+            user2.addGamePlayer(gamePlayer2);
             game1.addGamePlayer(gamePlayer2);
+
+
+            GamePlayer gamePlayer3 = new GamePlayer(date2);
+            user1.addGamePlayer(gamePlayer3);
+            game2.addGamePlayer(gamePlayer3);
 
             gamePlayerRepository.save(gamePlayer1);
             gamePlayerRepository.save(gamePlayer2);
+            gamePlayerRepository.save(gamePlayer3);
 
 
 

@@ -39,11 +39,11 @@ public class GamePlayer {
         this.date = date;
     }
 
-    public long getId() {
+    public long getGamePlayerId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setGamePlayerId(long id) {
         this.id = id;
     }
 

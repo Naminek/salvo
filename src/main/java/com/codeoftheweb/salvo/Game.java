@@ -59,5 +59,14 @@ public class Game {
     public List<Player> getPlayers() {
         return gamePlayers.stream().map(per -> per.getPlayer()).collect(Collectors.toList());
     }
+
+    public Set<GamePlayer> getGamePlayers() {
+        return gamePlayers;
+    }
+
+    public void setGamePlayers(Set<GamePlayer> gamePlayers) {
+        this.gamePlayers = gamePlayers;
+    }
+
 }
 

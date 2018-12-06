@@ -43,12 +43,12 @@ public class Player {
         return id;
     }
 
-    public String getUserName() {
+    public String getEmail() {
         return userName;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setEmail(String email) {
+        this.userName = email;
     }
 
     public void setPlayerId(long id) {
