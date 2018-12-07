@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.text.SimpleDateFormat;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -37,8 +38,10 @@ public class Game {
         return id;
     }
 
-    public Date getCreatedDate(){
-        return date;
+    public String getCreatedDate(){
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss.SSS");
+        String stringDate = sdf.format(date);
+        return stringDate;
     }
 
 

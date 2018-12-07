@@ -7,33 +7,35 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Salvo</title>
 </head>
+
 <body>
     <div v-if="loading">
         <p>Loading...</p>
     </div>
     <div v-else id="gameList">
         <div v-for="(game, index) in games" :key="index">
-        <ol>
-        <li>Game{{game.gameId}}:
             <ol>
-            <li>id: {{game.gameId}}</li>
-            <li>created date: {{game.created}}</li>
-            <li>GamePlayers: 
-                <ol v-for="(player, index) in game.gamePlayers" :key="index">
-                    <li>ID: {{player.id}}
-                        <ol>
-                            <li>Player ID: {{player.player.id}}</li>
-                            <li>Player Email: {{player.player.email}}</li>
-                        </ol>
-                    </li>
-                </ol></li>
+                <li>Game{{game.gameId}}:
+                    <ol>
+                        <li>id: {{game.gameId}}</li>
+                        <li>created date: {{game.created}}</li>
+                        <li>GamePlayers:
+                            <ol v-for="(player, index) in game.gamePlayers" :key="index">
+                                <li>ID: {{player.id}}
+                                    <ol>
+                                        <li>Player ID: {{player.player.id}}</li>
+                                        <li>Player Email: {{player.player.email}}</li>
+                                    </ol>
+                                </li>
+                            </ol>
+                        </li>
+                    </ol>
+                </li>
+
             </ol>
-        </li>
-        
-        </ol>
 
         </div>
-        
+
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>

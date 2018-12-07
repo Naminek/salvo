@@ -9,7 +9,7 @@ var gameData = new Vue({
     },
 
     methods: {
-        loadGames(){
+        loadGames() {
             fetch("http://localhost:8080/api/games", {
                     method: "GET"
                 })
@@ -18,14 +18,10 @@ var gameData = new Vue({
                     this.games = json;
                     this.loading = false;
                     console.log(this.games);
-                    gameData.test();
                 })
                 .catch(function (error) {
                     console.log(error);
                 });
-        },
-        test() {
-            console.log("hi");
         }
     }
 })
