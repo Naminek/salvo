@@ -9,33 +9,35 @@
 </head>
 
 <body>
-    <div v-if="loading">
-        <p>Loading...</p>
-    </div>
-    <div v-else id="gameList">
-        <div v-for="(game, index) in games" :key="index">
-            <ol>
-                <li>Game{{game.gameId}}:
-                    <ol>
-                        <li>id: {{game.gameId}}</li>
-                        <li>created date: {{game.created}}</li>
-                        <li>GamePlayers:
-                            <ol v-for="(player, index) in game.gamePlayers" :key="index">
-                                <li>ID: {{player.id}}
-                                    <ol>
-                                        <li>Player ID: {{player.player.id}}</li>
-                                        <li>Player Email: {{player.player.email}}</li>
-                                    </ol>
-                                </li>
-                            </ol>
-                        </li>
-                    </ol>
-                </li>
+    <div id="gameList">
+        <div v-if="loading">
+            <p>Loading...</p>
+        </div>
+        <div v-else>
+            <div v-for="(game, index) in games" :key="index">
+                <ol>
+                    <li>Game{{game.gameId}}:
+                        <ol>
+                            <li>id: {{game.gameId}}</li>
+                            <li>created date: {{game.created}}</li>
+                            <li>GamePlayers:
+                                <ol v-for="(player, index) in game.gamePlayers" :key="index">
+                                    <li>ID: {{player.id}}
+                                        <ul>
+                                            <li>Player ID: {{player.player.id}}</li>
+                                            <li>Player Email: {{player.player.email}}</li>
+                                        </ul>
+                                    </li>
+                                </ol>
+                            </li>
+                        </ol>
+                    </li>
 
-            </ol>
+                </ol>
+
+            </div>
 
         </div>
-
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>

@@ -18,10 +18,14 @@ var gameData = new Vue({
                     this.games = json;
                     this.loading = false;
                     console.log(this.games);
+                    gameData.getDate();
                 })
                 .catch(function (error) {
                     console.log(error);
                 });
+        },
+        getDate() {
+            this.games.map(game => game.created = new Date(game.created).toLocaleString());
         }
     }
 })
