@@ -1,6 +1,7 @@
 package com.codeoftheweb.salvo;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,7 +23,7 @@ public class SalvoController {
     @RequestMapping("/games")
     public List<Map<String, Object>> getGames() {
         return gameRepo.findAll().stream().map(game -> new HashMap<String, Object>() {{
-            put("gameId", game.getGameId());
+            put("id", game.getGameId());
             put("created", game.getCreatedDate());
             put("gamePlayers", game.getGamePlayers().stream().map(gamePlayer -> new HashMap<String, Object>() {{
                 put("id", gamePlayer.getGamePlayerId());
@@ -31,6 +32,21 @@ public class SalvoController {
                     put("email", gamePlayer.getPlayer().getEmail());
                 }});
 
+            }}).collect(Collectors.toList()));
+        }}).collect(Collectors.toList());
+    }
+
+    @RequestMapping("/game_view/{nn}")
+    public List<Map<String, Object>> getGameView(@PathVariable("nn") Long gamePlayerId) {
+        return gameRepo.findAll().stream().map(game -> new HashMap<String, Object>() {{
+            put("id", game.getGameId());
+            put("created", game.getCreatedDate());
+            put("gamePlayers", game.getGamePlayers().stream().map(gamePlayer -> new HashMap<String, Object>() {{
+                put("id", gamePlayer.getGamePlayerId());
+                put("player", new HashMap<String, Object>() {{
+                    put("id", gamePlayer.getPlayer().getPlayerId());
+                    put("email", gamePlayer.getPlayer().getEmail());
+                }});
             }}).collect(Collectors.toList()));
         }}).collect(Collectors.toList());
     }
