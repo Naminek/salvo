@@ -68,6 +68,11 @@ public class GamePlayer {
     public void setShips(Set<Ship> ships) {
         this.ships = ships;
     }
+
+    public void addShip(Ship ship) {
+        ship.setGamePlayer(this);
+        ships.add(ship);
+    }
 }
 
 

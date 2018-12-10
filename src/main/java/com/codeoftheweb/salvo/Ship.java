@@ -26,6 +26,11 @@ public class Ship {
 
     }
 
+    public Ship(String shipType) {
+        this.shipType = shipType;
+
+    }
+
     public long getShipId() {
         return id;
     }
