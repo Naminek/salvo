@@ -2,8 +2,7 @@ package com.codeoftheweb.salvo;
 
 import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 public class Ship {
@@ -19,16 +18,16 @@ public class Ship {
     private  GamePlayer gamePlayer;
 
     @ElementCollection
-    private Set<String> shipLocation = new HashSet<>();
-
+//    private Set<String> shipLocations = new HashSet<>();
+    private List<String> locations = new ArrayList<>();
 
     public Ship() {
 
     }
 
-    public Ship(String shipType) {
+    public Ship(String shipType, List<String> locations) {
         this.shipType = shipType;
-
+        this.locations = locations;
     }
 
     public long getShipId() {
@@ -56,11 +55,11 @@ public class Ship {
         this.gamePlayer = gamePlayer;
     }
 
-    public Set<String> getShipLocation() {
-        return shipLocation;
+    public List<String> getlocations() {
+        return locations;
     }
 
-    public void setShipLocation(Set<String> shipLocation) {
-        this.shipLocation = shipLocation;
+    public void setlocation(List<String> locations) {
+        this.locations = locations;
     }
 }
