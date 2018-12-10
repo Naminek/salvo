@@ -18,17 +18,15 @@ public class SalvoApplication {
     @Bean
     public CommandLineRunner initData(PlayerRepository playerRepository, GameRepository gameRepository, GamePlayerRepository gamePlayerRepository, ShipRepository shipRepository) {
         return (args) -> {
-            Player user1 = new Player("aaa@aaaaa");
-            Player user2 = new Player("bbb@bbbbb");
-            Player user3 = new Player("ccc@ccccc");
-            Player user4 = new Player("ddd@ddddd");
-            Player user5 = new Player("eee@eeeee");
+            Player user1 = new Player("j.bauer@ctu.gov");
+            Player user2 = new Player("c.obrian@ctu.gov");
+            Player user3 = new Player("kim_bauer@gmail.com");
+            Player user4 = new Player("t.almeida@ctu.gov");
 
             playerRepository.save(user1);
             playerRepository.save(user2);
             playerRepository.save(user3);
             playerRepository.save(user4);
-            playerRepository.save(user5);
 
 
 
@@ -60,8 +58,12 @@ public class SalvoApplication {
             gamePlayerRepository.save(gamePlayer2);
             gamePlayerRepository.save(gamePlayer3);
 
-            Ship ship1 = new Ship("cruiser");
+            Ship ship1 = new Ship("Destroyer");
+            Ship ship2 = new Ship("Submarine");
+            Ship ship3 = new Ship("Patrol Boat");
             gamePlayer1.addShip(ship1);
+            gamePlayer1.addShip(ship2);
+            gamePlayer1.addShip(ship3);
 
 
 
