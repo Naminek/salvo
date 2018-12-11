@@ -48,11 +48,19 @@ public class SalvoController {
 
     @RequestMapping(value = "/game_view/{nn}", method = RequestMethod.GET)
     public Map<String, Object> getGameView(@PathVariable("nn") Long gamePlayerId) {
+        GamePlayer gamePlayer = gamePlayerRepo.findOne(gamePlayerId);
 
         return new HashMap<String, Object>() {{
-            put("id", gamePlayerRepo.findOne(gamePlayerId).getGame().getGameId());
-            put("created", gamePlayerRepo.findOne(gamePlayerId).getGame().getCreatedDate());
-            put("gamePlayers", createPlayerMap(gamePlayerRepo.findOne(gamePlayerId).getPlayer()));
+            put("id", gamePlayer.getGame().getGameId());
+            put("created", gamePlayer.getGame().getCreatedDate());
+            put("gamePlayers", getGamePlayer(gamePlayer.getGame()));
         }};
+    }
+
+    private List<HashMap<String, Object>> getGamePlayer(Game game) {
+        return game.getGamePlayers().stream().map(gamePlayer -> new HashMap<String, Object>() {{
+            put("id", gamePlayer.getGamePlayerId());
+            put("player", createPlayerMap(gamePlayer.getPlayer()));
+        }}).collect(Collectors.toList());
     }
 }
