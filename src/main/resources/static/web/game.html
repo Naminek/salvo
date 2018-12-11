@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Ship Locations</title>
+    <link rel="stylesheet" href="game.css">
 </head>
 
 <body>
@@ -15,7 +16,28 @@
         </div>
         <div v-else>
 
-            
+            <table>
+                <thead>
+                    <tr>
+                        <th v-for="(rowCell, index) in row" :key="index">{{ rowCell }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="(columnCell, index) in column" :key="index">
+                        <th>{{ columnCell }}</th>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+
+            </table>
+
         </div>
 
 

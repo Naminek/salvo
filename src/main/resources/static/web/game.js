@@ -1,9 +1,11 @@
 var oneGame = new Vue({
     el: '#oneGame',
     data: {
-        oneGame: [],
+        oneGameData: [],
         gamePlayerId: null,
-        loading: true
+        loading: true,
+        row:["","1","2","3","4","5","6","7","8"],
+        column:["A","B","C","D","E","F","G","H"]
     },
     created() {
         this.getUrl(),
@@ -17,17 +19,17 @@ var oneGame = new Vue({
                 })
                 .then(response => response.json())
                 .then(json => {
-                    this.oneGame = json;
+                    this.oneGameData = json;
                     this.loading = false;
-                    console.log(this.oneGame);
-                    gameData.getDate();
+                    console.log(this.oneGameData);
+                    oneGame.getDate();
                 })
                 .catch(function (error) {
                     console.log(error);
                 });
         },
         getDate() {
-            this.games.map(game => game.created = new Date(game.created).toLocaleString());
+            this.oneGameData.map(game => game.created = new Date(game.created).toLocaleString());
         },
         getUrl() {
             var splitUrl = window.location.href.split('?');

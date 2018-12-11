@@ -1,0 +1,9 @@
+#oneGame table {
+    border-collapse: collapse;
+    width: 80%;
+}
+
+#oneGame th, #oneGame td {
+    border: 1px black solid;
+    height: 30px;
+}
