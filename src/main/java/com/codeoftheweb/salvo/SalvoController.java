@@ -68,7 +68,7 @@ public class SalvoController {
 
     private List<HashMap<String, Object>> getShips (GamePlayer gamePlayer) {
         return gamePlayer.getShips().stream().map(ship -> new LinkedHashMap<String, Object>() {{
-            put("type", ship.getShipId());
+            put("type", ship.getShipType());
             put("locations", ship.getlocations());
         }}).collect(Collectors.toList());
     }
