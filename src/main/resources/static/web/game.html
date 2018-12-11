@@ -19,20 +19,27 @@
             <table>
                 <thead>
                     <tr>
-                        <th v-for="(rowCell, index) in row" :key="index">{{ rowCell }}</th>
+                        <th v-for="(row, index1) in rowNumber" :key="index1">{{ row }}</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="(columnCell, index) in column" :key="index">
-                        <th>{{ columnCell }}</th>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+                    <tr v-for="(location, index2) in locationArray" :key="index2">
+                        <td>{{ location[0] }}</td>
+                        <td>{{ location[1] }}</td>
+                        <td>{{ location[2] }}</td>
+                        <td>{{ location[3] }}</td>
+                        <td>{{ location[4] }}</td>
+                        <td>{{ location[5] }}</td>
+                        <td>{{ location[6] }}</td>
+                        <td>{{ location[7] }}</td>
+                        <td>{{ location[8] }}</td>
+                        <!-- <td v-for="(location, index4) in locationArray" :key="index4">{{ location[1] }}</td> -->
+                        <!-- <td v-for="(location, index5) in locationArray" :key="index5">{{ location[2] }}</td>
+                        <td v-for="(location, index6) in locationArray" :key="index6">{{ location[3] }}</td>
+                        <td v-for="(location, index7) in locationArray" :key="index7">{{ location[4] }}</td>
+                        <td v-for="(location, index8) in locationArray" :key="index8">{{ location[5] }}</td>
+                        <td v-for="(location, index9) in locationArray" :key="index9">{{ location[6] }}</td>
+                        <td v-for="(location, index10) in locationArray" :key="index10">{{ location[7] }}</td> -->
                     </tr>
                 </tbody>
 
