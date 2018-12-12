@@ -57,6 +57,13 @@ var oneGame = new Vue({
 			}
 			console.log(this.locationArray);
 
+		},
+		checkLocation(location) {
+			for(var i = 0; i < this.oneGameData.ships.length; i++){
+				if(this.oneGameData.ships[i].locations.includes(location)){
+					return true;
+				}
+			}
 		}
 	}
 })

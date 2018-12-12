@@ -3,7 +3,16 @@
     width: 80%;
 }
 
-#oneGame th, #oneGame td {
+#oneGame th,
+#oneGame td {
     border: 1px black solid;
     height: 30px;
+}
+
+.normal {
+    background-color: white;
+}
+
+.shipLocation {
+    background-color: blue;
 }

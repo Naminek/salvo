@@ -24,15 +24,15 @@
                 </thead>
                 <tbody>
                     <tr v-for="(location, index2) in locationArray" :key="index2">
-                        <td>{{ location[0] }}</td>
-                        <td>{{ location[1] }}</td>
-                        <td>{{ location[2] }}</td>
-                        <td>{{ location[3] }}</td>
-                        <td>{{ location[4] }}</td>
-                        <td>{{ location[5] }}</td>
-                        <td>{{ location[6] }}</td>
-                        <td>{{ location[7] }}</td>
-                        <td>{{ location[8] }}</td>
+                        <td class="normal" v-bind:class="{shipLocation: checkLocation(location[0])}">{{ location[0] }}</td>
+                        <td class="normal" v-bind:class="{shipLocation: checkLocation(location[1])}">{{ location[1] }}</td>
+                        <td class="normal" v-bind:class="{shipLocation: checkLocation(location[2])}">{{ location[2] }}</td>
+                        <td class="normal" v-bind:class="{shipLocation: checkLocation(location[3])}">{{ location[3] }}</td>
+                        <td class="normal" v-bind:class="{shipLocation: checkLocation(location[4])}">{{ location[4] }}</td>
+                        <td class="normal" v-bind:class="{shipLocation: checkLocation(location[5])}">{{ location[5] }}</td>
+                        <td class="normal" v-bind:class="{shipLocation: checkLocation(location[6])}">{{ location[6] }}</td>
+                        <td class="normal" v-bind:class="{shipLocation: checkLocation(location[7])}">{{ location[7] }}</td>
+                        <td class="normal" v-bind:class="{shipLocation: checkLocation(location[8])}">{{ location[8] }}</td>
                     </tr>
                 </tbody>
 
