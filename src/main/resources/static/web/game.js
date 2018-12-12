@@ -2,16 +2,20 @@ var oneGame = new Vue({
 	el: '#oneGame',
 	data: {
 		oneGameData: [],
+		gamePlayers:[],
 		gamePlayerId: null,
 		loading: true,
 		rowNumber: ["", "1", "2", "3", "4", "5", "6", "7", "8"],
 		columnLetter: ["A", "B", "C", "D", "E", "F", "G", "H"],
 		allCellArray: [],
-		locationArray: []
+		locationArray: [],
+		viewingPlayer: null,
+		oponentPlayer: null
 	},
 	created() {
 		this.getUrl(),
 			this.loadOneGame(),
+			this.showPlayers(),
 			this.makeTable()
 	},
 
@@ -23,8 +27,10 @@ var oneGame = new Vue({
 				.then(response => response.json())
 				.then(json => {
 					this.oneGameData = json;
+					this.gamePlayers = json.gamePlayers;
 					this.loading = false;
 					console.log(this.oneGameData);
+					console.log(this.gamePlayers);
 					oneGame.getDate();
 				})
 				.catch(function (error) {
@@ -64,6 +70,14 @@ var oneGame = new Vue({
 					return true;
 				}
 			}
+		},
+		showPlayers() {
+			// for(var i = 0; i < this.oneGameData.gamePlayers.length; i++) {
+			// 	if(this.gamePlayerId == this.oneGameData.gamePlayers[i].player.id) {
+			// 		this.viewingPlayer = this.oneGameData.gamePlayers.player.email;
+			// 	}
+			// }
+			console.log(this.gamePlayers.length);
 		}
 	}
 })

@@ -25,11 +25,6 @@ public class SalvoApplication {
             Player user3 = new Player("kim_bauer@gmail.com");
             Player user4 = new Player("t.almeida@ctu.gov");
 
-            playerRepository.save(user1);
-            playerRepository.save(user2);
-            playerRepository.save(user3);
-            playerRepository.save(user4);
-
 
 
             Date date1 = new Date();
@@ -40,25 +35,16 @@ public class SalvoApplication {
             Game game2 = new Game(date2);
             Game game3 = new Game(date3);
 
-            gameRepository.save(game1);
-            gameRepository.save(game2);
-            gameRepository.save(game3);
-
             GamePlayer gamePlayer1 = new GamePlayer(date1);
             GamePlayer gamePlayer2 = new GamePlayer(date1);
             user1.addGamePlayer(gamePlayer1);
             game1.addGamePlayer(gamePlayer1);
             user2.addGamePlayer(gamePlayer2);
             game1.addGamePlayer(gamePlayer2);
-
-
             GamePlayer gamePlayer3 = new GamePlayer(date2);
             user1.addGamePlayer(gamePlayer3);
             game2.addGamePlayer(gamePlayer3);
 
-            gamePlayerRepository.save(gamePlayer1);
-            gamePlayerRepository.save(gamePlayer2);
-            gamePlayerRepository.save(gamePlayer3);
 
             List<String> locations1 = Arrays.asList("H2", "H3", "H4");
             List<String> locations2 = Arrays.asList("E1", "F1", "G1");
@@ -79,6 +65,23 @@ public class SalvoApplication {
             gamePlayer2.addShip(ship4);
             gamePlayer2.addShip(ship5);
             gamePlayer2.addShip(ship6);
+
+
+            playerRepository.save(user1);
+            playerRepository.save(user2);
+            playerRepository.save(user3);
+            playerRepository.save(user4);
+
+            gameRepository.save(game1);
+            gameRepository.save(game2);
+            gameRepository.save(game3);
+
+            gamePlayerRepository.save(gamePlayer1);
+            gamePlayerRepository.save(gamePlayer2);
+            gamePlayerRepository.save(gamePlayer3);
+
+
+
 
             shipRepository.save(ship1);
             shipRepository.save(ship2);
