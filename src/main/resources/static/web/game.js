@@ -14,9 +14,9 @@ var oneGame = new Vue({
 	},
 	created() {
 		this.getUrl(),
-			this.loadOneGame(),
-			this.showPlayers(),
-			this.makeTable()
+			this.loadOneGame()
+			
+			// this.makeTable()
 	},
 
 	methods: {
@@ -26,20 +26,24 @@ var oneGame = new Vue({
 				})
 				.then(response => response.json())
 				.then(json => {
+					this.loading = false;
 					this.oneGameData = json;
 					this.gamePlayers = json.gamePlayers;
-					this.loading = false;
+					
 					console.log(this.oneGameData);
 					console.log(this.gamePlayers);
-					oneGame.getDate();
+					// this.getDate();
+					this.showPlayers();
+					this.makeTable();
+					
 				})
 				.catch(function (error) {
 					console.log(error);
 				});
 		},
-		getDate() {
-			this.oneGameData.map(game => game.created = new Date(game.created).toLocaleString());
-		},
+		// getDate() {
+		// 	this.oneGameData.map(game => game.created = new Date(game.created).toLocaleString());
+		// },
 		getUrl() {
 			var splitUrl = window.location.href.split('?');
 			// if (splitUrl.length == 2) {
@@ -72,12 +76,15 @@ var oneGame = new Vue({
 			}
 		},
 		showPlayers() {
-			// for(var i = 0; i < this.oneGameData.gamePlayers.length; i++) {
-			// 	if(this.gamePlayerId == this.oneGameData.gamePlayers[i].player.id) {
-			// 		this.viewingPlayer = this.oneGameData.gamePlayers.player.email;
-			// 	}
-			// }
-			console.log(this.gamePlayers.length);
+			for(var i = 0; i < this.oneGameData.gamePlayers.length; i++) {
+				if(this.gamePlayerId == this.oneGameData.gamePlayers[i].player.id) {
+					// this.viewingPlayer = this.oneGameData.gamePlayers.player.email;
+					console.log("hi");
+				}
+			}
+			console.log(this.gamePlayerId);
+			// console.log(this.gamePlayers);
+			// console.log(this.oneGameData.gamePlayers);
 		}
 	}
 })
