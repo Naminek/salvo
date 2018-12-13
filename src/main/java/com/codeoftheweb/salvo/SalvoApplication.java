@@ -18,7 +18,8 @@ public class SalvoApplication {
     }
 
     @Bean
-    public CommandLineRunner initData(PlayerRepository playerRepository, GameRepository gameRepository, GamePlayerRepository gamePlayerRepository, ShipRepository shipRepository) {
+    public CommandLineRunner initData(PlayerRepository playerRepository, GameRepository gameRepository,
+                                      GamePlayerRepository gamePlayerRepository, ShipRepository shipRepository, SalvoRepository salvoRepository) {
         return (args) -> {
             Player user1 = new Player("j.bauer@ctu.gov");
             Player user2 = new Player("c.obrian@ctu.gov");
@@ -67,6 +68,36 @@ public class SalvoApplication {
             gamePlayer2.addShip(ship6);
 
 
+            List<String> salvoLocations1 = Arrays.asList("B5", "C5", "F1");
+            List<String> salvoLocations2 = Arrays.asList("B4", "B5", "B6");
+            List<String> salvoLocations3 = Arrays.asList("F2", "D5");
+            List<String> salvoLocations4 = Arrays.asList("E1, H3, A2");
+            List<String> salvoLocations5 = Arrays.asList("A2, A4, G6");
+            List<String> salvoLocations6 = Arrays.asList("B5, D5, C7");
+            List<String> salvoLocations7 = Arrays.asList("A3, H6");
+            List<String> salvoLocations8 = Arrays.asList("C5, C6");
+
+
+            Salvo salvo1 = new Salvo(1, salvoLocations1);
+            Salvo salvo2 = new Salvo(1, salvoLocations2);
+            Salvo salvo3 = new Salvo(2, salvoLocations3);
+            Salvo salvo4 = new Salvo(2, salvoLocations4);
+            Salvo salvo5 = new Salvo(1, salvoLocations5);
+            Salvo salvo6 = new Salvo(1, salvoLocations6);
+            Salvo salvo7 = new Salvo(2, salvoLocations7);
+            Salvo salvo8 = new Salvo(2, salvoLocations8);
+            gamePlayer1.addSalvo(salvo1);
+            gamePlayer1.addSalvo(salvo3);
+            gamePlayer1.addSalvo(salvo5);
+            gamePlayer1.addSalvo(salvo7);
+            gamePlayer2.addSalvo(salvo2);
+            gamePlayer2.addSalvo(salvo4);
+            gamePlayer2.addSalvo(salvo6);
+            gamePlayer2.addSalvo(salvo8);
+
+
+
+
             playerRepository.save(user1);
             playerRepository.save(user2);
             playerRepository.save(user3);
@@ -80,9 +111,6 @@ public class SalvoApplication {
             gamePlayerRepository.save(gamePlayer2);
             gamePlayerRepository.save(gamePlayer3);
 
-
-
-
             shipRepository.save(ship1);
             shipRepository.save(ship2);
             shipRepository.save(ship3);
@@ -90,7 +118,14 @@ public class SalvoApplication {
             shipRepository.save(ship5);
             shipRepository.save(ship6);
 
-
+            salvoRepository.save(salvo1);
+            salvoRepository.save(salvo2);
+            salvoRepository.save(salvo3);
+            salvoRepository.save(salvo4);
+            salvoRepository.save(salvo5);
+            salvoRepository.save(salvo6);
+            salvoRepository.save(salvo7);
+            salvoRepository.save(salvo8);
         };
     }
 }
