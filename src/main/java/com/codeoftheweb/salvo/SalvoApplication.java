@@ -98,12 +98,12 @@ public class SalvoApplication {
             Salvo salvo8 = new Salvo(2, salvoLocations8);
             gamePlayer1.addSalvo(salvo1);
             gamePlayer1.addSalvo(salvo3);
-            gamePlayer1.addSalvo(salvo5);
-            gamePlayer1.addSalvo(salvo7);
+            gamePlayer3.addSalvo(salvo5);
+            gamePlayer3.addSalvo(salvo7);
             gamePlayer2.addSalvo(salvo2);
             gamePlayer2.addSalvo(salvo4);
-            gamePlayer2.addSalvo(salvo6);
-            gamePlayer2.addSalvo(salvo8);
+            gamePlayer4.addSalvo(salvo6);
+            gamePlayer4.addSalvo(salvo8);
 
 
 
@@ -128,6 +128,8 @@ public class SalvoApplication {
             shipRepository.save(ship4);
             shipRepository.save(ship5);
             shipRepository.save(ship6);
+            shipRepository.save(ship7);
+            shipRepository.save(ship8);
 
             salvoRepository.save(salvo1);
             salvoRepository.save(salvo2);
