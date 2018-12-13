@@ -2,7 +2,7 @@ var oneGame = new Vue({
 	el: '#oneGame',
 	data: {
 		oneGameData: [],
-		gamePlayers:[],
+		gamePlayers: [],
 		gamePlayerId: null,
 		loading: true,
 		rowNumber: ["", "1", "2", "3", "4", "5", "6", "7", "8"],
@@ -15,8 +15,6 @@ var oneGame = new Vue({
 	created() {
 		this.getUrl(),
 			this.loadOneGame()
-			
-			// this.makeTable()
 	},
 
 	methods: {
@@ -29,13 +27,13 @@ var oneGame = new Vue({
 					this.loading = false;
 					this.oneGameData = json;
 					this.gamePlayers = json.gamePlayers;
-					
+
 					console.log(this.oneGameData);
 					console.log(this.gamePlayers);
 					// this.getDate();
 					this.showPlayers();
 					this.makeTable();
-					
+
 				})
 				.catch(function (error) {
 					console.log(error);
@@ -65,26 +63,25 @@ var oneGame = new Vue({
 				var smallArray = this.allCellArray.slice(startSlice, startSlice + 9);
 				this.locationArray.push(smallArray);
 			}
-			console.log(this.locationArray);
+			// console.log(this.locationArray);
 
 		},
 		checkLocation(location) {
-			for(var i = 0; i < this.oneGameData.ships.length; i++){
-				if(this.oneGameData.ships[i].locations.includes(location)){
+			for (var i = 0; i < this.oneGameData.ships.length; i++) {
+				if (this.oneGameData.ships[i].locations.includes(location)) {
 					return true;
 				}
 			}
 		},
 		showPlayers() {
-			for(var i = 0; i < this.oneGameData.gamePlayers.length; i++) {
-				if(this.gamePlayerId == this.oneGameData.gamePlayers[i].player.id) {
-					// this.viewingPlayer = this.oneGameData.gamePlayers.player.email;
-					console.log("hi");
-				}
+			if (this.gamePlayerId == this.oneGameData.gamePlayers[0].player.id) {
+				this.viewingPlayer = this.oneGameData.gamePlayers[0].player.email;
+				this.oponentPlayer = this.oneGameData.gamePlayers[1].player.email;
+				console.log(this.oneGameData.gamePlayers[i].player.email);
+			} else {
+				this.viewingPlayer = this.oneGameData.gamePlayers[1].player.email;
+				this.oponentPlayer = this.oneGameData.gamePlayers[0].player.email;
 			}
-			console.log(this.gamePlayerId);
-			// console.log(this.gamePlayers);
-			// console.log(this.oneGameData.gamePlayers);
 		}
 	}
 })

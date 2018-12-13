@@ -16,3 +16,8 @@
 .shipLocation {
     background-color: blue;
 }
+
+#players span {
+    border: 1px black solid;
+    padding: 5px;
+}
