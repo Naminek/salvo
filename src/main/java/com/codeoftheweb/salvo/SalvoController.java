@@ -39,7 +39,7 @@ public class SalvoController {
 
     private Map<String, Object> getPlayers(Player player) {
         return new LinkedHashMap<String, Object>() {{
-            put("id", player.getPlayerId());
+            put("playerId", player.getPlayerId());
             put("email", player.getEmail());
         }};
     }
@@ -49,7 +49,7 @@ public class SalvoController {
         GamePlayer gamePlayer = gamePlayerRepo.findOne(gamePlayerId);
 
         return new LinkedHashMap<String, Object>() {{
-            put("id", gamePlayer.getGame().getGameId());
+            put("gameId", gamePlayer.getGame().getGameId());
             put("created", gamePlayer.getGame().getCreatedDate());
             put("gamePlayers", getGamePlayers(gamePlayer.getGame()));
             put("ships", getShips(gamePlayer));
@@ -60,7 +60,7 @@ public class SalvoController {
     private List<HashMap<String, Object>> getGamePlayers(Game game) {
         return game.getGamePlayers()
                 .stream().map(gamePlayer -> new LinkedHashMap<String, Object>() {{
-            put("id", gamePlayer.getGamePlayerId());
+            put("GamePlayerId", gamePlayer.getGamePlayerId());
             put("player", getPlayers(gamePlayer.getPlayer()));
         }}).collect(Collectors.toList());
     }
@@ -78,10 +78,10 @@ public class SalvoController {
                 .flatMap(oneGamePlayer -> oneGamePlayer.getSalvos()
                         .stream().map(salvo -> new LinkedHashMap<String, Object>() {{
                             put("turn", salvo.getTurn());
-                            put("player", salvo.getGamePlayer().getPlayer().getPlayerId());
+                            put("gamePlayerId", salvo.getGamePlayer().getGamePlayerId());
                             put("locations", salvo.getSalvoLocations());
                         }})
                 ).collect(Collectors.toList());
     }
-    
+
 }

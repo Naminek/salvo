@@ -23,17 +23,41 @@
                         <th v-for="(row, index1) in rowNumber" :key="index1">{{ row }}</th>
                     </tr>
                 </thead>
+
                 <tbody>
                     <tr v-for="(location, index2) in locationArray" :key="index2">
-                        <td class="normal" v-bind:class="{shipLocation: checkLocation(location[0])}">{{ location[0] }}</td>
-                        <td class="normal" v-bind:class="{shipLocation: checkLocation(location[1])}">{{ location[1] }}</td>
-                        <td class="normal" v-bind:class="{shipLocation: checkLocation(location[2])}">{{ location[2] }}</td>
-                        <td class="normal" v-bind:class="{shipLocation: checkLocation(location[3])}">{{ location[3] }}</td>
-                        <td class="normal" v-bind:class="{shipLocation: checkLocation(location[4])}">{{ location[4] }}</td>
-                        <td class="normal" v-bind:class="{shipLocation: checkLocation(location[5])}">{{ location[5] }}</td>
-                        <td class="normal" v-bind:class="{shipLocation: checkLocation(location[6])}">{{ location[6] }}</td>
-                        <td class="normal" v-bind:class="{shipLocation: checkLocation(location[7])}">{{ location[7] }}</td>
-                        <td class="normal" v-bind:class="{shipLocation: checkLocation(location[8])}">{{ location[8] }}</td>
+                        <td>{{ location[0] }}</td>
+                        <td class="normal" v-bind:class="{'shipLocation': checkLocation(location[1]), 'oponentSalvo': checkOponentSalvoLocation(location[1]), 'hitShip': hitShip(location[1])}"></td>
+                        <td class="normal" v-bind:class="{'shipLocation': checkLocation(location[2]), 'oponentSalvo': checkOponentSalvoLocation(location[2]), 'hitShip': hitShip(location[2])}"></td>
+                        <td class="normal" v-bind:class="{'shipLocation': checkLocation(location[3]), 'oponentSalvo': checkOponentSalvoLocation(location[3]), 'hitShip': hitShip(location[3])}"></td>
+                        <td class="normal" v-bind:class="{'shipLocation': checkLocation(location[4]), 'oponentSalvo': checkOponentSalvoLocation(location[4]), 'hitShip': hitShip(location[4])}"></td>
+                        <td class="normal" v-bind:class="{'shipLocation': checkLocation(location[5]), 'oponentSalvo': checkOponentSalvoLocation(location[5]), 'hitShip': hitShip(location[5])}"></td>
+                        <td class="normal" v-bind:class="{'shipLocation': checkLocation(location[6]), 'oponentSalvo': checkOponentSalvoLocation(location[6]), 'hitShip': hitShip(location[6])}"></td>
+                        <td class="normal" v-bind:class="{'shipLocation': checkLocation(location[7]), 'oponentSalvo': checkOponentSalvoLocation(location[7]), 'hitShip': hitShip(location[7])}"></td>
+                        <td class="normal" v-bind:class="{'shipLocation': checkLocation(location[8]), 'oponentSalvo': checkOponentSalvoLocation(location[8]), 'hitShip': hitShip(location[8])}"></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p>Salvo Location</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th v-for="(row, index1) in rowNumber" :key="index1">{{ row }}</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr v-for="(salvo, index3) in salvoArray" :key="index3">
+                        <td>{{ salvo[0] }}</td>
+                        <td class="normal" v-bind:class="{salvoLocation: checkMySalvoLocation(salvo[1])}"></td>
+                        <td class="normal" v-bind:class="{salvoLocation: checkMySalvoLocation(salvo[2])}"></td>
+                        <td class="normal" v-bind:class="{salvoLocation: checkMySalvoLocation(salvo[3])}"></td>
+                        <td class="normal" v-bind:class="{salvoLocation: checkMySalvoLocation(salvo[4])}"></td>
+                        <td class="normal" v-bind:class="{salvoLocation: checkMySalvoLocation(salvo[5])}"></td>
+                        <td class="normal" v-bind:class="{salvoLocation: checkMySalvoLocation(salvo[6])}"></td>
+                        <td class="normal" v-bind:class="{salvoLocation: checkMySalvoLocation(salvo[7])}"></td>
+                        <td class="normal" v-bind:class="{salvoLocation: checkMySalvoLocation(salvo[8])}"></td>
                     </tr>
                 </tbody>
 

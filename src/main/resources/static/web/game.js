@@ -9,7 +9,10 @@ var oneGame = new Vue({
 		columnLetter: ["A", "B", "C", "D", "E", "F", "G", "H"],
 		allCellArray: [],
 		locationArray: [],
+		salvoArray:[],
+		viewingPlayerId: null,
 		viewingPlayer: null,
+		oponentPlayerId: null,
 		oponentPlayer: null
 	},
 	created() {
@@ -33,6 +36,7 @@ var oneGame = new Vue({
 					// this.getDate();
 					this.showPlayers();
 					this.makeTable();
+					this.test();
 
 				})
 				.catch(function (error) {
@@ -50,7 +54,7 @@ var oneGame = new Vue({
 			this.gamePlayerId = splitUrl2[1];
 			// }
 			// }
-			console.log(this.gamePlayerId);
+			// console.log(this.gamePlayerId);
 		},
 		makeTable() {
 			for (var i = 0; i < this.columnLetter.length; i++) {
@@ -62,26 +66,70 @@ var oneGame = new Vue({
 				var startSlice = k * 9;
 				var smallArray = this.allCellArray.slice(startSlice, startSlice + 9);
 				this.locationArray.push(smallArray);
+				this.salvoArray.push(smallArray);
 			}
-			// console.log(this.locationArray);
+			console.log(this.salvoArray);
 
 		},
 		checkLocation(location) {
 			for (var i = 0; i < this.oneGameData.ships.length; i++) {
 				if (this.oneGameData.ships[i].locations.includes(location)) {
+					// console.log(this.oneGameData.ships[i].locations);
 					return true;
 				}
 			}
 		},
+		checkMySalvoLocation(salvo) {
+			for (var i = 0; i < this.oneGameData.salvoes.length; i++) {
+				if (this.viewingPlayerId == this.oneGameData.salvoes[i].gamePlayerId 
+					&& this.oneGameData.salvoes[i].locations.includes(salvo)) {
+					return true;
+				}
+			}
+		},
+		checkOponentSalvoLocation(location) {
+			for (var i = 0; i < this.oneGameData.ships.length; i++) {
+				if (this.oneGameData.ships[i].locations.includes(location)) {
+					// console.log(this.oneGameData.ships[i].locations);
+					return false;
+				} else {
+					for (var i = 0; i < this.oneGameData.salvoes.length; i++) {
+						if (this.oponentPlayerId == this.oneGameData.salvoes[i].gamePlayerId && this.oneGameData.salvoes[i].locations.includes(location)) {
+							return true;
+						}
+					}
+				}
+			}
+			
+		},
+		hitShip(location) {
+			for (var i = 0; i < this.oneGameData.ships.length; i++) {
+				if (this.oneGameData.ships[i].locations.includes(location)) {
+					for (var i = 0; i < this.oneGameData.salvoes.length; i++) {
+						if (this.oponentPlayerId == this.oneGameData.salvoes[i].gamePlayerId && this.oneGameData.salvoes[i].locations.includes(location)) {
+							return true;
+						}
+					}
+				}
+			}
+
+		},
 		showPlayers() {
-			if (this.gamePlayerId == this.oneGameData.gamePlayers[0].player.id) {
+			if (this.gamePlayerId == this.oneGameData.gamePlayers[0].player.playerId) {
 				this.viewingPlayer = this.oneGameData.gamePlayers[0].player.email;
+				this.viewingPlayerId = this.oneGameData.gamePlayers[0].player.playerId;
 				this.oponentPlayer = this.oneGameData.gamePlayers[1].player.email;
+				this.oponentPlayerId = this.oneGameData.gamePlayers[1].player.playerId;
 				console.log(this.oneGameData.gamePlayers[i].player.email);
 			} else {
 				this.viewingPlayer = this.oneGameData.gamePlayers[1].player.email;
+				this.viewingPlayerId = this.oneGameData.gamePlayers[1].player.playerId;
 				this.oponentPlayer = this.oneGameData.gamePlayers[0].player.email;
+				this.oponentPlayerId = this.oneGameData.gamePlayers[0].player.playerId;
 			}
+		},
+		test() {
+			console.log(document.querySelectorAll(".normal"));
 		}
 	}
 })

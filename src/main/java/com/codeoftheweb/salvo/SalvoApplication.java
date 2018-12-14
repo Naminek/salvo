@@ -67,12 +67,14 @@ public class SalvoApplication {
             Ship ship6 = new Ship("Patrol Boat", locations6);
             Ship ship7 = new Ship("Submarine", locations7);
             Ship ship8 = new Ship("Patrol Boat", locations8);
+            Ship ship9 = new Ship("Destroyer", locations4);
+
             gamePlayer1.addShip(ship1);
             gamePlayer1.addShip(ship2);
             gamePlayer1.addShip(ship3);
             gamePlayer2.addShip(ship4);
             gamePlayer2.addShip(ship5);
-            gamePlayer3.addShip(ship4);
+            gamePlayer3.addShip(ship9);
             gamePlayer3.addShip(ship6);
             gamePlayer4.addShip(ship7);
             gamePlayer4.addShip(ship8);
@@ -81,11 +83,11 @@ public class SalvoApplication {
             List<String> salvoLocations1 = Arrays.asList("B5", "C5", "F1");
             List<String> salvoLocations2 = Arrays.asList("B4", "B5", "B6");
             List<String> salvoLocations3 = Arrays.asList("F2", "D5");
-            List<String> salvoLocations4 = Arrays.asList("E1, H3, A2");
-            List<String> salvoLocations5 = Arrays.asList("A2, A4, G6");
-            List<String> salvoLocations6 = Arrays.asList("B5, D5, C7");
-            List<String> salvoLocations7 = Arrays.asList("A3, H6");
-            List<String> salvoLocations8 = Arrays.asList("C5, C6");
+            List<String> salvoLocations4 = Arrays.asList("E1", "H3", "A2");
+            List<String> salvoLocations5 = Arrays.asList("A2", "A4", "G6");
+            List<String> salvoLocations6 = Arrays.asList("B5", "D5", "C7");
+            List<String> salvoLocations7 = Arrays.asList("A3", "H6");
+            List<String> salvoLocations8 = Arrays.asList("C5", "C6");
 
 
             Salvo salvo1 = new Salvo(1, salvoLocations1);
@@ -96,6 +98,7 @@ public class SalvoApplication {
             Salvo salvo6 = new Salvo(1, salvoLocations6);
             Salvo salvo7 = new Salvo(2, salvoLocations7);
             Salvo salvo8 = new Salvo(2, salvoLocations8);
+
             gamePlayer1.addSalvo(salvo1);
             gamePlayer1.addSalvo(salvo3);
             gamePlayer3.addSalvo(salvo5);
