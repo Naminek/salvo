@@ -86,11 +86,17 @@ var oneGame = new Vue({
 			}
 		},
 		checkOponentSalvoLocation(location) {
-			for (var i = 0; i < this.oneGameData.salvoes.length; i++) {
-				if (this.oponentPlayerId == this.oneGameData.salvoes[i].gamePlayerId && this.oneGameData.salvoes[i].locations.includes(location)) {
-					return true;
-				}
-			}
+			// for (var i = 0; i < this.oneGameData.ships.length; i++) {
+			// 	if (this.oneGameData.ships[i].locations.includes(location)) {
+			// 		return false;
+			// 	} else {
+					for (var i = 0; i < this.oneGameData.salvoes.length; i++) {
+						if (this.oponentPlayerId == this.oneGameData.salvoes[i].gamePlayerId && this.oneGameData.salvoes[i].locations.includes(location)) {
+							return true;
+						}
+					}
+			// 	}
+			// }
 		},
 		hitShip(location) {
 			for (var i = 0; i < this.oneGameData.ships.length; i++) {
