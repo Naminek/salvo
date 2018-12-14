@@ -36,7 +36,6 @@ var oneGame = new Vue({
 					// this.getDate();
 					this.showPlayers();
 					this.makeTable();
-					this.test();
 
 				})
 				.catch(function (error) {
@@ -100,7 +99,6 @@ var oneGame = new Vue({
 					}
 				}
 			}
-			
 		},
 		hitShip(location) {
 			for (var i = 0; i < this.oneGameData.ships.length; i++) {
@@ -127,9 +125,6 @@ var oneGame = new Vue({
 				this.oponentPlayer = this.oneGameData.gamePlayers[0].player.email;
 				this.oponentPlayerId = this.oneGameData.gamePlayers[0].player.playerId;
 			}
-		},
-		test() {
-			console.log(document.querySelectorAll(".normal"));
 		}
 	}
 })
