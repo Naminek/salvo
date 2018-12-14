@@ -9,7 +9,7 @@ var oneGame = new Vue({
 		columnLetter: ["A", "B", "C", "D", "E", "F", "G", "H"],
 		allCellArray: [],
 		locationArray: [],
-		salvoArray:[],
+		salvoArray: [],
 		viewingPlayerId: null,
 		viewingPlayer: null,
 		oponentPlayerId: null,
@@ -73,15 +73,14 @@ var oneGame = new Vue({
 		checkLocation(location) {
 			for (var i = 0; i < this.oneGameData.ships.length; i++) {
 				if (this.oneGameData.ships[i].locations.includes(location)) {
-					// console.log(this.oneGameData.ships[i].locations);
 					return true;
 				}
 			}
 		},
 		checkMySalvoLocation(salvo) {
 			for (var i = 0; i < this.oneGameData.salvoes.length; i++) {
-				if (this.viewingPlayerId == this.oneGameData.salvoes[i].gamePlayerId 
-					&& this.oneGameData.salvoes[i].locations.includes(salvo)) {
+				if (this.viewingPlayerId == this.oneGameData.salvoes[i].gamePlayerId &&
+					this.oneGameData.salvoes[i].locations.includes(salvo)) {
 					return true;
 				}
 			}
@@ -89,7 +88,6 @@ var oneGame = new Vue({
 		checkOponentSalvoLocation(location) {
 			for (var i = 0; i < this.oneGameData.ships.length; i++) {
 				if (this.oneGameData.ships[i].locations.includes(location)) {
-					// console.log(this.oneGameData.ships[i].locations);
 					return false;
 				} else {
 					for (var i = 0; i < this.oneGameData.salvoes.length; i++) {
