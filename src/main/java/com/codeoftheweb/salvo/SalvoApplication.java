@@ -19,7 +19,8 @@ public class SalvoApplication {
 
     @Bean
     public CommandLineRunner initData(PlayerRepository playerRepository, GameRepository gameRepository,
-                                      GamePlayerRepository gamePlayerRepository, ShipRepository shipRepository, SalvoRepository salvoRepository) {
+                                      GamePlayerRepository gamePlayerRepository, ShipRepository shipRepository,
+                                      SalvoRepository salvoRepository, ScoreRepository scoreRepository) {
         return (args) -> {
             Player user1 = new Player("j.bauer@ctu.gov");
             Player user2 = new Player("c.obrian@ctu.gov");
@@ -108,6 +109,24 @@ public class SalvoApplication {
             gamePlayer4.addSalvo(salvo6);
             gamePlayer4.addSalvo(salvo8);
 
+            Date finishingDate1 = date1.from(date1.toInstant().plusSeconds(1800));
+            Date finishingDate2 = date2.from(date2.toInstant().plusSeconds(1800));
+//            Date finishingDate3 = date3.from(date2.toInstant().plusSeconds(1800));
+
+            Score score1 = new Score(0.5, finishingDate1);
+            Score score2 = new Score(0.5, finishingDate1);
+            Score score3 = new Score(1.0, finishingDate2);
+            Score score4 = new Score(0.0, finishingDate2);
+
+            game1.addScore(score1);
+            game1.addScore(score2);
+            game2.addScore(score3);
+            game2.addScore(score4);
+
+            user1.addScore(score1);
+            user2.addScore(score2);
+            user1.addScore(score3);
+            user2.addScore(score4);
 
 
 
@@ -142,6 +161,11 @@ public class SalvoApplication {
             salvoRepository.save(salvo6);
             salvoRepository.save(salvo7);
             salvoRepository.save(salvo8);
+
+            scoreRepository.save(score1);
+            scoreRepository.save(score2);
+            scoreRepository.save(score3);
+            scoreRepository.save(score4);
         };
     }
 }

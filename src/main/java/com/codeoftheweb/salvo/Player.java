@@ -26,7 +26,7 @@ public class Player {
     private String userName;
     @OneToMany(mappedBy="player", fetch=FetchType.EAGER)
     private Set<GamePlayer> gamePlayers = new HashSet<>();
-    @OneToMany(mappedBy = "score", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "player", fetch = FetchType.EAGER)
     private Set<Score> scores = new HashSet<>();
 
     public Player() {
@@ -68,5 +68,13 @@ public class Player {
     public void addScore(Score score) {
         score.setPlayer(this);
         scores.add(score);
+    }
+
+    public Set<Score> getScores() {
+        return scores;
+    }
+
+    public void setScores(Set<Score> scores) {
+        this.scores = scores;
     }
 }
