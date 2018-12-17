@@ -28,7 +28,6 @@ public class SalvoApplication {
             Player user4 = new Player("t.almeida@ctu.gov");
 
 
-
             Date date1 = new Date();
             Date date2 = date1.from(date1.toInstant().plusSeconds(3600));
             Date date3 = date1.from(date1.toInstant().plusSeconds(7200));
@@ -127,7 +126,6 @@ public class SalvoApplication {
             user2.addScore(score2);
             user1.addScore(score3);
             user2.addScore(score4);
-
 
 
             playerRepository.save(user1);

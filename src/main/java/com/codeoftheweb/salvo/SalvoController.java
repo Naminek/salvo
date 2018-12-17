@@ -44,6 +44,15 @@ public class SalvoController {
         }};
     }
 
+//    private Map<String, Object> getScores(Player player) {
+//        if(player.getScores().size() < 1)
+//        return new LinkedHashMap<String, Object>() {{
+//
+//        }}
+//    }
+
+
+
     @RequestMapping(value = "/game_view/{nn}", method = RequestMethod.GET)
     public Map<String, Object> getGameView(@PathVariable("nn") Long gamePlayerId) {
         GamePlayer gamePlayer = gamePlayerRepo.findOne(gamePlayerId);

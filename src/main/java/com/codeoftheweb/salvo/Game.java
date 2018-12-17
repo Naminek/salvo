@@ -22,12 +22,11 @@ public class Game {
 
     private Date date;
 
-    @OneToMany(mappedBy="game", fetch=FetchType.EAGER)
+    @OneToMany(mappedBy = "game", fetch = FetchType.EAGER)
     private Set<GamePlayer> gamePlayers = new HashSet<>();
 
     @OneToMany(mappedBy = "game", fetch = FetchType.EAGER)
     private Set<Score> scores = new HashSet<>();
-
 
 
     public Game() {
@@ -41,7 +40,7 @@ public class Game {
         return id;
     }
 
-    public Date getCreatedDate(){
+    public Date getCreatedDate() {
         return date;
     }
 
