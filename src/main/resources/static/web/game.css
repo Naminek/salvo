@@ -27,7 +27,7 @@
     border-radius: 2%;
 }
 
-.oponentSalvo {
+.opponentSalvo {
     background-color: orange;
     border-color: orange;
     border-radius: 5%;
@@ -43,3 +43,7 @@
     border: 1px black solid;
     padding: 5px;
 }
+
+/* .myShip{
+
+} */

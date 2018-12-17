@@ -9,13 +9,16 @@ var oneGame = new Vue({
 		columnLetter: ["A", "B", "C", "D", "E", "F", "G", "H"],
 		allCellArray: [],
 		locationArray: [],
-		salvoArray: [],
 		viewingPlayerId: null,
 		viewingPlayer: null,
-		oponentPlayerId: null,
-		oponentPlayer: null
+		opponentPlayerId: null,
+		opponentPlayer: null,
+		myShipsArr: []
 	},
 	created() {
+		this.makeTable();
+	},
+	mounted() {
 		this.getUrl(),
 			this.loadOneGame()
 	},
@@ -35,8 +38,9 @@ var oneGame = new Vue({
 					console.log(this.gamePlayers);
 					// this.getDate();
 					this.showPlayers();
-					this.makeTable();
-
+					this.markShips();
+					this.markSalvo();
+					this.writeTurn();
 				})
 				.catch(function (error) {
 					console.log(error);
@@ -65,63 +69,62 @@ var oneGame = new Vue({
 				var startSlice = k * 9;
 				var smallArray = this.allCellArray.slice(startSlice, startSlice + 9);
 				this.locationArray.push(smallArray);
-				this.salvoArray.push(smallArray);
 			}
 			console.log(this.salvoArray);
-
-		},
-		checkLocation(location) {
-			for (var i = 0; i < this.oneGameData.ships.length; i++) {
-				if (this.oneGameData.ships[i].locations.includes(location)) {
-					return true;
-				}
-			}
-		},
-		checkMySalvoLocation(salvo) {
-			for (var i = 0; i < this.oneGameData.salvoes.length; i++) {
-				if (this.viewingPlayerId == this.oneGameData.salvoes[i].gamePlayerId &&
-					this.oneGameData.salvoes[i].locations.includes(salvo)) {
-					return true;
-				}
-			}
-		},
-		checkOponentSalvoLocation(location) {
-			// for (var i = 0; i < this.oneGameData.ships.length; i++) {
-			// 	if (this.oneGameData.ships[i].locations.includes(location)) {
-			// 		return false;
-			// 	} else {
-					for (var i = 0; i < this.oneGameData.salvoes.length; i++) {
-						if (this.oponentPlayerId == this.oneGameData.salvoes[i].gamePlayerId && this.oneGameData.salvoes[i].locations.includes(location)) {
-							return true;
-						}
-					}
-			// 	}
-			// }
-		},
-		hitShip(location) {
-			for (var i = 0; i < this.oneGameData.ships.length; i++) {
-				if (this.oneGameData.ships[i].locations.includes(location)) {
-					for (var i = 0; i < this.oneGameData.salvoes.length; i++) {
-						if (this.oponentPlayerId == this.oneGameData.salvoes[i].gamePlayerId && this.oneGameData.salvoes[i].locations.includes(location)) {
-							return true;
-						}
-					}
-				}
-			}
+			console.log("Table ok")
 
 		},
 		showPlayers() {
 			if (this.gamePlayerId == this.oneGameData.gamePlayers[0].player.playerId) {
 				this.viewingPlayer = this.oneGameData.gamePlayers[0].player.email;
 				this.viewingPlayerId = this.oneGameData.gamePlayers[0].player.playerId;
-				this.oponentPlayer = this.oneGameData.gamePlayers[1].player.email;
-				this.oponentPlayerId = this.oneGameData.gamePlayers[1].player.playerId;
-				console.log(this.oneGameData.gamePlayers[i].player.email);
+				this.opponentPlayer = this.oneGameData.gamePlayers[1].player.email;
+				this.opponentPlayerId = this.oneGameData.gamePlayers[1].player.playerId;
 			} else {
 				this.viewingPlayer = this.oneGameData.gamePlayers[1].player.email;
 				this.viewingPlayerId = this.oneGameData.gamePlayers[1].player.playerId;
-				this.oponentPlayer = this.oneGameData.gamePlayers[0].player.email;
-				this.oponentPlayerId = this.oneGameData.gamePlayers[0].player.playerId;
+				this.opponentPlayer = this.oneGameData.gamePlayers[0].player.email;
+				this.opponentPlayerId = this.oneGameData.gamePlayers[0].player.playerId;
+			}
+		},
+		markShips() {
+			this.oneGameData.ships.forEach(ship => ship.locations.forEach(loc =>
+				this.myShipsArr.push(loc)
+			))
+			console.log(this.myShipsArr)
+			this.myShipsArr.forEach(loc => {
+				document.querySelector(`#${loc}`).classList.add("shipLocation")
+			})
+		},
+		markSalvo() {
+			for (var i = 0; i < this.oneGameData.salvoes.length; i++) {
+				if (this.opponentPlayerId == this.oneGameData.salvoes[i].gamePlayerId) {
+					for (var j = 0; j < this.oneGameData.salvoes[i].locations.length; j++) {
+						if (this.myShipsArr.includes(this.oneGameData.salvoes[i].locations[j])) {
+							document.querySelector(`#${this.oneGameData.salvoes[i].locations[j]}`).classList.add("hitShip")
+						} else {
+							document.querySelector(`#${this.oneGameData.salvoes[i].locations[j]}`).classList.add("opponentSalvo");
+						}
+					}
+				} else if (this.viewingPlayerId == this.oneGameData.salvoes[i].gamePlayerId) {
+					for (var k = 0; k < this.oneGameData.salvoes[i].locations.length; k++) {
+						console.log(`#salvo${this.oneGameData.salvoes[i].locations[k]}`);
+						document.querySelector(`#salvo${this.oneGameData.salvoes[i].locations[k]}`).classList.add("opponentSalvo");
+					}
+				}
+			}
+		},
+		writeTurn() {
+			for (var i = 0; i < this.oneGameData.salvoes.length; i++) {
+				if (this.opponentPlayerId == this.oneGameData.salvoes[i].gamePlayerId) {
+					this.oneGameData.salvoes[i].locations.forEach(loc => {
+						document.querySelector(`#${loc}`).innerHTML = this.oneGameData.salvoes[i].turn;
+					})
+				} else {
+					this.oneGameData.salvoes[i].locations.forEach(loc => {
+						document.querySelector(`#salvo${loc}`).innerHTML = this.oneGameData.salvoes[i].turn;
+					})
+				}
 			}
 		}
 	}
