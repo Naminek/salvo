@@ -20,7 +20,7 @@ public class GamePlayer {
         private Date date;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name="player_id")
+    @JoinColumn(name="player")
     private Player player;
 
     @ManyToOne(fetch = FetchType.EAGER)
