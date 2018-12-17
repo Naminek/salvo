@@ -103,13 +103,12 @@ var oneGame = new Vue({
 						if (this.myShipsArr.includes(this.oneGameData.salvoes[i].locations[j])) {
 							document.querySelector(`#${this.oneGameData.salvoes[i].locations[j]}`).classList.add("hitShip")
 						} else {
-							document.querySelector(`#${this.oneGameData.salvoes[i].locations[j]}`).classList.add("opponentSalvo");
+							document.querySelector(`#${this.oneGameData.salvoes[i].locations[j]}`).classList.add("salvoLocation");
 						}
 					}
 				} else if (this.viewingPlayerId == this.oneGameData.salvoes[i].gamePlayerId) {
 					for (var k = 0; k < this.oneGameData.salvoes[i].locations.length; k++) {
-						console.log(`#salvo${this.oneGameData.salvoes[i].locations[k]}`);
-						document.querySelector(`#salvo${this.oneGameData.salvoes[i].locations[k]}`).classList.add("opponentSalvo");
+						document.querySelector(`#salvo${this.oneGameData.salvoes[i].locations[k]}`).classList.add("salvoLocation");
 					}
 				}
 			}

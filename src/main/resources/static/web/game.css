@@ -11,10 +11,6 @@
     text-align: center;
 }
 
-.normal {
-    background-color: white;
-}
-
 .shipLocation {
     background-color: blue;
     border-color: blue;
@@ -27,12 +23,6 @@
     border-radius: 2%;
 }
 
-.opponentSalvo {
-    background-color: orange;
-    border-color: orange;
-    border-radius: 5%;
-}
-
 .hitShip {
     background-color: red;
     border-color: red;
@@ -43,7 +33,3 @@
     border: 1px black solid;
     padding: 5px;
 }
-
-/* .myShip{
-
-} */
