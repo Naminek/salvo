@@ -75,16 +75,16 @@ var oneGame = new Vue({
 
 		},
 		showPlayers() {
-			if (this.gamePlayerId == this.oneGameData.gamePlayers[0].player.playerId) {
-				this.viewingPlayer = this.oneGameData.gamePlayers[0].player.email;
-				this.viewingPlayerId = this.oneGameData.gamePlayers[0].player.playerId;
-				this.opponentPlayer = this.oneGameData.gamePlayers[1].player.email;
-				this.opponentPlayerId = this.oneGameData.gamePlayers[1].player.playerId;
-			} else {
-				this.viewingPlayer = this.oneGameData.gamePlayers[1].player.email;
-				this.viewingPlayerId = this.oneGameData.gamePlayers[1].player.playerId;
-				this.opponentPlayer = this.oneGameData.gamePlayers[0].player.email;
-				this.opponentPlayerId = this.oneGameData.gamePlayers[0].player.playerId;
+			for (var i = 0; i < this.oneGameData.gamePlayers.length; i++) {
+				if (this.gamePlayerId == this.oneGameData.gamePlayers[i].GamePlayerId) {
+					this.viewingPlayer = this.oneGameData.gamePlayers[i].player.email;
+					this.viewingPlayerId = this.oneGameData.gamePlayers[i].GamePlayerId;
+					console.log(this.viewingPlayer);
+				} else {
+					this.opponentPlayer = this.oneGameData.gamePlayers[i].player.email;
+					
+					this.opponentPlayerId = this.oneGameData.gamePlayers[i].GamePlayerId;
+				}
 			}
 		},
 		markShips() {

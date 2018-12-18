@@ -1,12 +1,12 @@
 package com.codeoftheweb.salvo;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.Set;
 
 @Entity
@@ -90,10 +90,14 @@ public class GamePlayer {
         salvos.add(salvo);
     }
 
-    public Score getScoreInGame(Game game) {
+    public LinkedHashMap<String, Object> getScoreInGame(Game game) {
         return player.getScores()
                 .stream()
                 .filter(score -> game.equals(score.getGame()))
+                .map(score -> new LinkedHashMap<String,Object>() {{
+                    put("id", score.getscoreId());
+                    put("scorePoints", score.getScore());
+                }})
                 .findFirst()
                 .orElse(null);
     }

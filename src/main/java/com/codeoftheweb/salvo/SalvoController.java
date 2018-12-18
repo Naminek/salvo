@@ -32,7 +32,7 @@ public class SalvoController {
                 .map(game -> new LinkedHashMap<String, Object>() {{
                     put("id", game.getGameId());
                     put("created", game.getCreatedDate());
-                    put("finished", checkFinished(game));
+                    put("finished", checkFinished(game.getScores()));
                     put("gamePlayers", game.getGamePlayers().stream().map(gamePlayer -> new LinkedHashMap<String, Object>() {{
                         put("id", gamePlayer.getGamePlayerId());
                         put("player", getPlayers(gamePlayer.getPlayer()));
@@ -48,27 +48,13 @@ public class SalvoController {
         }};
     }
 
-    private String checkFinished(Game game) {
-        if (game.getScores().size() < 1) {
-            return null;
-        } else {
-            return "finished";
-        }
+    private Date checkFinished(Set<Score> score) {
+        return score
+                .stream()
+                .map(sc -> sc.getFinishDate())
+                .findFirst()
+                .orElse(null);
     }
-
-//    private Double getScores(Game game) {
-//        return game.getScores()
-//                .stream()
-//                .filter(score -> score.getFinishDate().equals(game.getCreatedDate().from(game.getCreatedDate().toInstant().plusSeconds(1800))))
-//                .filter(score -> score.getPlayer().equals(game.getPlayers().forEach(player -> player.getPlayerId())))
-//                .filter(score -> game.getPlayers().forEach(player -> player.getPlayerId()).equals(score.getPlayer().getPlayerId()))
-//                .filter(score -> score.getPlayer().equals(game.getPlayers()))
-//                .filter(score -> score.getPlayer().getPlayerId().equals(game.getPlayers().stream().map(player -> player.getPlayerId())))
-//                .filter(score -> score.getPlayer().getPlayerId() == game.getPlayers().stream().map(player -> player.getPlayerId()))
-//                .map(score -> score.getScore())
-//                .findFirst()
-//                .orElse(null);
-//    }
 
 
     @RequestMapping(value = "/game_view/{nn}", method = RequestMethod.GET)
@@ -88,7 +74,7 @@ public class SalvoController {
         return game.getGamePlayers()
                 .stream()
                 .map(gamePlayer -> new LinkedHashMap<String, Object>() {{
-                    put("GamePlayerId", gamePlayer.getGamePlayerId());
+                    put("gamePlayerId", gamePlayer.getGamePlayerId());
                     put("player", getPlayers(gamePlayer.getPlayer()));
                 }}).collect(Collectors.toList());
     }
