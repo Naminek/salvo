@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 
 @RestController
@@ -27,16 +26,19 @@ public class SalvoController {
 
     @RequestMapping("/games")
     public List<Map<String, Object>> getGames() {
-        return gameRepo.findAll().stream().map(game -> new LinkedHashMap<String, Object>() {{
-            put("id", game.getGameId());
-            put("created", game.getCreatedDate());
-            put("finished", checkFinished(game));
-            put("gamePlayers", game.getGamePlayers().stream().map(gamePlayer -> new LinkedHashMap<String, Object>() {{
-                put("id", gamePlayer.getGamePlayerId());
-                put("player", getPlayers(gamePlayer.getPlayer()));
-//                put("score", getScores(gamePlayer.getGame()))
-            }}).collect(Collectors.toList()));
-        }}).collect(Collectors.toList());
+        return gameRepo
+                .findAll()
+                .stream()
+                .map(game -> new LinkedHashMap<String, Object>() {{
+                    put("id", game.getGameId());
+                    put("created", game.getCreatedDate());
+                    put("finished", checkFinished(game));
+                    put("gamePlayers", game.getGamePlayers().stream().map(gamePlayer -> new LinkedHashMap<String, Object>() {{
+                        put("id", gamePlayer.getGamePlayerId());
+                        put("player", getPlayers(gamePlayer.getPlayer()));
+                        put("score", getScores(gamePlayer.getGame()));
+                    }}).collect(Collectors.toList()));
+                }}).collect(Collectors.toList());
     }
 
     private Map<String, Object> getPlayers(Player player) {
@@ -54,6 +56,16 @@ public class SalvoController {
         }
     }
 
+    private Double getScores(Game game) {
+        return game.getScores()
+                .stream()
+//                .filter(score -> score.getFinishDate().equals(game.getCreatedDate().from(game.getCreatedDate().toInstant().plusSeconds(1800))))
+//                .filter(score -> score.getPlayer().equals(game.getPlayers().forEach(player -> player.getPlayerId())))
+                .filter(score -> score.getPlayer().equals(game.getPlayers()))
+                .map(score -> score.getScore())
+                .findFirst()
+                .orElse(null);
+    }
 
 
     @RequestMapping(value = "/game_view/{nn}", method = RequestMethod.GET)
@@ -71,7 +83,8 @@ public class SalvoController {
 
     private List<HashMap<String, Object>> getGamePlayers(Game game) {
         return game.getGamePlayers()
-                .stream().map(gamePlayer -> new LinkedHashMap<String, Object>() {{
+                .stream()
+                .map(gamePlayer -> new LinkedHashMap<String, Object>() {{
                     put("GamePlayerId", gamePlayer.getGamePlayerId());
                     put("player", getPlayers(gamePlayer.getPlayer()));
                 }}).collect(Collectors.toList());
@@ -79,7 +92,8 @@ public class SalvoController {
 
     private List<HashMap<String, Object>> getShips(GamePlayer gamePlayer) {
         return gamePlayer.getShips()
-                .stream().map(ship -> new LinkedHashMap<String, Object>() {{
+                .stream()
+                .map(ship -> new LinkedHashMap<String, Object>() {{
                     put("type", ship.getShipType());
                     put("locations", ship.getlocations());
                 }}).collect(Collectors.toList());
