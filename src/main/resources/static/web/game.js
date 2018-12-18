@@ -70,20 +70,15 @@ var oneGame = new Vue({
 				var smallArray = this.allCellArray.slice(startSlice, startSlice + 9);
 				this.locationArray.push(smallArray);
 			}
-			console.log(this.salvoArray);
-			console.log("Table ok")
-
 		},
 		showPlayers() {
 			for (var i = 0; i < this.oneGameData.gamePlayers.length; i++) {
-				if (this.gamePlayerId == this.oneGameData.gamePlayers[i].GamePlayerId) {
+				if (this.gamePlayerId == this.oneGameData.gamePlayers[i].gamePlayerId) {
 					this.viewingPlayer = this.oneGameData.gamePlayers[i].player.email;
-					this.viewingPlayerId = this.oneGameData.gamePlayers[i].GamePlayerId;
-					console.log(this.viewingPlayer);
+					this.viewingPlayerId = this.oneGameData.gamePlayers[i].gamePlayerId;
 				} else {
 					this.opponentPlayer = this.oneGameData.gamePlayers[i].player.email;
-					
-					this.opponentPlayerId = this.oneGameData.gamePlayers[i].GamePlayerId;
+					this.opponentPlayerId = this.oneGameData.gamePlayers[i].gamePlayerId;
 				}
 			}
 		},
