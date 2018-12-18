@@ -90,7 +90,13 @@ public class GamePlayer {
         salvos.add(salvo);
     }
 
-
+    public Score getScoreInGame(Game game) {
+        return player.getScores()
+                .stream()
+                .filter(score -> game.equals(score.getGame()))
+                .findFirst()
+                .orElse(null);
+    }
 
 }
 

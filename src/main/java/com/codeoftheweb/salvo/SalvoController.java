@@ -36,7 +36,7 @@ public class SalvoController {
                     put("gamePlayers", game.getGamePlayers().stream().map(gamePlayer -> new LinkedHashMap<String, Object>() {{
                         put("id", gamePlayer.getGamePlayerId());
                         put("player", getPlayers(gamePlayer.getPlayer()));
-                        put("score", getScores(gamePlayer.getGame()));
+                        put("score", gamePlayer.getScoreInGame(game));
                     }}).collect(Collectors.toList()));
                 }}).collect(Collectors.toList());
     }
@@ -56,16 +56,19 @@ public class SalvoController {
         }
     }
 
-    private Double getScores(Game game) {
-        return game.getScores()
-                .stream()
+//    private Double getScores(Game game) {
+//        return game.getScores()
+//                .stream()
 //                .filter(score -> score.getFinishDate().equals(game.getCreatedDate().from(game.getCreatedDate().toInstant().plusSeconds(1800))))
 //                .filter(score -> score.getPlayer().equals(game.getPlayers().forEach(player -> player.getPlayerId())))
-                .filter(score -> score.getPlayer().equals(game.getPlayers()))
-                .map(score -> score.getScore())
-                .findFirst()
-                .orElse(null);
-    }
+//                .filter(score -> game.getPlayers().forEach(player -> player.getPlayerId()).equals(score.getPlayer().getPlayerId()))
+//                .filter(score -> score.getPlayer().equals(game.getPlayers()))
+//                .filter(score -> score.getPlayer().getPlayerId().equals(game.getPlayers().stream().map(player -> player.getPlayerId())))
+//                .filter(score -> score.getPlayer().getPlayerId() == game.getPlayers().stream().map(player -> player.getPlayerId()))
+//                .map(score -> score.getScore())
+//                .findFirst()
+//                .orElse(null);
+//    }
 
 
     @RequestMapping(value = "/game_view/{nn}", method = RequestMethod.GET)
