@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 @RestController
@@ -29,10 +30,11 @@ public class SalvoController {
         return gameRepo.findAll().stream().map(game -> new LinkedHashMap<String, Object>() {{
             put("id", game.getGameId());
             put("created", game.getCreatedDate());
+            put("finished", checkFinished(game));
             put("gamePlayers", game.getGamePlayers().stream().map(gamePlayer -> new LinkedHashMap<String, Object>() {{
                 put("id", gamePlayer.getGamePlayerId());
                 put("player", getPlayers(gamePlayer.getPlayer()));
-
+//                put("score", getScores(gamePlayer.getGame()))
             }}).collect(Collectors.toList()));
         }}).collect(Collectors.toList());
     }
@@ -44,12 +46,13 @@ public class SalvoController {
         }};
     }
 
-//    private Map<String, Object> getScores(Player player) {
-//        if(player.getScores().size() < 1)
-//        return new LinkedHashMap<String, Object>() {{
-//
-//        }}
-//    }
+    private String checkFinished(Game game) {
+        if (game.getScores().size() < 1) {
+            return null;
+        } else {
+            return "finished";
+        }
+    }
 
 
 
@@ -69,17 +72,17 @@ public class SalvoController {
     private List<HashMap<String, Object>> getGamePlayers(Game game) {
         return game.getGamePlayers()
                 .stream().map(gamePlayer -> new LinkedHashMap<String, Object>() {{
-            put("GamePlayerId", gamePlayer.getGamePlayerId());
-            put("player", getPlayers(gamePlayer.getPlayer()));
-        }}).collect(Collectors.toList());
+                    put("GamePlayerId", gamePlayer.getGamePlayerId());
+                    put("player", getPlayers(gamePlayer.getPlayer()));
+                }}).collect(Collectors.toList());
     }
 
     private List<HashMap<String, Object>> getShips(GamePlayer gamePlayer) {
         return gamePlayer.getShips()
                 .stream().map(ship -> new LinkedHashMap<String, Object>() {{
-            put("type", ship.getShipType());
-            put("locations", ship.getlocations());
-        }}).collect(Collectors.toList());
+                    put("type", ship.getShipType());
+                    put("locations", ship.getlocations());
+                }}).collect(Collectors.toList());
     }
 
     private List<HashMap<String, Object>> getSalvoes(Set<GamePlayer> gamePlayer) {
