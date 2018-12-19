@@ -40,7 +40,7 @@ var oneGame = new Vue({
 					this.showPlayers();
 					this.markShips();
 					this.markSalvo();
-					this.writeTurn();
+					// this.writeTurn();
 				})
 				.catch(function (error) {
 					console.log(error);
@@ -88,7 +88,8 @@ var oneGame = new Vue({
 			))
 			console.log(this.myShipsArr)
 			this.myShipsArr.forEach(loc => {
-				document.querySelector(`#${loc}`).classList.add("shipLocation")
+				// document.querySelector(`#${loc}`).classList.add("shipLocation");]
+				document.querySelector(`#${loc}`).innerHTML = '<div class="shipLocation"></div>';
 			})
 		},
 		markSalvo() {
@@ -96,30 +97,33 @@ var oneGame = new Vue({
 				if (this.opponentPlayerId == this.oneGameData.salvoes[i].gamePlayerId) {
 					for (var j = 0; j < this.oneGameData.salvoes[i].locations.length; j++) {
 						if (this.myShipsArr.includes(this.oneGameData.salvoes[i].locations[j])) {
-							document.querySelector(`#${this.oneGameData.salvoes[i].locations[j]}`).classList.add("hitShip")
+							// document.querySelector(`#${this.oneGameData.salvoes[i].locations[j]}`).classList.add("hitShip");
+							document.querySelector(`#${this.oneGameData.salvoes[i].locations[j]}`).innerHTML = '<div class="hitShip">' + this.oneGameData.salvoes[i].turn + '</div>';
 						} else {
-							document.querySelector(`#${this.oneGameData.salvoes[i].locations[j]}`).classList.add("salvoLocation");
+							// document.querySelector(`#${this.oneGameData.salvoes[i].locations[j]}`).classList.add("salvoLocation");
+							document.querySelector(`#${this.oneGameData.salvoes[i].locations[j]}`).innerHTML = '<div class="salvoLocation">' + this.oneGameData.salvoes[i].turn + '</div>';
 						}
 					}
 				} else if (this.viewingPlayerId == this.oneGameData.salvoes[i].gamePlayerId) {
 					for (var k = 0; k < this.oneGameData.salvoes[i].locations.length; k++) {
-						document.querySelector(`#salvo${this.oneGameData.salvoes[i].locations[k]}`).classList.add("salvoLocation");
+						// document.querySelector(`#salvo${this.oneGameData.salvoes[i].locations[k]}`).classList.add("salvoLocation");
+						document.querySelector(`#salvo${this.oneGameData.salvoes[i].locations[k]}`).innerHTML = '<div class="salvoLocation">' + this.oneGameData.salvoes[i].turn + '</div>';
 					}
 				}
 			}
 		},
-		writeTurn() {
-			for (var i = 0; i < this.oneGameData.salvoes.length; i++) {
-				if (this.opponentPlayerId == this.oneGameData.salvoes[i].gamePlayerId) {
-					this.oneGameData.salvoes[i].locations.forEach(loc => {
-						document.querySelector(`#${loc}`).innerHTML = this.oneGameData.salvoes[i].turn;
-					})
-				} else {
-					this.oneGameData.salvoes[i].locations.forEach(loc => {
-						document.querySelector(`#salvo${loc}`).innerHTML = this.oneGameData.salvoes[i].turn;
-					})
-				}
-			}
-		}
+		// writeTurn() {
+		// 	for (var i = 0; i < this.oneGameData.salvoes.length; i++) {
+		// 		if (this.opponentPlayerId == this.oneGameData.salvoes[i].gamePlayerId) {
+		// 			this.oneGameData.salvoes[i].locations.forEach(loc => {
+		// 				document.querySelector(`#${loc}`).innerHTML = this.oneGameData.salvoes[i].turn;
+		// 			})
+		// 		} else {
+		// 			this.oneGameData.salvoes[i].locations.forEach(loc => {
+		// 				document.querySelector(`#salvo${loc}`).innerHTML = this.oneGameData.salvoes[i].turn;
+		// 			})
+		// 		}
+		// 	}
+		// }
 	}
 })

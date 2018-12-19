@@ -1,0 +1,11 @@
+table {
+    width: 90%;
+}
+
+#table_for_scores th,
+#table_for_scores td {
+    border: 2px black solid;
+    height: 50px;
+    width: 50px;
+    text-align: center;
+}

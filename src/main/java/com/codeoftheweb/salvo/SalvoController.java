@@ -59,7 +59,7 @@ public class SalvoController {
                 .orElse(null);
     }
 
-    @RequestMapping("/gameTable")
+    @RequestMapping("/leaderboard")
     public List<Map<String, Object>> getGameTable() {
         return playerRepo
                 .findAll()
@@ -71,7 +71,7 @@ public class SalvoController {
                             .map(score -> score.getScore()).collect(Collectors.toList()));
                 }}).collect(Collectors.toList());
     }
-    
+
 
 
 
