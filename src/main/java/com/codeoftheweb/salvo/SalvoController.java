@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 @RestController
@@ -16,11 +17,13 @@ public class SalvoController {
 
     private GameRepository gameRepo;
     private GamePlayerRepository gamePlayerRepo;
+    private PlayerRepository playerRepo;
 
     @Autowired
-    public SalvoController(GameRepository gameRepo, GamePlayerRepository gamePlayerRepo) {
+    public SalvoController(GameRepository gameRepo, GamePlayerRepository gamePlayerRepo, PlayerRepository playerRepo) {
         this.gameRepo = gameRepo;
         this.gamePlayerRepo = gamePlayerRepo;
+        this.playerRepo = playerRepo;
     }
 
 
@@ -55,6 +58,21 @@ public class SalvoController {
                 .findFirst()
                 .orElse(null);
     }
+
+    @RequestMapping("/gameTable")
+    public List<Map<String, Object>> getGameTable() {
+        return playerRepo
+                .findAll()
+                .stream()
+                .map(player -> new LinkedHashMap<String, Object>() {{
+                    put("playerEmail", player.getEmail());
+                    put("scores", player.getScores()
+                            .stream()
+                            .map(score -> score.getScore()).collect(Collectors.toList()));
+                }}).collect(Collectors.toList());
+    }
+    
+
 
 
     @RequestMapping(value = "/game_view/{nn}", method = RequestMethod.GET)
