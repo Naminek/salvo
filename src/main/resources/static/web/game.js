@@ -88,8 +88,8 @@ var oneGame = new Vue({
 			))
 			console.log(this.myShipsArr)
 			this.myShipsArr.forEach(loc => {
-				// document.querySelector(`#${loc}`).classList.add("shipLocation");]
-				document.querySelector(`#${loc}`).innerHTML = '<div class="shipLocation"></div>';
+				document.querySelector(`#${loc}`).classList.add("shipLocation");
+				// document.querySelector(`#${loc}`).innerHTML = '<div class="shipLocation"></div>';
 			})
 		},
 		markSalvo() {

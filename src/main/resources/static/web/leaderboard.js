@@ -30,18 +30,25 @@ var leaderBoard = new Vue({
         addData() {
 
             for (var i = 0; i < this.results.length; i++) {
-                var oneTotalScore = 0;
-                var numberOfWin = 0;
-                var numberOfLoss = 0;
-                var numberOfTie = 0;
-                for (var j = 0; j < this.results[i].scores.length; j++) {
-                    oneTotalScore += this.results[i].scores[j];
-                    if(this.results[i].scores[j] == 1.0){
-                        numberOfWin++;
-                    } else if(this.results[i].scores[j] == 0.5) {
-                        numberOfTie++;
-                    } else if(this.results[i].scores[j] == 0) {
-                        numberOfLoss++;
+                if (this.results[i].scores.length < 1) {
+                    var oneTotalScore = "No Game Data";
+                    var numberOfWin = "-";
+                    var numberOfTie = "-";
+                    var numberOfLoss = "-";
+                } else {
+                    var oneTotalScore = 0;
+                    var numberOfWin = 0;
+                    var numberOfLoss = 0;
+                    var numberOfTie = 0;
+                    for (var j = 0; j < this.results[i].scores.length; j++) {
+                        oneTotalScore += this.results[i].scores[j];
+                        if (this.results[i].scores[j] == 1.0) {
+                            numberOfWin++;
+                        } else if (this.results[i].scores[j] == 0.5) {
+                            numberOfTie++;
+                        } else if (this.results[i].scores[j] == 0) {
+                            numberOfLoss++;
+                        }
                     }
                 }
                 this.results[i]["totalScore"] = oneTotalScore;

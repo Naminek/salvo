@@ -15,8 +15,8 @@
     background-color: blue;
     border-color: blue;
     border-radius: 50%;
-    height: 100%;
-    width: 100%;
+    /* height: 100%;
+    width: 100%; */
 }
 
 .salvoLocation {
@@ -25,6 +25,7 @@
     border-radius: 2%;
     height: 100%;
     width: 100%;
+    
 }
 
 .hitShip {
