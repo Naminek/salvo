@@ -20,7 +20,7 @@ var oneGame = new Vue({
 	},
 	mounted() {
 		this.getUrl(),
-			this.loadOneGame()
+		this.loadOneGame()
 	},
 
 	methods: {

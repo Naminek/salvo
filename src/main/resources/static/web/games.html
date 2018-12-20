@@ -13,10 +13,10 @@
 
 <body>
     <div id="gameList">
-        <div v-if="loading">
-            <p>Loading...</p>
+        <div v-show="loading">
+            <p>Now Loading...</p>
         </div>
-        <div v-else>
+        <div v-show="!loading" class="container">
             <div v-for="(game, index) in games" :key="index" class="row">
                 <ul>
                     <li>Game{{game.id}}:
