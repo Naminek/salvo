@@ -19,7 +19,7 @@
         <div v-show="!loading" class="container">
 
             <p id="players" class="mt-3"><span>{{ viewingPlayer }} (YOU)</span> vs <span>{{ opponentPlayer }}</span></p>
-            <div class="row">
+            <div class="row" id="locations">
                 <div class="col-6">
                     <table>
                         <thead>
@@ -69,7 +69,31 @@
                     </table>
                 </div>
             </div>
-
+            <div class="row">
+                <div class="col-12 mt-5">
+                    <p>Leaderboard</p>
+                <table id="table_for_scores" class="mt-3 table">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>Player</th>
+                            <th>Total Score</th>
+                            <th>Wins</th>
+                            <th>Losses</th>
+                            <th>Ties</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(result, index) in results" :key="index">
+                            <td>{{ result.playerEmail }}</td>
+                            <td>{{ result.totalScore }}</td>
+                            <td>{{ result.wins }}</td>
+                            <td>{{ result.losses }}</td>
+                            <td>{{ result.ties }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            </div>
         </div>
 
 

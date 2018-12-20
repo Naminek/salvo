@@ -13,7 +13,8 @@ var oneGame = new Vue({
 		viewingPlayer: null,
 		opponentPlayerId: null,
 		opponentPlayer: null,
-		myShipsArr: []
+		myShipsArr: [],
+		results: []
 	},
 	created() {
 		this.makeTable();
@@ -21,6 +22,7 @@ var oneGame = new Vue({
 	mounted() {
 		this.getUrl(),
 			this.loadOneGame()
+			this.loadResults()
 	},
 
 	methods: {
@@ -30,7 +32,6 @@ var oneGame = new Vue({
 				})
 				.then(response => response.json())
 				.then(json => {
-					this.loading = false;
 					this.oneGameData = json;
 					this.gamePlayers = json.gamePlayers;
 
@@ -46,18 +47,29 @@ var oneGame = new Vue({
 					console.log(error);
 				});
 		},
+		loadResults() {
+            fetch("http://localhost:8080/api/leaderboard", {
+                    method: "GET"
+                })
+                .then(response => response.json())
+                .then(json => {
+                    this.results = json;
+                    this.loading = false;
+                    console.log(this.results);
+                    // gameData.getDate();
+                    this.addResults();
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        },
 		// getDate() {
 		// 	this.oneGameData.map(game => game.created = new Date(game.created).toLocaleString());
 		// },
 		getUrl() {
 			var splitUrl = window.location.href.split('?');
-			// if (splitUrl.length == 2) {
 			var splitUrl2 = splitUrl[1].split('=');
-			// if (splitUrl2.length == 2) {
 			this.gamePlayerId = splitUrl2[1];
-			// }
-			// }
-			// console.log(this.gamePlayerId);
 		},
 		makeTable() {
 			for (var i = 0; i < this.columnLetter.length; i++) {
@@ -124,6 +136,37 @@ var oneGame = new Vue({
 		// 			})
 		// 		}
 		// 	}
-		// }
+		// },
+		addResults() {
+
+            for (var i = 0; i < this.results.length; i++) {
+                if (this.results[i].scores.length < 1) {
+                    var oneTotalScore = "No Game Data";
+                    var numberOfWin = "-";
+                    var numberOfTie = "-";
+                    var numberOfLoss = "-";
+                } else {
+                    var oneTotalScore = 0;
+                    var numberOfWin = 0;
+                    var numberOfLoss = 0;
+                    var numberOfTie = 0;
+                    for (var j = 0; j < this.results[i].scores.length; j++) {
+                        oneTotalScore += this.results[i].scores[j];
+                        if (this.results[i].scores[j] == 1.0) {
+                            numberOfWin++;
+                        } else if (this.results[i].scores[j] == 0.5) {
+                            numberOfTie++;
+                        } else if (this.results[i].scores[j] == 0) {
+                            numberOfLoss++;
+                        }
+                    }
+                }
+                this.results[i]["totalScore"] = oneTotalScore;
+                this.results[i]["wins"] = numberOfWin;
+                this.results[i]["losses"] = numberOfLoss;
+                this.results[i]["ties"] = numberOfTie;
+            }
+            console.log(this.results)
+        }
 	}
 })

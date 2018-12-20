@@ -1,10 +1,11 @@
-#oneGame table {
+#locations table {
+    width: 90%;
     border-collapse: collapse;
     /* width: 80%; */
 }
 
-#oneGame th,
-#oneGame td {
+#locations th,
+#locations td {
     border: 2px black solid;
     height: 50px;
     width: 50px;
@@ -14,7 +15,7 @@
 .shipLocation {
     background-color: blue;
     border-color: blue;
-    border-radius: 50%;
+    border-radius: 2%;
     /* height: 100%;
     width: 100%; */
 }
@@ -22,9 +23,10 @@
 .salvoLocation {
     background-color: orange;
     border-color: orange;
-    border-radius: 2%;
+    border-radius: 50%;
     height: 100%;
     width: 100%;
+    text-align: center;
     
 }
 
@@ -34,9 +36,21 @@
     border-radius: 50%;
     height: 100%;
     width: 100%;
+    text-align: center;
 }
 
 #players span {
     border: 1px black solid;
     padding: 5px;
+}
+
+#table_for_scores {
+    width: 90%;
+    border: 2px gray solid;
+}
+
+#table_for_scores th,
+#table_for_scores td {
+    height: 50px;
+    text-align: center;
 }
