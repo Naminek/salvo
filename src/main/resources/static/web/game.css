@@ -43,14 +43,3 @@
     border: 1px black solid;
     padding: 5px;
 }
-
-#table_for_scores {
-    width: 90%;
-    border: 2px gray solid;
-}
-
-#table_for_scores th,
-#table_for_scores td {
-    height: 50px;
-    text-align: center;
-}
