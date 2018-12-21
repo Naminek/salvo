@@ -3,23 +3,26 @@ var gameData = new Vue({
     data: {
         games: [],
         results: [],
-        loading: true
+        loading: true,
+        dataUrl:["http://localhost:8080/api/games", "http://localhost:8080/api/leaderboard"]
     },
     created() {
-        this.loadGames(),
-        this.loadResults()
+        this.loadGames(this.dataUrl)
+        // this.loadResults()
     },
 
     methods: {
-        loadGames() {
-            fetch("http://localhost:8080/api/games", {
-                    method: "GET"
-                })
-                .then(response => response.json())
+        loadGames(urlArray) {
+            Promise.all(urlArray.map(url => fetch(url)
+                .then(response => response.json())))
                 .then(json => {
-                    this.games = json;
+                    this.games = json[0];
+                    this.results = json[1];
                     console.log(this.games);
-                    gameData.getDate();
+                    console.log(this.results);
+                    this.loading = false;
+                    this.getDate();
+                    this.addResults();
                 })
                 .catch(function (error) {
                     console.log(error);
@@ -27,22 +30,6 @@ var gameData = new Vue({
         },
         getDate() {
             this.games.map(game => game.created = new Date(game.created).toLocaleString());
-        },
-        loadResults() {
-            fetch("http://localhost:8080/api/leaderboard", {
-                    method: "GET"
-                })
-                .then(response => response.json())
-                .then(json => {
-                    this.results = json;
-                    this.loading = false;
-                    console.log(this.results);
-                    // gameData.getDate();
-                    this.addResults();
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
         },
         addResults() {
 
