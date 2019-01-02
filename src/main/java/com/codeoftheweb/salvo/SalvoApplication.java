@@ -22,10 +22,10 @@ public class SalvoApplication {
                                       GamePlayerRepository gamePlayerRepository, ShipRepository shipRepository,
                                       SalvoRepository salvoRepository, ScoreRepository scoreRepository) {
         return (args) -> {
-            Player user1 = new Player("j.bauer@ctu.gov");
-            Player user2 = new Player("c.obrian@ctu.gov");
-            Player user3 = new Player("kim_bauer@gmail.com");
-            Player user4 = new Player("t.almeida@ctu.gov");
+            Player user1 = new Player("j.bauer@ctu.gov", "24");
+            Player user2 = new Player("c.obrian@ctu.gov", "42");
+            Player user3 = new Player("kim_bauer@gmail.com", "kb");
+            Player user4 = new Player("t.almeida@ctu.gov","mole");
 
 
             Date date1 = new Date();

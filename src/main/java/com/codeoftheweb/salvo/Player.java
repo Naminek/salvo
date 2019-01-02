@@ -33,8 +33,9 @@ public class Player {
     public Player() {
     }
 
-    public Player(String email) {
+    public Player(String email, String userPassword) {
         userName = email;
+        password = userPassword;
     }
 
     public void addGamePlayer(GamePlayer gamePlayer) {
