@@ -28,6 +28,7 @@ public class Player {
     private Set<GamePlayer> gamePlayers = new HashSet<>();
     @OneToMany(mappedBy = "player", fetch = FetchType.EAGER)
     private Set<Score> scores = new HashSet<>();
+    private String password;
 
     public Player() {
     }
@@ -76,5 +77,13 @@ public class Player {
 
     public void setScores(Set<Score> scores) {
         this.scores = scores;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }
