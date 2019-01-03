@@ -189,23 +189,23 @@ class WebSecurityConfiguration extends GlobalAuthenticationConfigurerAdapter {
 
     @Override
     public void init(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(email -> {
-            Player player = playerRepository.findByUserName(email);
+        auth.userDetailsService(inputName -> {
+            Player player = playerRepository.findByUserName(inputName);
             if (player != null) {
                 return new User(player.getEmail(), player.getPassword(), AuthorityUtils.createAuthorityList("USER"));
             } else {
-                throw new UsernameNotFoundException("Unknown user: " + email);
+                throw new UsernameNotFoundException("Unknown user: " + inputName);
             }
         });
     }
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Player player = playerRepository.findByUserName(email);
-        if (player != null) {
-            return new User(player.getEmail(), player.getPassword(), AuthorityUtils.createAuthorityList("USER"));
-        } else {
-            throw new UsernameNotFoundException("Unknown user: " + email);
-        }
-    }
+//    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+//        Player player = playerRepository.findByUserName(email);
+//        if (player != null) {
+//            return new User(player.getEmail(), player.getPassword(), AuthorityUtils.createAuthorityList("USER"));
+//        } else {
+//            throw new UsernameNotFoundException("Unknown user: " + email);
+//        }
+//    }
 
 }
 
@@ -217,7 +217,12 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                 .antMatchers("/web/games.html").permitAll()
-                .anyRequest().authenticated()
+                .antMatchers("/web/games.css").permitAll()
+                .antMatchers("/web/games.js").permitAll()
+                .antMatchers("/api/games").permitAll()
+                .antMatchers("/api/games_view/*").hasAnyAuthority("USER")
+                .antMatchers("/rest/*").denyAll()
+                .anyRequest().fullyAuthenticated()
                 .and()
                 .formLogin()
                 .loginPage("/login")
