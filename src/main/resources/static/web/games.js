@@ -4,17 +4,16 @@ var gameData = new Vue({
         games: [],
         results: [],
         loading: true,
-        dataUrl:["http://localhost:8080/api/games", "http://localhost:8080/api/leaderboard"]
+        dataUrl: ["http://localhost:8080/api/games", "http://localhost:8080/api/leaderboard"]
     },
     created() {
         this.loadGames(this.dataUrl)
         // this.loadResults()
     },
-
     methods: {
         loadGames(urlArray) {
             Promise.all(urlArray.map(url => fetch(url)
-                .then(response => response.json())))
+                    .then(response => response.json())))
                 .then(json => {
                     this.games = json[0];
                     this.results = json[1];
