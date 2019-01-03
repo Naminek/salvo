@@ -17,7 +17,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.web.WebAttributes;
+import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -230,6 +235,23 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .logout()
                 .permitAll();
+
+        http.csrf().disable();
+        http.exceptionHandling().authenticationEntryPoint((request, response, authException)
+                -> response.sendError(HttpServletResponse.SC_UNAUTHORIZED));
+        http.formLogin().successHandler((request, response, authentication)
+                -> clearAuthenticationAttributes(request));
+        http.formLogin().failureHandler((request, response, exception)
+                -> response.sendError(HttpServletResponse.SC_UNAUTHORIZED));
+        http.logout().logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler());
+
+    }
+
+    private void clearAuthenticationAttributes(HttpServletRequest request) {
+        HttpSession httpSession = request.getSession(false);
+        if(httpSession != null) {
+            httpSession.removeAttribute(WebAttributes.AUTHENTICATION_EXCEPTION);
+        }
     }
 
     @Bean
