@@ -8,11 +8,15 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configurers.GlobalAuthenticationConfigurerAdapter;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -34,7 +38,7 @@ public class SalvoApplication {
             Player user1 = new Player("j.bauer@ctu.gov", "24");
             Player user2 = new Player("c.obrian@ctu.gov", "42");
             Player user3 = new Player("kim_bauer@gmail.com", "kb");
-            Player user4 = new Player("t.almeida@ctu.gov","mole");
+            Player user4 = new Player("t.almeida@ctu.gov", "mole");
 
 
             Date date1 = new Date();
@@ -185,24 +189,56 @@ class WebSecurityConfiguration extends GlobalAuthenticationConfigurerAdapter {
 
     @Override
     public void init(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(inputName -> {
-            Player player = playerRepository.findByUserName(inputName);
-            if(player != null) {
+        auth.userDetailsService(email -> {
+            Player player = playerRepository.findByUserName(email);
+            if (player != null) {
                 return new User(player.getEmail(), player.getPassword(), AuthorityUtils.createAuthorityList("USER"));
             } else {
-                throw new UsernameNotFoundException("Unknown user: " + inputName);
+                throw new UsernameNotFoundException("Unknown user: " + email);
             }
         });
     }
-    //    public UserDetailsService userDetailsService() {
-//        UserDetails user =
-//                User.withDefaultPasswordEncoder()
-//                        .username("user")
-//                        .password("password")
-//                        .roles("USER")
-//                        .build();
-//
-//        return new InMemoryUserDetailsManager(user);
-//    }
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        Player player = playerRepository.findByUserName(email);
+        if (player != null) {
+            return new User(player.getEmail(), player.getPassword(), AuthorityUtils.createAuthorityList("USER"));
+        } else {
+            throw new UsernameNotFoundException("Unknown user: " + email);
+        }
+    }
 
 }
+
+@EnableWebSecurity
+@Configuration
+class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http
+                .authorizeRequests()
+                .antMatchers("/web/games.html").permitAll()
+                .anyRequest().authenticated()
+                .and()
+                .formLogin()
+                .loginPage("/login")
+                .permitAll()
+                .and()
+                .logout()
+                .permitAll();
+    }
+
+    @Bean
+    @Override
+    public UserDetailsService userDetailsService() {
+        UserDetails user =
+                User.withDefaultPasswordEncoder()
+                        .username("email")
+                        .password("password")
+                        .roles("USER")
+                        .build();
+
+        return new InMemoryUserDetailsManager(user);
+    }
+}
+
+
