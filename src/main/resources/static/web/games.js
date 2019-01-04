@@ -12,7 +12,7 @@ var gameData = new Vue({
     },
     computed: {
         getUser() {
-            console.log(document.form.username.value);
+            console.log(document.form.email.value);
             console.log(document.form.password.value);
         }
     },

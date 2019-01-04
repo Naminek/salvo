@@ -19,15 +19,26 @@
         <div v-show="!loading" class="container">
 
             <form name="login-form" id="login-form">
-                <label>Name: <input type="text" name="username"></label>
+                <label>Name: <input type="text" name="email"></label>
                 <label>Password: <input type="text" name="password"></label>
                 <button onclick="getUser()">Log in</button>
-                <input type="button" value="Log in 2" onclick="getUser()">
             </form>
 
-            <form id="logout-form">
-                <button>Log out</button>
+            <form name="login-form" id="login-form" onsubmit="getUser()">
+                <label>Name: <input type="text" name="email"></label>
+                <label>Password: <input type="text" name="password"></label>
+                <input type="submit" value="Log in 2">
             </form>
+
+            <form name="login-form" id="login-form">
+                <label>Name: <input type="text" name="email"></label>
+                <label>Password: <input type="text" name="password"></label>
+                <input type="button" value="Log in 3" onclick="getUser()">
+            </form>
+
+            <!-- <form id="logout-form">
+                <button>Log out</button>
+            </form> -->
 
             <div v-for="(game, index) in games" :key="index" class="row">
                 <ul>
@@ -82,8 +93,9 @@
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <!-- <script src="https://code.jquery.com/jquery-2.2.0.js"></script> -->
     <script src="games.js"></script>
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-        crossorigin="anonymous"></script>
+    <!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
         crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"

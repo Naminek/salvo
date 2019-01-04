@@ -203,14 +203,6 @@ class WebSecurityConfiguration extends GlobalAuthenticationConfigurerAdapter {
             }
         });
     }
-//    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-//        Player player = playerRepository.findByUserName(email);
-//        if (player != null) {
-//            return new User(player.getEmail(), player.getPassword(), AuthorityUtils.createAuthorityList("USER"));
-//        } else {
-//            throw new UsernameNotFoundException("Unknown user: " + email);
-//        }
-//    }
 
 }
 
@@ -220,21 +212,23 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .authorizeRequests()
+            .authorizeRequests()
                 .antMatchers("/web/games.html").permitAll()
                 .antMatchers("/web/games.css").permitAll()
                 .antMatchers("/web/games.js").permitAll()
                 .antMatchers("/api/games").permitAll()
+                .antMatchers("/api/leaderboard").permitAll()
                 .antMatchers("/api/games_view/*").hasAnyAuthority("USER")
                 .antMatchers("/rest/*").denyAll()
                 .anyRequest().fullyAuthenticated()
                 .and()
-                .formLogin()
+            .formLogin()
+                .usernameParameter("email")
+                .passwordParameter("password")
                 .loginPage("/api/login")
-                .permitAll()
                 .and()
-                .logout()
-                .permitAll();
+            .logout()
+                .logoutUrl("/api/logout");
 
         http.csrf().disable();
 
@@ -262,18 +256,18 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         }
     }
 
-    @Bean
-    @Override
-    public UserDetailsService userDetailsService() {
-        UserDetails user =
-                User.withDefaultPasswordEncoder()
-                        .username("email")
-                        .password("password")
-                        .roles("USER")
-                        .build();
-
-        return new InMemoryUserDetailsManager(user);
-    }
+//    @Bean
+//    @Override
+//    public UserDetailsService userDetailsService() {
+//        UserDetails user =
+//                User.builder()
+//                        .username("email")
+//                        .password("password")
+//                        .roles("USER")
+//                        .build();
+//
+//        return new InMemoryUserDetailsManager(user);
+//    }
 }
 
 
