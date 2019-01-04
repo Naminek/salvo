@@ -237,12 +237,20 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll();
 
         http.csrf().disable();
+
+        // if user is not authenticated, just send an authentication failure response
         http.exceptionHandling().authenticationEntryPoint((request, response, authException)
                 -> response.sendError(HttpServletResponse.SC_UNAUTHORIZED));
+
+        // if login is successful, just clear the flags asking for authentication
         http.formLogin().successHandler((request, response, authentication)
                 -> clearAuthenticationAttributes(request));
+
+        // if login fails, just send an authentication failure response
         http.formLogin().failureHandler((request, response, exception)
                 -> response.sendError(HttpServletResponse.SC_UNAUTHORIZED));
+
+        // if logout is successful, just send a success response
         http.logout().logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler());
 
     }
