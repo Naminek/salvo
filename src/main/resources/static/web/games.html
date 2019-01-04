@@ -18,12 +18,14 @@
         </div>
         <div v-show="!loading" class="container">
 
-            <form id="login-form" onsubmit="return false">
+            <form name="login-form" id="login-form">
                 <label>Name: <input type="text" name="username"></label>
                 <label>Password: <input type="text" name="password"></label>
+                <button onclick="getUser()">Log in</button>
+                <input type="button" value="Log in 2" onclick="getUser()">
             </form>
 
-            <form id="logout-form" onsubmit="return false">
+            <form id="logout-form">
                 <button>Log out</button>
             </form>
 

@@ -10,6 +10,12 @@ var gameData = new Vue({
         this.loadGames(this.dataUrl)
         // this.loadResults()
     },
+    computed: {
+        getUser() {
+            console.log(document.form.username.value);
+            console.log(document.form.password.value);
+        }
+    },
     methods: {
         loadGames(urlArray) {
             Promise.all(urlArray.map(url => fetch(url)

@@ -230,7 +230,7 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().fullyAuthenticated()
                 .and()
                 .formLogin()
-                .loginPage("/login")
+                .loginPage("/api/login")
                 .permitAll()
                 .and()
                 .logout()
