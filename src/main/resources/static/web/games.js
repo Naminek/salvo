@@ -28,7 +28,8 @@ var gameData = new Vue({
             Promise.all(urlArray.map(url => fetch(url)
                     .then(response => response.json())))
                 .then(json => {
-                    this.games = json[0];
+                    console.log(json);
+                    this.games = json[0].games;
                     this.results = json[1];
                     console.log(this.games);
                     console.log(this.results);

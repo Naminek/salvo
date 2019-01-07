@@ -3,11 +3,15 @@ package com.codeoftheweb.salvo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.security.Principal;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -30,21 +34,25 @@ public class SalvoController {
 
 
     @RequestMapping("/games")
-    public  List<Map<String, Object>> getGameForUser() {
-        if() {
-
+    public Map<String, Object> getGamesForUser(Authentication authentication) {
+        if(authentication == null || authentication instanceof AnonymousAuthenticationToken) {
+            return new LinkedHashMap<String, Object>() {{
+                put("player", "null");
+                put("games", getGames());
+            }};
+        } else {
+            return new LinkedHashMap<String, Object>() {{
+                put("player", getPlayers(getViewingPlayer(authentication)));
+//                put("games", getGames());
+            }};
         }
     }
 
-    public Player getViewingPlayer(Authentication authentication) {
+    private Player getViewingPlayer(Authentication authentication) {
         return playerRepo.findByUserName(authentication.getName());
     }
 
-    private boolean isGuest(Authentication authentication) {
-        return authentication == null || authentication instanceof AnonymousAuthenticationToken;
-    }
-
-    public List<Map<String, Object>> getGames() {
+    private List<Map<String, Object>> getGames() {
         return gameRepo
                 .findAll()
                 .stream()
