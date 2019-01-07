@@ -5,6 +5,10 @@ var gameData = new Vue({
         results: [],
         loading: true,
         dataUrl: ["http://localhost:8080/api/games", "http://localhost:8080/api/leaderboard"],
+        user: {
+            "email": "",
+            "password": ""
+        },
         userEmail: "",
         userPassword: ""
     },
@@ -70,8 +74,28 @@ var gameData = new Vue({
             console.log(this.results)
         },
         getUser() {
-            console.log(this.userEmail);
-            console.log(this.userPassword);
+            this.user.email = this.userEmail;
+            this.user.password = this.userPassword;
+            // console.log(this.userEmail);
+            // console.log(this.userPassword);
+            console.log(this.user);
+            fetch("/api/login", {
+                    credentials: 'include',
+                    method: "POST",
+                    // body: JSON.stringify(this.user),
+                    body: `email=${ this.user.email }&password=${ this.user.password }`,
+                    // body: JSON.stringify({"email": this.userEmail, "password": this.userPassword}),
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    }
+                })
+                .then(function (data) {
+                    console.log('Request success: ', data);
+                })
+                .catch(function (error) {
+                    console.log('Request failure: ', error);
+                });
         }
     }
 })
