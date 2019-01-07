@@ -4,7 +4,9 @@ var gameData = new Vue({
         games: [],
         results: [],
         loading: true,
-        dataUrl: ["http://localhost:8080/api/games", "http://localhost:8080/api/leaderboard"]
+        dataUrl: ["http://localhost:8080/api/games", "http://localhost:8080/api/leaderboard"],
+        userEmail: "",
+        userPassword: ""
     },
     created() {
         this.loadGames(this.dataUrl)
@@ -66,6 +68,10 @@ var gameData = new Vue({
                 this.results[i]["ties"] = numberOfTie;
             }
             console.log(this.results)
+        },
+        getUser() {
+            console.log(this.userEmail);
+            console.log(this.userPassword);
         }
     }
 })

@@ -18,11 +18,18 @@
         </div>
         <div v-show="!loading" class="container">
 
-            <form name="login-form" id="login-form">
+            <!-- <form name="login-form" id="login-form">
                 <label>Name: <input type="text" name="email"></label>
                 <label>Password: <input type="text" name="password"></label>
                 <button onclick="getUser()">Log in</button>
+            </form> -->
+
+            <form name="login-form" id="login-form" @submit.prevent="getUser">
+                <label>Name: <input type="text" name="email" placeholder="email" v-model="userEmail"></label>
+                <label>Password: <input type="text" name="password" placeholder="password" v-model="userPassword"></label>
+                <button type="submit">Log in</button>
             </form>
+
 
             <!-- <form name="login-form" id="login-form" onsubmit="getUser()">
                 <label>Name: <input type="text" name="email"></label>
