@@ -43,7 +43,7 @@ public class SalvoController {
         } else {
             return new LinkedHashMap<String, Object>() {{
                 put("player", getPlayers(getViewingPlayer(authentication)));
-//                put("games", getGames());
+                put("games", getGames());
             }};
         }
     }
