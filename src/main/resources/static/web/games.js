@@ -76,8 +76,6 @@ var gameData = new Vue({
         getUser() {
             this.user.email = this.userEmail;
             this.user.password = this.userPassword;
-            // console.log(this.userEmail);
-            // console.log(this.userPassword);
             console.log(this.user);
             fetch("/api/login", {
                     credentials: 'include',
@@ -91,11 +89,22 @@ var gameData = new Vue({
                     }
                 })
                 .then(function (data) {
-                    console.log('Request success: ', data);
+                    console.log('Login success: ', data);
                 })
                 .catch(function (error) {
-                    console.log('Request failure: ', error);
+                    console.log('Login failure: ', error);
                 });
+        },
+        loseUser() {
+            fetch("/api/logout", {
+                method: "POST"
+            })
+            .then(function (data) {
+                console.log('Logout success: ', data);
+            })
+            .catch(function (error) {
+                console.log('Logout failure: ', error);
+            });
         }
     }
 })

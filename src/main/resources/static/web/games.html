@@ -43,9 +43,9 @@
                 <input type="button" value="Log in 3" onclick="getUser()">
             </form> -->
 
-            <!-- <form id="logout-form">
-                <button>Log out</button>
-            </form> -->
+            <form id="logout-form"  onsubmit="return false">
+                <button v-on:click="loseUser">Log out</button>
+            </form>
 
             <div v-for="(game, index) in games" :key="index" class="row">
                 <ul>
