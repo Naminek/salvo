@@ -5,19 +5,11 @@ var gameData = new Vue({
         results: [],
         loading: true,
         dataUrl: ["http://localhost:8080/api/games", "http://localhost:8080/api/leaderboard"],
-        user: {
-            "email": "",
-            "password": ""
-        },
         userEmail: "",
         userPassword: "",
         showForm: true,
         addEmail:"",
-        addPassword: "",
-        newUser: {
-            "email": "",
-            "password": ""
-        }
+        addPassword: ""
     },
     created() {
         this.loadGames(this.dataUrl)
@@ -82,14 +74,11 @@ var gameData = new Vue({
             console.log(this.results)
         },
         getUser() {
-            this.user.email = this.userEmail;
-            this.user.password = this.userPassword;
-            console.log(this.user);
             fetch("/api/login", {
                     credentials: 'include',
                     method: "POST",
                     // body: JSON.stringify(this.user),
-                    body: `email=${ this.user.email }&password=${ this.user.password }`,
+                    body: `email=${ this.userEmail }&password=${ this.userPassword }`,
                     // body: JSON.stringify({"email": this.userEmail, "password": this.userPassword}),
                     headers: {
                         'Accept': 'application/json',
@@ -98,20 +87,21 @@ var gameData = new Vue({
                 })
                 .then(function (data) {
                     console.log('Request success: ', data);
+                    if(data.status == 200) {
+                        gameData.showForm = false;
+                    } else if(data.status == 401) {
+                        alert("User not found")
+                    }
                 })
                 .catch(function (error) {
                     console.log('Request failure: ', error);
                 });
-                this.showForm = false;
         },
         addUser() {
-            this.newUser.email = this.addEmail;
-            this.newUser.password = this.addPassword;
-            console.log(this.newUser);
-            fetch("/api/player", {
+            fetch("/api/players", {
                     credentials: 'include',
                     method: "POST",
-                    body: `email=${ this.newUser.email }&password=${ this.newUser.password }`,
+                    body: `email=${ this.addEmail }&password=${ this.addPassword }`,
                     headers: {
                         'Accept': 'application/json',
                         'Content-Type': 'application/x-www-form-urlencoded'
@@ -119,11 +109,15 @@ var gameData = new Vue({
                 })
                 .then(function (data) {
                     console.log('Request success: ', data);
+                    if(data.status == 201) {
+                        gameData.showForm = false;
+                    } else if(data.status == 403) {
+                        alert("Please try again")
+                    }
                 })
                 .catch(function (error) {
                     console.log('Request failure: ', error);
                 });
-                this.showForm = false;
         },
         loseUser() {
             this.showForm = true;
