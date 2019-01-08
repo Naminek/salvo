@@ -26,26 +26,33 @@
 
             <div>
                 <div v-if="showForm">
-                <form name="login-form" id="login-form" @submit.prevent="getUser">
-                    <label>Name: <input type="text" name="email" placeholder="email" v-model="userEmail"></label>
-                    <label>Password: <input type="text" name="password" placeholder="password" v-model="userPassword"></label>
-                    <button type="submit">Log in</button>
-                </form>
+                    <form name="login-form" id="login-form" @submit.prevent="getUser">
+                        <label>Name: <input type="text" name="email" placeholder="email" v-model="userEmail"></label>
+                        <label>Password: <input type="text" name="password" placeholder="password" v-model="userPassword"></label>
+                        <button type="submit">Log in</button>
+                    </form>
 
-                <form name="signin-form" id="signin-form" @submit.prevent="addUser">
-                    <label>Name: <input type="text" name="email" placeholder="email" v-model="addEmail"></label>
-                    <label>Password: <input type="text" name="password" placeholder="password" v-model="addPassword"></label>
-                    <button type="submit">Sign in</button>
-                </form>
+                    <button v-on:click="showSignin" v-if="clickSignIn">Register</button>
 
-            </div>
+                    <div v-else>
+                        <button v-on:click="hideSignin">Register</button>
+                        <form name="signin-form" id="signin-form" @submit.prevent="addUser">
+                            <label>Name: <input type="text" name="email" placeholder="email" v-model="addEmail"></label>
+                            <label>Password: <input type="text" name="password" placeholder="password" v-model="addPassword"></label>
+                            <button type="submit">Sign in</button>
+                        </form>
+                    </div>
+
+                </div>
                 <form id="logout-form" onsubmit="return false" v-else>
                     <button v-on:click="loseUser">Log out</button>
                 </form>
 
             </div>
 
-            <div v-for="(game, index) in games" :key="index" class="row">
+            <p class="mt-5">Player: {{player.email}}</p>
+
+            <div v-for="(game, index) in games" :key="index" class="row mt-4">
                 <ul>
                     <li>Game{{game.id}}:
                         <ol>

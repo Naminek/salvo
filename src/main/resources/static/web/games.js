@@ -9,24 +9,28 @@ var gameData = new Vue({
         userPassword: "",
         showForm: true,
         addEmail:"",
-        addPassword: ""
+        addPassword: "",
+        clickSignIn: true,
+        player: [],
+        playersEmail: false
     },
     created() {
         this.loadGames(this.dataUrl)
         // this.loadResults()
     },
-    computed: {
-        getUser() {
-            console.log(document.form.email.value);
-            console.log(document.form.password.value);
-        }
-    },
+    // computed: {
+    //     getUser() {
+    //         console.log(document.form.email.value);
+    //         console.log(document.form.password.value);
+    //     }
+    // },
     methods: {
         loadGames(urlArray) {
             Promise.all(urlArray.map(url => fetch(url)
                     .then(response => response.json())))
                 .then(json => {
                     console.log(json);
+                    this.player = json[0].player
                     this.games = json[0].games;
                     this.results = json[1];
                     console.log(this.games);
@@ -34,6 +38,8 @@ var gameData = new Vue({
                     this.loading = false;
                     this.getDate();
                     this.addResults();
+                    console.log(this.player);
+                    this.showPlayer();
                 })
                 .catch(function (error) {
                     console.log(error);
@@ -73,6 +79,11 @@ var gameData = new Vue({
             }
             console.log(this.results)
         },
+        showPlayer(){
+            if(this.player != null) {
+                this.playersEmail = true;
+            }
+        },
         getUser() {
             fetch("/api/login", {
                     credentials: 'include',
@@ -88,6 +99,7 @@ var gameData = new Vue({
                 .then(function (data) {
                     console.log('Request success: ', data);
                     if(data.status == 200) {
+                        location.reload();
                         gameData.showForm = false;
                     } else if(data.status == 401) {
                         alert("User not found")
@@ -110,6 +122,9 @@ var gameData = new Vue({
                 .then(function (data) {
                     console.log('Request success: ', data);
                     if(data.status == 201) {
+                        gameData.userEmail = gameData.addEmail;
+                        gameData.userPassword = gameData.addPassword;
+                        gameData.getUser();
                         gameData.showForm = false;
                     } else if(data.status == 403) {
                         alert("Please try again")
@@ -130,6 +145,12 @@ var gameData = new Vue({
             .catch(function (error) {
                 console.log('Request failure: ', error);
             });
+        },
+        showSignin() {
+            this.clickSignIn = false;
+        },
+        hideSignin() {
+            this.clickSignIn = true;
         }
     }
 })
