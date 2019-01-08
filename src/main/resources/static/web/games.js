@@ -11,7 +11,13 @@ var gameData = new Vue({
         },
         userEmail: "",
         userPassword: "",
-        showForm: true
+        showForm: true,
+        addEmail:"",
+        addPassword: "",
+        newUser: {
+            "email": "",
+            "password": ""
+        }
     },
     created() {
         this.loadGames(this.dataUrl)
@@ -79,7 +85,6 @@ var gameData = new Vue({
             this.user.email = this.userEmail;
             this.user.password = this.userPassword;
             console.log(this.user);
-            this.showForm = false;
             fetch("/api/login", {
                     credentials: 'include',
                     method: "POST",
@@ -97,6 +102,28 @@ var gameData = new Vue({
                 .catch(function (error) {
                     console.log('Request failure: ', error);
                 });
+                this.showForm = false;
+        },
+        addUser() {
+            this.newUser.email = this.addEmail;
+            this.newUser.password = this.addPassword;
+            console.log(this.newUser);
+            fetch("/api/player", {
+                    credentials: 'include',
+                    method: "POST",
+                    body: `email=${ this.newUser.email }&password=${ this.newUser.password }`,
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    }
+                })
+                .then(function (data) {
+                    console.log('Request success: ', data);
+                })
+                .catch(function (error) {
+                    console.log('Request failure: ', error);
+                });
+                this.showForm = false;
         },
         loseUser() {
             this.showForm = true;

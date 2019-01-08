@@ -1,15 +1,14 @@
 package com.codeoftheweb.salvo;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.*;
@@ -140,5 +139,19 @@ public class SalvoController {
                         }})
                 ).collect(Collectors.toList());
     }
+
+    @RequestMapping(value = "/players", method = RequestMethod.POST)
+    public ResponseEntity<String> createUser(@RequestParam("email") String email, @RequestParam("password") String password){
+        Player player = playerRepo.findByUserName(email);
+        if (email.isEmpty() || password.isEmpty()) {
+            return new ResponseEntity<>("No user given", HttpStatus.FORBIDDEN);
+        } else if (player != null) {
+            return new ResponseEntity<>("Email in use", HttpStatus.FORBIDDEN);
+        } else {
+            playerRepo.save(new Player(email, password));
+            return new ResponseEntity<>("User added", HttpStatus.CREATED);
+        }
+    }
+
 
 }
