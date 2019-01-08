@@ -11,7 +11,7 @@ var gameData = new Vue({
         addEmail:"",
         addPassword: "",
         clickSignIn: true,
-        player: [],
+        viewingPlayer: null,
         playersEmail: false
     },
     created() {
@@ -30,7 +30,7 @@ var gameData = new Vue({
                     .then(response => response.json())))
                 .then(json => {
                     console.log(json);
-                    this.player = json[0].player
+                    this.viewingPlayer = json[0].player.email;
                     this.games = json[0].games;
                     this.results = json[1];
                     console.log(this.games);
@@ -38,7 +38,7 @@ var gameData = new Vue({
                     this.loading = false;
                     this.getDate();
                     this.addResults();
-                    console.log(this.player);
+                    console.log(this.viewingPlayer);
                     this.showPlayer();
                 })
                 .catch(function (error) {
@@ -80,7 +80,7 @@ var gameData = new Vue({
             console.log(this.results)
         },
         showPlayer(){
-            if(this.player != null) {
+            if(this.viewingPlayer != null) {
                 this.playersEmail = true;
             }
         },
@@ -99,8 +99,7 @@ var gameData = new Vue({
                 .then(function (data) {
                     console.log('Request success: ', data);
                     if(data.status == 200) {
-                        location.reload();
-                        gameData.showForm = false;
+                        window.location.reload();
                     } else if(data.status == 401) {
                         alert("User not found")
                     }
@@ -125,7 +124,6 @@ var gameData = new Vue({
                         gameData.userEmail = gameData.addEmail;
                         gameData.userPassword = gameData.addPassword;
                         gameData.getUser();
-                        gameData.showForm = false;
                     } else if(data.status == 403) {
                         alert("Please try again")
                     }
@@ -141,6 +139,8 @@ var gameData = new Vue({
             })
             .then(function (data) {
                 console.log('Request success: ', data);
+                window.location.reload();
+                this.player = null;
             })
             .catch(function (error) {
                 console.log('Request failure: ', error);
