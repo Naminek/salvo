@@ -60,7 +60,7 @@
                         <!-- <span v-if="check(game)"> -->
                         <span v-if="check(game.gamePlayers)">
                             <!-- <a :href=`game.html?gp=${viewingPlayerId}`><button>Join Game{{game.id}}</button></a> -->
-                            <a :href="link"><button>Back to the Game{{game.id}}</button></a>
+                            <a :href="link" target="_blank"><button>Back to the Game{{game.id}}</button></a>
                         </span>
                         <ol>
                             <li>created date: {{game.created}}</li>
