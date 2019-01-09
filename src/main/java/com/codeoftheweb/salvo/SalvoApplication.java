@@ -66,6 +66,9 @@ public class SalvoApplication {
             GamePlayer gamePlayer4 = new GamePlayer(date2);
             user2.addGamePlayer(gamePlayer4);
             game2.addGamePlayer(gamePlayer4);
+            GamePlayer gamePlayer5 = new GamePlayer(date3);
+            user3.addGamePlayer(gamePlayer5);
+            game3.addGamePlayer(gamePlayer5);
 
 
             List<String> locations1 = Arrays.asList("H2", "H3", "H4");
@@ -159,6 +162,7 @@ public class SalvoApplication {
             gamePlayerRepository.save(gamePlayer2);
             gamePlayerRepository.save(gamePlayer3);
             gamePlayerRepository.save(gamePlayer4);
+            gamePlayerRepository.save(gamePlayer5);
 
             shipRepository.save(ship1);
             shipRepository.save(ship2);

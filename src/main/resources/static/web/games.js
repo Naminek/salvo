@@ -8,11 +8,12 @@ var gameData = new Vue({
         userEmail: "",
         userPassword: "",
         showForm: true,
-        addEmail:"",
+        addEmail: "",
         addPassword: "",
         clickSignIn: true,
         viewingPlayer: null,
-        playersEmail: false
+        playersEmail: false,
+        viewingPlayerId: ""
     },
     created() {
         this.loadGames(this.dataUrl)
@@ -33,6 +34,7 @@ var gameData = new Vue({
                     this.addResults();
                     console.log(this.viewingPlayer);
                     this.showPlayer();
+                    // this.showJoinButton();
                 })
                 .catch(function (error) {
                     console.log(error);
@@ -72,8 +74,8 @@ var gameData = new Vue({
             }
             console.log(this.results)
         },
-        showPlayer(){
-            if(this.viewingPlayer != null) {
+        showPlayer() {
+            if (this.viewingPlayer != null) {
                 this.playersEmail = true;
             }
         },
@@ -91,9 +93,10 @@ var gameData = new Vue({
                 })
                 .then(function (data) {
                     console.log('Request success: ', data);
-                    if(data.status == 200) {
+                    if (data.status == 200) {
                         window.location.reload();
-                    } else if(data.status == 401) {
+                        // gameData.showJoinButton();
+                    } else if (data.status == 401) {
                         alert("User not found")
                     }
                 })
@@ -113,11 +116,11 @@ var gameData = new Vue({
                 })
                 .then(function (data) {
                     console.log('Request success: ', data);
-                    if(data.status == 201) {
+                    if (data.status == 201) {
                         gameData.userEmail = gameData.addEmail;
                         gameData.userPassword = gameData.addPassword;
                         gameData.getUser();
-                    } else if(data.status == 403) {
+                    } else if (data.status == 403) {
                         alert("Please try again")
                     }
                 })
@@ -128,22 +131,50 @@ var gameData = new Vue({
         loseUser() {
             this.showForm = true;
             fetch("/api/logout", {
-                method: "POST"
-            })
-            .then(function (data) {
-                console.log('Request success: ', data);
-                window.location.reload();
-                this.player = null;
-            })
-            .catch(function (error) {
-                console.log('Request failure: ', error);
-            });
+                    method: "POST"
+                })
+                .then(function (data) {
+                    console.log('Request success: ', data);
+                    window.location.reload();
+                    // this.player = null;
+                })
+                .catch(function (error) {
+                    console.log('Request failure: ', error);
+                });
         },
         showSignin() {
             this.clickSignIn = false;
         },
         hideSignin() {
             this.clickSignIn = true;
+        },
+        // showJoinButton() {
+        //     for (var i = 0; i < this.games.length; i++) {
+        //         for (var j = 0; j < this.games[i].gamePlayers.length; j++) {
+        //             // console.log(this.viewingPlayer);
+        //             // console.log(this.games[i].gamePlayers[j].name);
+        //             console.log(this.games[i].id);
+        //             console.log(`#showButton${this.games[i].id}`);
+        //             console.log(document.querySelector(`#showButton${this.games[i].id}`));
+        //             if (this.viewingPlayer != null && this.viewingPlayer == this.games[i].gamePlayers[j].name) {
+        //                 document.querySelector(`#showButton${this.games[i].id}`).innerHTML = '<a href="/web/game.html?gp=' + this.game[i].id + '"><button>Join Game' + this.games[i].id + '</button></a>';
+
+        //             }
+        //         }
+
+        //     }
+        // },
+        check(game){
+            for(var i = 0; i < game.gamePlayers.length; i++) {
+                if(game.gamePlayers[i]) {
+                    if(game.gamePlayers[i].name == this.viewingPlayer) {
+                        this.viewingPlayerId = game.gamePlayers[i].gpid;
+                        return true;
+                    }
+                } else {
+                    return false;
+                }
+            }
         }
     }
 })

@@ -56,7 +56,10 @@
 
             <div v-for="(game, index) in games" :key="index" class="row mt-4">
                 <ul>
-                    <li>Game{{game.id}}:
+                    <li>Game{{game.id}}
+                        <span v-if="check(game)">
+                            <p><a :href="'/web/game.html?gp=' + viewingPlayerId"><button>Join Game{{game.id}}</button></a></p>
+                        </span>
                         <ol>
                             <li>created date: {{game.created}}</li>
                             <li>GamePlayers:
