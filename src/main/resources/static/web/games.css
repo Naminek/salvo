@@ -8,3 +8,10 @@
     height: 50px;
     text-align: center;
 }
+
+.viewing_player {
+    border: 1px black solid;
+    border-radius: 5%;
+    padding: 1%;
+    margin-right: 1em;
+}

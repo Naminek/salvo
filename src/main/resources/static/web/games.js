@@ -16,14 +16,7 @@ var gameData = new Vue({
     },
     created() {
         this.loadGames(this.dataUrl)
-        // this.loadResults()
     },
-    // computed: {
-    //     getUser() {
-    //         console.log(document.form.email.value);
-    //         console.log(document.form.password.value);
-    //     }
-    // },
     methods: {
         loadGames(urlArray) {
             Promise.all(urlArray.map(url => fetch(url)

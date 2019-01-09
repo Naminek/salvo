@@ -51,6 +51,22 @@ public class SalvoController {
         return playerRepo.findByUserName(authentication.getName());
     }
 
+//    private List<Map<String, Object>> getGames() {
+//        return gameRepo
+//                .findAll()
+//                .stream()
+//                .map(game -> new LinkedHashMap<String, Object>() {{
+//                    put("id", game.getGameId());
+//                    put("created", game.getCreatedDate());
+//                    put("finished", checkFinished(game.getScores()));
+//                    put("gamePlayers", game.getGamePlayers().stream().map(gamePlayer -> new LinkedHashMap<String, Object>() {{
+//                        put("id", gamePlayer.getGamePlayerId());
+//                        put("player", getPlayers(gamePlayer.getPlayer()));
+//                        put("score", gamePlayer.getScoreInGame(game));
+//                    }}).collect(Collectors.toList()));
+//                }}).collect(Collectors.toList());
+//    }
+
     private List<Map<String, Object>> getGames() {
         return gameRepo
                 .findAll()
@@ -60,8 +76,9 @@ public class SalvoController {
                     put("created", game.getCreatedDate());
                     put("finished", checkFinished(game.getScores()));
                     put("gamePlayers", game.getGamePlayers().stream().map(gamePlayer -> new LinkedHashMap<String, Object>() {{
-                        put("id", gamePlayer.getGamePlayerId());
-                        put("player", getPlayers(gamePlayer.getPlayer()));
+                        put("gpid", gamePlayer.getGamePlayerId());
+                        put("id", gamePlayer.getPlayer().getPlayerId());
+                        put("name", gamePlayer.getPlayer().getEmail());
                         put("score", gamePlayer.getScoreInGame(game));
                     }}).collect(Collectors.toList()));
                 }}).collect(Collectors.toList());
