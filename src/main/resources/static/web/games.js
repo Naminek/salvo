@@ -13,7 +13,8 @@ var gameData = new Vue({
         clickSignIn: true,
         viewingPlayer: null,
         playersEmail: false,
-        viewingPlayerId: ""
+        viewingPlayerId: "",
+        link: ""
     },
     created() {
         this.loadGames(this.dataUrl)
@@ -34,7 +35,6 @@ var gameData = new Vue({
                     this.addResults();
                     console.log(this.viewingPlayer);
                     this.showPlayer();
-                    // this.showJoinButton();
                 })
                 .catch(function (error) {
                     console.log(error);
@@ -148,33 +148,44 @@ var gameData = new Vue({
         hideSignin() {
             this.clickSignIn = true;
         },
-        // showJoinButton() {
-        //     for (var i = 0; i < this.games.length; i++) {
-        //         for (var j = 0; j < this.games[i].gamePlayers.length; j++) {
-        //             // console.log(this.viewingPlayer);
-        //             // console.log(this.games[i].gamePlayers[j].name);
-        //             console.log(this.games[i].id);
-        //             console.log(`#showButton${this.games[i].id}`);
-        //             console.log(document.querySelector(`#showButton${this.games[i].id}`));
-        //             if (this.viewingPlayer != null && this.viewingPlayer == this.games[i].gamePlayers[j].name) {
-        //                 document.querySelector(`#showButton${this.games[i].id}`).innerHTML = '<a href="/web/game.html?gp=' + this.game[i].id + '"><button>Join Game' + this.games[i].id + '</button></a>';
-
+        check(gamePlayers) {
+            if(gamePlayers[0].name == this.viewingPlayer){
+                this.link = `game.html?gp=${gamePlayers[0].gpid}`
+                return true;
+            }
+            if(gamePlayers[1] && gamePlayers[1].name == this.viewingPlayer){
+                this.link = `game.html?gp=${gamePlayers[1].gpid}`
+                return true
+            }
+            return false
+        }
+        // check(game) {
+        //     for (var i = 0; i < game.gamePlayers.length; i++) {
+        //         if (game.gamePlayers[i] && this.viewingPlayer) {
+        //             if (this.viewingPlayer == game.gamePlayers[i].name) {
+        //                 this.viewingPlayerId = game.gamePlayers[i].gpid;
+        //                 // this.link = `game.html?gp=${game.gamePlayers[i].gpid}`
+        //                 return true;
         //             }
+        //         } else {
+        //             return false;
         //         }
-
         //     }
         // },
-        check(game){
-            for(var i = 0; i < game.gamePlayers.length; i++) {
-                if(game.gamePlayers[i]) {
-                    if(game.gamePlayers[i].name == this.viewingPlayer) {
-                        this.viewingPlayerId = game.gamePlayers[i].gpid;
-                        return true;
-                    }
-                } else {
-                    return false;
-                }
-            }
-        }
+        // check(game) {
+        //     if (game.gamePlayers[0] && this.viewingPlayer) {
+        //         if (this.viewingPlayer == game.gamePlayers[0].name) {
+        //             this.viewingPlayerId = game.gamePlayers[0].gpid;
+        //             return true;
+        //         } else if (game.gamePlayers[1] && this.viewingPlayer == game.gamePlayers[1].name) {
+        //             this.viewingPlayerId = game.gamePlayers[1].gpid;
+        //             return true;
+        //         } else {
+        //             return false;
+        //         }
+        //     } else {
+        //         return false;
+        //     }
+        // }
     }
 })
