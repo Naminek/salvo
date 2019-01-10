@@ -164,7 +164,7 @@ var gameData = new Vue({
                 }
             }
             return null
-        }
+        },
         // check(game) {
         //     for (var i = 0; i < game.gamePlayers.length; i++) {
         //         if (game.gamePlayers[i] && this.viewingPlayer) {
@@ -178,20 +178,24 @@ var gameData = new Vue({
         //         }
         //     }
         // },
-        // check(game) {
-        //     if (game.gamePlayers[0] && this.viewingPlayer) {
-        //         if (this.viewingPlayer == game.gamePlayers[0].name) {
-        //             this.viewingPlayerId = game.gamePlayers[0].gpid;
-        //             return true;
-        //         } else if (game.gamePlayers[1] && this.viewingPlayer == game.gamePlayers[1].name) {
-        //             this.viewingPlayerId = game.gamePlayers[1].gpid;
-        //             return true;
-        //         } else {
-        //             return false;
-        //         }
-        //     } else {
-        //         return false;
-        //     }
-        // }
+        createNewGame() {
+            fetch("/api/games", {
+                credentials: 'include',
+                    method: "POST",
+                    body: `email=${ this.userEmail }&password=${ this.userPassword }`,
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    }
+            })
+            .then(function (data) {
+                console.log('Request success: ', data);
+                window.location.reload();
+                // this.player = null;
+            })
+            .catch(function (error) {
+                console.log('Request failure: ', error);
+            }); 
+        }
     }
 })

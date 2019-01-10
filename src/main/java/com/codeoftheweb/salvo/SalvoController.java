@@ -94,6 +94,24 @@ public class SalvoController {
                 .orElse(null);
     }
 
+    @RequestMapping(value = "/games", method = RequestMethod.POST)
+    public ResponseEntity<String> createNewGame(Authentication auth){
+        if (auth.getName().isEmpty()) {
+            return new ResponseEntity<>("No user given", HttpStatus.FORBIDDEN);
+        } else {
+            Date date = new Date();
+            Game game = new Game(date);
+            Player player = playerRepo.findByUserName(auth.getName());
+            GamePlayer gamePlayer = gamePlayerRepo.save(new GamePlayer(date));
+            game.addGamePlayer(gamePlayer);
+            player.addGamePlayer(gamePlayer);
+            gameRepo.save(game);
+            playerRepo.save(player);
+            return new ResponseEntity<>("Game added", HttpStatus.CREATED);
+        }
+    }
+
+
     @RequestMapping("/leaderboard")
     public List<Map<String, Object>> getGameTable() {
         return playerRepo
@@ -110,10 +128,7 @@ public class SalvoController {
 
     @RequestMapping(value = "/game_view/{nn}", method = RequestMethod.GET)
     public Object getGameView(@PathVariable("nn") Long gamePlayerId, Authentication auth) {
-
-        System.out.println(auth.getName());
         GamePlayer gamePlayer = gamePlayerRepo.findOne(gamePlayerId);
-        System.out.println(gamePlayer.getPlayer().getEmail());
         if(auth.getName() == gamePlayer.getPlayer().getEmail()) {
             return new LinkedHashMap<String, Object>() {{
                 put("gameId", gamePlayer.getGame().getGameId());
@@ -172,3 +187,5 @@ public class SalvoController {
 
 
 }
+
+
