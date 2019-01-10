@@ -14,7 +14,8 @@ var gameData = new Vue({
         viewingPlayer: null,
         playersEmail: false,
         viewingPlayerId: "",
-        newGamePlayersId: ""
+        newGamePlayersId: "",
+        joiningGameId:""
     },
     created() {
         this.loadGames(this.dataUrl)
@@ -35,7 +36,7 @@ var gameData = new Vue({
                     this.addResults();
                     console.log(this.viewingPlayer);
                     this.showPlayer();
-                    this.getNewGamePlayerId();
+                    this.getGamePlayerId();
                 })
                 .catch(function (error) {
                     console.log(error);
@@ -183,7 +184,6 @@ var gameData = new Vue({
             fetch("/api/games", {
                 credentials: 'include',
                     method: "POST",
-                    body: `email=${ this.userEmail }&password=${ this.userPassword }`,
                     headers: {
                         'Accept': 'application/json',
                         'Content-Type': 'application/x-www-form-urlencoded'
@@ -192,18 +192,48 @@ var gameData = new Vue({
             .then(function (data) {
                 console.log('Request success: ', data);
                 window.location.reload();
-                // gameData.getNewGamePlayerId();
             })
             .catch(function (error) {
                 console.log('Request failure: ', error);
-            }); 
+                alert("Failure");
+            });
         },
-        getNewGamePlayerId() {
+        getGamePlayerId() {
             var gamePlayerArray = this.games.map(game => game.gamePlayers);
             var allGamePlayerArray = [].concat.apply([], gamePlayerArray);
-            console.log(allGamePlayerArray);
+            // console.log(allGamePlayerArray);
             this.newGamePlayersId = (Math.max(...allGamePlayerArray.map(gamePlayer => gamePlayer.gpid))) + 1;
-            console.log(this.newGamePlayersId);
+            // console.log(this.newGamePlayersId);
+        },
+        joinGame() {
+            fetch("/api/games/" + this.joiningGameId + "/players", {
+                credentials: 'include',
+                    method: "POST",
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    }
+            })
+            .then(function (data) {
+                console.log('Request success: ', data);
+                window.location.reload();
+            })
+            .catch(function (error) {
+                console.log('Request failure: ', error);
+                alert("Failure");
+            }); 
+        },
+        checkPlayerInGame(gamePlayers) {
+            if(gamePlayers.length === 1 && this.viewingPlayer) {
+                return 1;
+            } else {
+                return null;
+            }
+        },
+        getGameIdToJoin(oneGame) {
+            this.joiningGameId = oneGame.id;
+            console.log(this.joiningGameId);
+            window.location.reload();
         }
     }
 })

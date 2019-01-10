@@ -102,7 +102,8 @@ public class SalvoController {
             Date date = new Date();
             Game game = new Game(date);
             Player player = playerRepo.findByUserName(auth.getName());
-            GamePlayer gamePlayer = gamePlayerRepo.save(new GamePlayer(date));
+            GamePlayer gamePlayer = new GamePlayer(date);
+            gamePlayerRepo.save(gamePlayer);
             game.addGamePlayer(gamePlayer);
             player.addGamePlayer(gamePlayer);
             gameRepo.save(game);
@@ -138,7 +139,7 @@ public class SalvoController {
                 put("salvoes", getSalvoes(gamePlayer.getGame().getGamePlayers()));
             }};
         } else {
-            return new ResponseEntity<>("Wrong user", HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>("Wrong user", HttpStatus.UNAUTHORIZED);
         }
     }
 
@@ -184,6 +185,33 @@ public class SalvoController {
         }
     }
 
+
+    @RequestMapping(value = "/api/game/{nn}/players", method = RequestMethod.POST)
+    public Object joinGame(@PathVariable("nn") Long gameId, Authentication auth) {
+        Game game = gameRepo.findOne(gameId);
+        System.out.println(game);
+        if(auth.getName().isEmpty()) {
+            System.out.println("no auth");
+            return new ResponseEntity<>("No user given", HttpStatus.UNAUTHORIZED);
+        } else if(game == null) {
+            System.out.println("no game");
+            return new ResponseEntity<>("No such game", HttpStatus.FORBIDDEN);
+        } else if(game.getPlayers().size() == 2) {
+            System.out.println("game full");
+            return new ResponseEntity<>("Game is full", HttpStatus.FORBIDDEN);
+        } else {
+            System.out.println("joining");
+            Date date = new Date();
+            Player player = playerRepo.findByUserName(auth.getName());
+            GamePlayer gamePlayer = new GamePlayer(date);
+            gamePlayerRepo.save(gamePlayer);
+            game.addGamePlayer(gamePlayer);
+            player.addGamePlayer(gamePlayer);
+            gameRepo.save(game);
+            playerRepo.save(player);
+            return new ResponseEntity<>("Player added", HttpStatus.CREATED);
+        }
+    }
 
 
 }
