@@ -52,25 +52,21 @@
 
             </div>
 
-            <div v-if="playersEmail">
-
-                <p class="mt-5"><span class="viewing_player">{{viewingPlayer}}</span>is playing !</p>
+            <p class="mt-5" v-if="playersEmail"><span class="viewing_player">{{viewingPlayer}}</span>is playing !</p>
 
 
-                <button v-on:click="createNewGame" class="mt-3">Create new game</button>
-
-            </div>
+            <a :href=`game.html?gp=${newGamePlayersId}` target="_blank"><button v-on:click="createNewGame" v-if="playersEmail">Create new game</button></a>
 
             <div v-for="(game, index) in games" :key="index" class="row mt-4">
                 <ul>
                     <li>Game{{game.id}}
                         <span v-if="check(game.gamePlayers) === 0">
-                            <a :href=`game.html?gp=${game.gamePlayers[0].gpid}` target="_blank"><button>Back to the
-                                    Game{{game.id}}</button></a>
+                            <a :href=`game.html?gp=${game.gamePlayers[0].gpid}` target="_blank">
+                                <button>Back to the Game{{game.id}}</button></a>
                         </span>
                         <span v-if="check(game.gamePlayers) === 1">
-                            <a :href=`game.html?gp=${game.gamePlayers[1].gpid}` target="_blank"><button>Back to the
-                                    Game{{game.id}}</button></a>
+                            <a :href=`game.html?gp=${game.gamePlayers[1].gpid}` target="_blank">
+                                <button>Back to the Game{{game.id}}</button></a>
                         </span>
                         <ol>
                             <li>created date: {{game.created}}</li>

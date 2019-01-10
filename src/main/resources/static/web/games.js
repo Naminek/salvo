@@ -14,7 +14,7 @@ var gameData = new Vue({
         viewingPlayer: null,
         playersEmail: false,
         viewingPlayerId: "",
-        link: ""
+        newGamePlayersId: ""
     },
     created() {
         this.loadGames(this.dataUrl)
@@ -35,6 +35,7 @@ var gameData = new Vue({
                     this.addResults();
                     console.log(this.viewingPlayer);
                     this.showPlayer();
+                    this.getNewGamePlayerId();
                 })
                 .catch(function (error) {
                     console.log(error);
@@ -191,11 +192,18 @@ var gameData = new Vue({
             .then(function (data) {
                 console.log('Request success: ', data);
                 window.location.reload();
-                // this.player = null;
+                // gameData.getNewGamePlayerId();
             })
             .catch(function (error) {
                 console.log('Request failure: ', error);
             }); 
+        },
+        getNewGamePlayerId() {
+            var gamePlayerArray = this.games.map(game => game.gamePlayers);
+            var allGamePlayerArray = [].concat.apply([], gamePlayerArray);
+            console.log(allGamePlayerArray);
+            this.newGamePlayersId = (Math.max(...allGamePlayerArray.map(gamePlayer => gamePlayer.gpid))) + 1;
+            console.log(this.newGamePlayersId);
         }
     }
 })
