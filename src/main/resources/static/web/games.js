@@ -230,10 +230,12 @@ var gameData = new Vue({
                 return null;
             }
         },
-        getGameIdToJoin(oneGame) {
-            this.joiningGameId = oneGame.id;
+        getGameIdToJoin(game) {
+            this.joiningGameId = game.id;
             console.log(this.joiningGameId);
-            window.location.reload();
+            this.joinGame();
+            // window.location.reload();
+            
         }
     }
 })

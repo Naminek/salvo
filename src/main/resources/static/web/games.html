@@ -70,7 +70,7 @@
                                 <button>Back to the Game{{game.id}}</button></a>
                         </span>
                         <span v-if="checkPlayerInGame(game.gamePlayers) === 1">
-                                <a :href=`game.html?gp=${newGamePlayersId}` target="_blank"><button>Join Game{{game.id}}</button></a>
+                                <a :href=`game.html?gp=${newGamePlayersId}` target="_blank" v-on:click="getGameIdToJoin(game)"><button>Join Game{{game.id}}</button></a>
                         </span>
                         <ol>
                             <li>created date: {{game.created}}</li>
