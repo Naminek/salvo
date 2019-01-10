@@ -5,15 +5,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 
 @RestController
@@ -113,19 +108,23 @@ public class SalvoController {
     }
 
 
-
-
     @RequestMapping(value = "/game_view/{nn}", method = RequestMethod.GET)
-    public Map<String, Object> getGameView(@PathVariable("nn") Long gamePlayerId) {
-        GamePlayer gamePlayer = gamePlayerRepo.findOne(gamePlayerId);
+    public Object getGameView(@PathVariable("nn") Long gamePlayerId, Authentication auth) {
 
-        return new LinkedHashMap<String, Object>() {{
-            put("gameId", gamePlayer.getGame().getGameId());
-            put("created", gamePlayer.getGame().getCreatedDate());
-            put("gamePlayers", getGamePlayers(gamePlayer.getGame()));
-            put("ships", getShips(gamePlayer));
-            put("salvoes", getSalvoes(gamePlayer.getGame().getGamePlayers()));
-        }};
+        System.out.println(auth.getName());
+        GamePlayer gamePlayer = gamePlayerRepo.findOne(gamePlayerId);
+        System.out.println(gamePlayer.getPlayer().getEmail());
+        if(auth.getName() == gamePlayer.getPlayer().getEmail()) {
+            return new LinkedHashMap<String, Object>() {{
+                put("gameId", gamePlayer.getGame().getGameId());
+                put("created", gamePlayer.getGame().getCreatedDate());
+                put("gamePlayers", getGamePlayers(gamePlayer.getGame()));
+                put("ships", getShips(gamePlayer));
+                put("salvoes", getSalvoes(gamePlayer.getGame().getGamePlayers()));
+            }};
+        } else {
+            return new ResponseEntity<>("Wrong user", HttpStatus.FORBIDDEN);
+        }
     }
 
     private List<HashMap<String, Object>> getGamePlayers(Game game) {
@@ -169,6 +168,7 @@ public class SalvoController {
             return new ResponseEntity<>("User added", HttpStatus.CREATED);
         }
     }
+
 
 
 }

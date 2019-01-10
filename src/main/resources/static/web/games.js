@@ -148,16 +148,22 @@ var gameData = new Vue({
         hideSignin() {
             this.clickSignIn = true;
         },
+        // check(gamePlayers) {
+        //     if(gamePlayers[0].name == this.viewingPlayer){
+        //         return 0;
+        //     }
+        //     if(gamePlayers[1] && gamePlayers[1].name == this.viewingPlayer){
+        //         return 1;
+        //     }
+        //     return null
+        // }
         check(gamePlayers) {
-            if(gamePlayers[0].name == this.viewingPlayer){
-                this.link = `game.html?gp=${gamePlayers[0].gpid}`
-                return true;
+            for (var i = 0; i < gamePlayers.length; i++) {
+                if (gamePlayers[i].name == this.viewingPlayer) {
+                    return i;
+                }
             }
-            if(gamePlayers[1] && gamePlayers[1].name == this.viewingPlayer){
-                this.link = `game.html?gp=${gamePlayers[1].gpid}`
-                return true
-            }
-            return false
+            return null
         }
         // check(game) {
         //     for (var i = 0; i < game.gamePlayers.length; i++) {
