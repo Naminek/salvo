@@ -186,7 +186,7 @@ public class SalvoController {
     }
 
 
-    @RequestMapping(value = "/api/game/{nn}/players", method = RequestMethod.POST)
+    @RequestMapping(value = "/game/{nn}/players", method = RequestMethod.POST)
     public Object joinGame(@PathVariable("nn") Long gameId, Authentication auth) {
         Game game = gameRepo.findOne(gameId);
         System.out.println(game);
