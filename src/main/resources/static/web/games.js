@@ -205,28 +205,12 @@ var gameData = new Vue({
             this.newGamePlayersId = (Math.max(...allGamePlayerArray.map(gamePlayer => gamePlayer.gpid))) + 1;
             // console.log(this.newGamePlayersId);
         },
-        // joinGame() {
-        //     fetch("/api/games/" + this.joiningGameId + "/players", {
-        //         credentials: 'include',
-        //             method: "POST",
-        //             headers: {
-        //                 'Accept': 'application/json',
-        //                 'Content-Type': 'application/x-www-form-urlencoded'
-        //             }
-        //     })
-        //     .then(function (data) {
-        //         console.log('Request success: ', data);
-        //         window.location.reload();
-        //     })
-        //     .catch(function (error) {
-        //         console.log('Request failure: ', error);
-        //         alert("Failure");
-        //     }); 
-        // },
         joinGame() {
-            this.joiningGameId = document.getElementById("join_button").dataset.game;
-            console.log(this.joiningGameId);
-            fetch("/api/games/" + this.joiningGameId + "/players", {
+            let joiningGameId = document.getElementById("join_button").dataset.game;
+            console.log(joiningGameId);
+            let url = "/api/games/" + joiningGameId + "/players";
+            console.log(url)
+            fetch(url, {
                 credentials: 'include',
                     method: "POST",
                     headers: {
@@ -244,7 +228,7 @@ var gameData = new Vue({
             }); 
         },
         checkPlayerInGame(gamePlayers) {
-            if(gamePlayers.length === 1 && this.viewingPlayer) {
+            if(gamePlayers.length === 1 && this.viewingPlayer && gamePlayers[0].name != this.viewingPlayer) {
                 return 1;
             } else {
                 return null;

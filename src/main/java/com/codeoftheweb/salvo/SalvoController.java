@@ -42,6 +42,7 @@ public class SalvoController {
         }
     }
 
+
     private Player getViewingPlayer(Authentication authentication) {
         return playerRepo.findByUserName(authentication.getName());
     }
@@ -95,9 +96,9 @@ public class SalvoController {
     }
 
     @RequestMapping(value = "/games", method = RequestMethod.POST)
-    public ResponseEntity<String> createNewGame(Authentication auth){
+    public ResponseEntity<Map<String, Object>> createNewGame(Authentication auth){
         if (auth.getName().isEmpty()) {
-            return new ResponseEntity<>("No user given", HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(responseentity("error", "No user given"), HttpStatus.FORBIDDEN);
         } else {
             Date date = new Date();
             Game game = new Game(date);
@@ -108,8 +109,14 @@ public class SalvoController {
             player.addGamePlayer(gamePlayer);
             gameRepo.save(game);
             playerRepo.save(player);
-            return new ResponseEntity<>("Game added", HttpStatus.CREATED);
+            return new ResponseEntity<>(responseentity("success", "Game added"), HttpStatus.CREATED);
         }
+    }
+
+    private Map<String, Object> responseentity(String key, Object value) {
+        Map<String, Object> map = new HashMap<>();
+        map.put(key, value);
+        return map;
     }
 
 
@@ -129,8 +136,10 @@ public class SalvoController {
 
     @RequestMapping(value = "/game_view/{nn}", method = RequestMethod.GET)
     public Object getGameView(@PathVariable("nn") Long gamePlayerId, Authentication auth) {
+        System.out.println(gamePlayerId);
         GamePlayer gamePlayer = gamePlayerRepo.findOne(gamePlayerId);
-        if(auth.getName().equals(gamePlayer.getPlayer().getEmail())) {
+        System.out.println(gamePlayer);
+        if(auth.getName() == gamePlayer.getPlayer().getEmail()) {
             return new LinkedHashMap<String, Object>() {{
                 put("gameId", gamePlayer.getGame().getGameId());
                 put("created", gamePlayer.getGame().getCreatedDate());
@@ -173,43 +182,48 @@ public class SalvoController {
     }
 
     @RequestMapping(value = "/players", method = RequestMethod.POST)
-    public ResponseEntity<String> createUser(@RequestParam("email") String email, @RequestParam("password") String password){
+    public ResponseEntity<Map<String, Object>> createUser(@RequestParam("email") String email, @RequestParam("password") String password){
         Player player = playerRepo.findByUserName(email);
         if (email.isEmpty() || password.isEmpty()) {
-            return new ResponseEntity<>("No user given", HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(responseentity("error", "No user given"), HttpStatus.FORBIDDEN);
         } else if (player != null) {
-            return new ResponseEntity<>("Email in use", HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(responseentity("error", "Email in use"), HttpStatus.FORBIDDEN);
         } else {
             playerRepo.save(new Player(email, password));
-            return new ResponseEntity<>("User added", HttpStatus.CREATED);
+            return new ResponseEntity<>(responseentity("success", "User added"), HttpStatus.CREATED);
         }
     }
 
 
-    @RequestMapping(value = "/game/{nn}/players", method = RequestMethod.POST)
-    public Object joinGame(@PathVariable("nn") Long gameId, Authentication auth) {
+    @RequestMapping(value = "/games/{gameId}/players", method = RequestMethod.POST)
+    public ResponseEntity<Map<String, Object>> joinGame(@PathVariable Long gameId, Authentication auth) {
+        System.out.println(gameId);
         Game game = gameRepo.findOne(gameId);
+        Player player = playerRepo.findByUserName(auth.getName());
         System.out.println(game);
         if(auth.getName().isEmpty()) {
             System.out.println("no auth");
-            return new ResponseEntity<>("No user given", HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(responseentity("error", "No user given"), HttpStatus.UNAUTHORIZED);
         } else if(game == null) {
             System.out.println("no game");
-            return new ResponseEntity<>("No such game", HttpStatus.FORBIDDEN);
-        } else if(game.getPlayers().size() == 2) {
+            return new ResponseEntity<>(responseentity("error", "No such game"), HttpStatus.FORBIDDEN);
+        } else if(game.getGamePlayers().size() > 1) {
             System.out.println("game full");
-            return new ResponseEntity<>("Game is full", HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(responseentity("error", "Game is full"), HttpStatus.FORBIDDEN);
+        } else if(game.getPlayers().contains(player)) {
+            System.out.println("already joined");
+            return new ResponseEntity<>(responseentity("error", "User already joined"), HttpStatus.FORBIDDEN);
         } else {
             System.out.println("joining");
-            Date date = game.getCreatedDate();
-            Player player = playerRepo.findByUserName(auth.getName());
+            Date date = new Date();
             GamePlayer gamePlayer = new GamePlayer(date);
             gamePlayerRepo.save(gamePlayer);
             game.addGamePlayer(gamePlayer);
             player.addGamePlayer(gamePlayer);
             gameRepo.save(game);
             playerRepo.save(player);
-            return new ResponseEntity<>("Player added", HttpStatus.CREATED);
+
+            return new ResponseEntity<>(responseentity("success", "Player added"), HttpStatus.CREATED);
         }
     }
 
