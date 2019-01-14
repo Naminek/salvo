@@ -130,7 +130,7 @@ public class SalvoController {
     @RequestMapping(value = "/game_view/{nn}", method = RequestMethod.GET)
     public Object getGameView(@PathVariable("nn") Long gamePlayerId, Authentication auth) {
         GamePlayer gamePlayer = gamePlayerRepo.findOne(gamePlayerId);
-        if(auth.getName() == gamePlayer.getPlayer().getEmail()) {
+        if(auth.getName().equals(gamePlayer.getPlayer().getEmail())) {
             return new LinkedHashMap<String, Object>() {{
                 put("gameId", gamePlayer.getGame().getGameId());
                 put("created", gamePlayer.getGame().getCreatedDate());
@@ -201,7 +201,7 @@ public class SalvoController {
             return new ResponseEntity<>("Game is full", HttpStatus.FORBIDDEN);
         } else {
             System.out.println("joining");
-            Date date = new Date();
+            Date date = game.getCreatedDate();
             Player player = playerRepo.findByUserName(auth.getName());
             GamePlayer gamePlayer = new GamePlayer(date);
             gamePlayerRepo.save(gamePlayer);

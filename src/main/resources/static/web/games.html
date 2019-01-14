@@ -52,10 +52,10 @@
 
             </div>
 
-            <p class="mt-5" v-if="playersEmail"><span class="viewing_player">{{viewingPlayer}}</span>is playing !</p>
+            <p class="mt-5" v-if="showPlayersEmail"><span class="viewing_player">{{viewingPlayer}}</span>is playing !</p>
 
 
-            <a :href=`game.html?gp=${newGamePlayersId}` target="_blank"><button v-on:click="createNewGame" v-if="playersEmail">Create
+            <a :href=`game.html?gp=${newGamePlayersId}` target="_blank" v-if="showPlayersEmail"><button v-on:click="createNewGame">Create
                     new game</button></a>
 
             <div v-for="(game, index) in games" :key="index" class="row mt-4">
@@ -70,7 +70,10 @@
                                 <button>Back to the Game{{game.id}}</button></a>
                         </span>
                         <span v-if="checkPlayerInGame(game.gamePlayers) === 1">
-                                <a :href=`game.html?gp=${newGamePlayersId}` target="_blank" v-on:click="getGameIdToJoin(game)"><button>Join Game{{game.id}}</button></a>
+                                <!-- <a :href=`game.html?gp=${newGamePlayersId}` target="_blank" v-on:click="getGameIdToJoin(game)"><button>Join Game{{game.id}}</button></a> -->
+                                <a id="join_button" :href=`game.html?gp=${newGamePlayersId}` target="_blank" v-on:click="joinGame" :data-game=`${game.id}`>
+                                    <button>Join Game{{game.id}}</button>
+                                </a>
                         </span>
                         <ol>
                             <li>created date: {{game.created}}</li>

@@ -12,7 +12,7 @@ var gameData = new Vue({
         addPassword: "",
         clickSignIn: true,
         viewingPlayer: null,
-        playersEmail: false,
+        showPlayersEmail: false,
         viewingPlayerId: "",
         newGamePlayersId: "",
         joiningGameId:""
@@ -78,7 +78,7 @@ var gameData = new Vue({
         },
         showPlayer() {
             if (this.viewingPlayer != null) {
-                this.playersEmail = true;
+                this.showPlayersEmail = true;
             }
         },
         getUser() {
@@ -205,7 +205,27 @@ var gameData = new Vue({
             this.newGamePlayersId = (Math.max(...allGamePlayerArray.map(gamePlayer => gamePlayer.gpid))) + 1;
             // console.log(this.newGamePlayersId);
         },
+        // joinGame() {
+        //     fetch("/api/games/" + this.joiningGameId + "/players", {
+        //         credentials: 'include',
+        //             method: "POST",
+        //             headers: {
+        //                 'Accept': 'application/json',
+        //                 'Content-Type': 'application/x-www-form-urlencoded'
+        //             }
+        //     })
+        //     .then(function (data) {
+        //         console.log('Request success: ', data);
+        //         window.location.reload();
+        //     })
+        //     .catch(function (error) {
+        //         console.log('Request failure: ', error);
+        //         alert("Failure");
+        //     }); 
+        // },
         joinGame() {
+            this.joiningGameId = document.getElementById("join_button").dataset.game;
+            console.log(this.joiningGameId);
             fetch("/api/games/" + this.joiningGameId + "/players", {
                 credentials: 'include',
                     method: "POST",
@@ -229,11 +249,11 @@ var gameData = new Vue({
             } else {
                 return null;
             }
-        },
-        getGameIdToJoin(game) {
-            this.joiningGameId = game.id;
-            console.log(this.joiningGameId);
-            this.joinGame();
+        // },
+        // getGameIdToJoin(game) {
+        //     this.joiningGameId = game.id;
+        //     console.log(this.joiningGameId);
+        //     this.joinGame();
             // window.location.reload();
             
         }
