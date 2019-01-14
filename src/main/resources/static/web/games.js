@@ -167,19 +167,6 @@ var gameData = new Vue({
             }
             return null
         },
-        // check(game) {
-        //     for (var i = 0; i < game.gamePlayers.length; i++) {
-        //         if (game.gamePlayers[i] && this.viewingPlayer) {
-        //             if (this.viewingPlayer == game.gamePlayers[i].name) {
-        //                 this.viewingPlayerId = game.gamePlayers[i].gpid;
-        //                 // this.link = `game.html?gp=${game.gamePlayers[i].gpid}`
-        //                 return true;
-        //             }
-        //         } else {
-        //             return false;
-        //         }
-        //     }
-        // },
         createNewGame() {
             fetch("/api/games", {
                 credentials: 'include',
@@ -201,9 +188,7 @@ var gameData = new Vue({
         getGamePlayerId() {
             var gamePlayerArray = this.games.map(game => game.gamePlayers);
             var allGamePlayerArray = [].concat.apply([], gamePlayerArray);
-            // console.log(allGamePlayerArray);
             this.newGamePlayersId = (Math.max(...allGamePlayerArray.map(gamePlayer => gamePlayer.gpid))) + 1;
-            // console.log(this.newGamePlayersId);
         },
         joinGame() {
             let joiningGameId = document.getElementById("join_button").dataset.game;
@@ -233,13 +218,7 @@ var gameData = new Vue({
             } else {
                 return null;
             }
-        // },
-        // getGameIdToJoin(game) {
-        //     this.joiningGameId = game.id;
-        //     console.log(this.joiningGameId);
-        //     this.joinGame();
-            // window.location.reload();
-            
+        
         }
     }
 })

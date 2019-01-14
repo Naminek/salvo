@@ -43,3 +43,7 @@
     border: 1px black solid;
     padding: 5px;
 }
+
+#ships_to_place label input {
+    display: none;
+}

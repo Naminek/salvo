@@ -13,7 +13,11 @@ var oneGame = new Vue({
 		viewingPlayer: null,
 		opponentPlayerId: null,
 		opponentPlayer: null,
-		myShipsArr: []
+		myShipsArr: [],
+		showLogout: true,
+		chosenship: null,
+		showCheckbox: false,
+		checkShipDirection: null
 	},
 	created() {
 		this.makeTable();
@@ -119,5 +123,60 @@ var oneGame = new Vue({
 		// 		}
 		// 	}
 		// },
+		loseUser() {
+            this.showLogout = false;
+            fetch("/api/logout", {
+                    method: "POST"
+                })
+                .then(function (data) {
+                    console.log('Request success: ', data);
+                    window.location.reload();
+                    // this.player = null;
+                })
+                .catch(function (error) {
+                    console.log('Request failure: ', error);
+                });
+		},
+		setShip(location) {
+			if(this.chosenship == null) {
+				alert("Please choose a ship!")
+			} else {
+				console.log(location);
+				if(this.chosenship == "aircraft") {
+					document.getElementById("showMessage").innerHTML = "Please choose 5 cells"
+				} else if(this.chosenship == "battleship") {
+					document.getElementById("showMessage").innerHTML = "Please choose 4 cells"
+				} else if(this.chosenship == "patrol") {
+					document.getElementById("showMessage").innerHTML = "Please choose 2 cells"
+				} else {
+					document.getElementById("showMessage").innerHTML = "Please choose 3 cells"
+				}
+			}
+		},
+		chooseShip(ev) {
+			this.chosenship = ev.target.value;
+			console.log(this.chosenship);
+			document.getElementById("showMessage").innerHTML = "Please choose horizontal or vertical"
+			this.showCheckbox = true;
+		},
+		placeShips() {
+			fetch("/api/games/players/" + this.gamePlayerId + "/ships", {
+                credentials: 'include',
+					method: "POST",
+					// body: `shipType=${ this.addEmail }&locations=${ this.addPassword }`,
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    }
+            })
+            .then(function (data) {
+                console.log('Request success: ', data);
+                // window.location.reload();
+            })
+            .catch(function (error) {
+                console.log('Request failure: ', error);
+                alert("Failure");
+            });
+		}
 	}
 })

@@ -18,12 +18,14 @@ public class SalvoController {
     private GameRepository gameRepo;
     private GamePlayerRepository gamePlayerRepo;
     private PlayerRepository playerRepo;
+    private ShipRepository shipRepo;
 
     @Autowired
-    public SalvoController(GameRepository gameRepo, GamePlayerRepository gamePlayerRepo, PlayerRepository playerRepo) {
+    public SalvoController(GameRepository gameRepo, GamePlayerRepository gamePlayerRepo, PlayerRepository playerRepo, ShipRepository shipRepo) {
         this.gameRepo = gameRepo;
         this.gamePlayerRepo = gamePlayerRepo;
         this.playerRepo = playerRepo;
+        this.shipRepo = shipRepo;
     }
 
 
@@ -136,9 +138,7 @@ public class SalvoController {
 
     @RequestMapping(value = "/game_view/{nn}", method = RequestMethod.GET)
     public Object getGameView(@PathVariable("nn") Long gamePlayerId, Authentication auth) {
-        System.out.println(gamePlayerId);
         GamePlayer gamePlayer = gamePlayerRepo.findOne(gamePlayerId);
-        System.out.println(gamePlayer);
         if(auth.getName() == gamePlayer.getPlayer().getEmail()) {
             return new LinkedHashMap<String, Object>() {{
                 put("gameId", gamePlayer.getGame().getGameId());
@@ -197,24 +197,17 @@ public class SalvoController {
 
     @RequestMapping(value = "/games/{gameId}/players", method = RequestMethod.POST)
     public ResponseEntity<Map<String, Object>> joinGame(@PathVariable Long gameId, Authentication auth) {
-        System.out.println(gameId);
         Game game = gameRepo.findOne(gameId);
         Player player = playerRepo.findByUserName(auth.getName());
-        System.out.println(game);
         if(auth.getName().isEmpty()) {
-            System.out.println("no auth");
             return new ResponseEntity<>(responseentity("error", "No user given"), HttpStatus.UNAUTHORIZED);
         } else if(game == null) {
-            System.out.println("no game");
-            return new ResponseEntity<>(responseentity("error", "No such game"), HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(responseentity("error", "No such game"), HttpStatus.UNAUTHORIZED);
         } else if(game.getGamePlayers().size() > 1) {
-            System.out.println("game full");
             return new ResponseEntity<>(responseentity("error", "Game is full"), HttpStatus.FORBIDDEN);
         } else if(game.getPlayers().contains(player)) {
-            System.out.println("already joined");
             return new ResponseEntity<>(responseentity("error", "User already joined"), HttpStatus.FORBIDDEN);
         } else {
-            System.out.println("joining");
             Date date = new Date();
             GamePlayer gamePlayer = new GamePlayer(date);
             gamePlayerRepo.save(gamePlayer);
@@ -224,6 +217,25 @@ public class SalvoController {
             playerRepo.save(player);
 
             return new ResponseEntity<>(responseentity("success", "Player added"), HttpStatus.CREATED);
+        }
+    }
+
+    @RequestMapping(value = "/games/players/{gamePlayerId}/ships", method = RequestMethod.POST)
+    public ResponseEntity<Map<String, Object>> getShips(@PathVariable Long gamePlayerId, Authentication auth, @RequestBody Set<Ship> ships) {
+        GamePlayer gamePlayer = gamePlayerRepo.findOne(gamePlayerId);
+        if(auth.getName().isEmpty()) {
+            return new ResponseEntity<>(responseentity("error", "No user given"), HttpStatus.UNAUTHORIZED);
+        } else if(gamePlayer == null) {
+            return new ResponseEntity<>(responseentity("error", "No such game player"), HttpStatus.UNAUTHORIZED);
+        } else if(gamePlayer.getPlayer().getEmail() != auth.getName()) {
+            return new ResponseEntity<>(responseentity("error", "Not Correct player"), HttpStatus.UNAUTHORIZED);
+        } else if(gamePlayer.getShips() != null) {
+            return new ResponseEntity<>(responseentity("error", "Ships placed"), HttpStatus.FORBIDDEN);
+        } else {
+            shipRepo.save(ships);
+            ships.forEach(ship -> gamePlayer.addShip(ship));
+            gamePlayerRepo.save(gamePlayer);
+            return new ResponseEntity<>(responseentity("success", "Ship added"), HttpStatus.CREATED);
         }
     }
 
