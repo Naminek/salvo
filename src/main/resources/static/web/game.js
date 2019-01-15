@@ -187,10 +187,13 @@ var oneGame = new Vue({
 				} else {
 					if (this.selectedCell == location) {
 						document.querySelector("#" + this.selectedCell).classList.remove("chosenLocation");
+						this.oneShip.locations.pop();
+						console.log(this.oneShip);
 						this.selectedCell = null;
 						// console.log(this.selectedCell);
 					} else {
-						document.querySelector("#" + this.selectedCell).classList.remove("chosenLocation");
+						// document.querySelector("#" + this.selectedCell).classList.remove("chosenLocation");
+						// this.oneShip.locations.pop();
 						this.selectedCell = location;
 						this.shipFunction();
 					}
@@ -198,15 +201,26 @@ var oneGame = new Vue({
 			}
 		},
 		shipFunction() {
-					document.querySelector("#" + this.selectedCell).classList.add("chosenLocation")
+					document.querySelector("#" + this.selectedCell).classList.add("chosenLocation");
+					this.oneShip.locations.push(this.selectedCell);
+					console.log(this.oneShip);
+					document.getElementById("showMessage").innerHTML = "Please choose a place to set the stern";
+					let cellNumber = this.selectedCell.substr(1, 1);
+					let cellAlpha = this.selectedCell.substr(0, 1);
+					let sternCell = null;
+					// if(this.checkShipDirection == "horizontal") {
+					// 	if(cellAlpha == "A" || "B" || "c") {
+					// 		sternCell = 
+					// 	}
+					// }
 					if (this.chosenShip == "aircraft") {
-						document.getElementById("showMessage").innerHTML = "Please choose 5 cells"
+						// document.getElementById("showMessage").innerHTML = "Please choose 5 cells"
 					} else if (this.chosenShip == "battleship") {
-						document.getElementById("showMessage").innerHTML = "Please choose 4 cells"
+						// document.getElementById("showMessage").innerHTML = "Please choose 4 cells"
 					} else if (this.chosenShip == "patrol") {
-						document.getElementById("showMessage").innerHTML = "Please choose 2 cells"
+						// document.getElementById("showMessage").innerHTML = "Please choose 2 cells"
 					} else {
-						document.getElementById("showMessage").innerHTML = "Please choose 3 cells"
+						// document.getElementById("showMessage").innerHTML = "Please choose 3 cells"
 					}
 		},
 		chooseShip(ev) {
@@ -215,7 +229,7 @@ var oneGame = new Vue({
 			if (this.checkShipDirection == null) {
 				document.getElementById("showMessage").innerHTML = "Please choose horizontal or vertical"
 			} else {
-				document.getElementById("showMessage").innerHTML = "Please choose a place to set bow"
+				document.getElementById("showMessage").innerHTML = "Please choose a place to set the bow"
 			}
 			this.showRadio = true;
 			this.oneShip.shipType = this.chosenShip;
