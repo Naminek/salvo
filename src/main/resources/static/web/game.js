@@ -15,18 +15,28 @@ var oneGame = new Vue({
 		opponentPlayer: null,
 		myShipsArr: [],
 		showLogout: true,
-		chosenship: null,
-		showCheckbox: false,
-		checkShipDirection: null
+		chosenShip: null,
+		showRadio: false,
+		checkShipDirection: null,
+		selectedCell: null,
+		aircraftButton: true,
+		battleshipButton: true,
+		destroyerButton: true,
+		submarineButton: true,
+		patrolButton: true,
+		allShips: [],
+		oneShip: {
+			shipType: "",
+			locations: []
+		}
 	},
 	created() {
 		this.makeTable();
 	},
 	mounted() {
 		this.getUrl(),
-		this.loadOneGame()
+			this.loadOneGame()
 	},
-
 	methods: {
 		loadOneGame() {
 			fetch("http://localhost:8080/api/game_view/" + this.gamePlayerId, {
@@ -124,61 +134,97 @@ var oneGame = new Vue({
 		// 	}
 		// },
 		loseUser() {
-            this.showLogout = false;
-            fetch("/api/logout", {
-                    method: "POST"
-                })
-                .then(function (data) {
-                    console.log('Request success: ', data);
-                    window.location.reload();
-                    // this.player = null;
-                })
-                .catch(function (error) {
-                    console.log('Request failure: ', error);
-                });
-		},
-		setShip(location) {
-			if(this.chosenship == null) {
-				alert("Please choose a ship!")
-			} else {
-				console.log(location);
-				if(this.chosenship == "aircraft") {
-					document.getElementById("showMessage").innerHTML = "Please choose 5 cells"
-				} else if(this.chosenship == "battleship") {
-					document.getElementById("showMessage").innerHTML = "Please choose 4 cells"
-				} else if(this.chosenship == "patrol") {
-					document.getElementById("showMessage").innerHTML = "Please choose 2 cells"
-				} else {
-					document.getElementById("showMessage").innerHTML = "Please choose 3 cells"
-				}
-			}
-		},
-		chooseShip(ev) {
-			this.chosenship = ev.target.value;
-			console.log(this.chosenship);
-			document.getElementById("showMessage").innerHTML = "Please choose horizontal or vertical"
-			this.showCheckbox = true;
+			this.showLogout = false;
+			fetch("/api/logout", {
+					method: "POST"
+				})
+				.then(function (data) {
+					console.log('Request success: ', data);
+					window.location.reload();
+					// this.player = null;
+				})
+				.catch(function (error) {
+					console.log('Request failure: ', error);
+				});
 		},
 		placeShips() {
 			fetch("/api/games/players/" + this.gamePlayerId + "/ships", {
-                credentials: 'include',
+					credentials: 'include',
 					method: "POST",
 					// body: `shipType=${ this.addEmail }&locations=${ this.addPassword }`,
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json'
-					}, 
-					body: JSON.stringify([{ "shipType": "destroyer", "locations": ["A1", "B1", "C1"] },
-					{ "shipType": "patrol boat", "locations": ["H5", "H6"] }])
-            })
-            .then(function (data) {
-                console.log('Request success: ', data);
-                // window.location.reload();
-            })
-            .catch(function (error) {
-                console.log('Request failure: ', error);
-                alert("Failure");
-            });
+					headers: {
+						'Accept': 'application/json',
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify([{
+							"shipType": "destroyer",
+							"locations": ["A1", "B1", "C1"]
+						},
+						{
+							"shipType": "patrol boat",
+							"locations": ["H5", "H6"]
+						}
+					])
+				})
+				.then(function (data) {
+					console.log('Request success: ', data);
+					window.location.reload();
+				})
+				.catch(function (error) {
+					console.log('Request failure: ', error);
+					alert("Failure");
+				});
+		},
+		setShip(location) {
+			if (this.chosenShip == null) {
+				alert("Please choose a ship!")
+			} else if (this.checkShipDirection == null) {
+				alert("Please choose a direction!")
+			} else {
+				if (this.selectedCell == null) {
+					this.selectedCell = location;
+					this.shipFunction();
+				} else {
+					if (this.selectedCell == location) {
+						document.querySelector("#" + this.selectedCell).classList.remove("chosenLocation");
+						this.selectedCell = null;
+						// console.log(this.selectedCell);
+					} else {
+						document.querySelector("#" + this.selectedCell).classList.remove("chosenLocation");
+						this.selectedCell = location;
+						this.shipFunction();
+					}
+				}
+			}
+		},
+		shipFunction() {
+					document.querySelector("#" + this.selectedCell).classList.add("chosenLocation")
+					if (this.chosenShip == "aircraft") {
+						document.getElementById("showMessage").innerHTML = "Please choose 5 cells"
+					} else if (this.chosenShip == "battleship") {
+						document.getElementById("showMessage").innerHTML = "Please choose 4 cells"
+					} else if (this.chosenShip == "patrol") {
+						document.getElementById("showMessage").innerHTML = "Please choose 2 cells"
+					} else {
+						document.getElementById("showMessage").innerHTML = "Please choose 3 cells"
+					}
+		},
+		chooseShip(ev) {
+			this.chosenShip = ev.target.value;
+			console.log(this.chosenShip);
+			if (this.checkShipDirection == null) {
+				document.getElementById("showMessage").innerHTML = "Please choose horizontal or vertical"
+			} else {
+				document.getElementById("showMessage").innerHTML = "Please choose a place to set bow"
+			}
+			this.showRadio = true;
+			this.oneShip.shipType = this.chosenShip;
+			console.log(this.oneShip);
+		},
+		decideDirection(ev) {
+			console.log(ev.target.value);
+			this.checkShipDirection = ev.target.value;
+			document.getElementById("showMessage").innerHTML = "Please choose a place to set bow";
 		}
 	}
 })

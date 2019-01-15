@@ -20,6 +20,17 @@
     width: 100%; */
 }
 
+.chosenLocation {
+    background-color: rgb(0, 255, 200);
+    border-color: rgb(0, 255, 200);
+    border-radius: 2%;
+}
+.NoLocation {
+    background-color: white;
+    border-color: white;
+    border-radius: 2%;
+}
+
 .salvoLocation {
     background-color: orange;
     border-color: orange;
