@@ -221,7 +221,7 @@ public class SalvoController {
     }
 
     @RequestMapping(value = "/games/players/{gamePlayerId}/ships", method = RequestMethod.POST)
-    public ResponseEntity<Map<String, Object>> getShips(@PathVariable Long gamePlayerId, Authentication auth, @RequestBody Set<Ship> ships) {
+    public ResponseEntity<Map<String, Object>> getShips(@PathVariable Long gamePlayerId, Authentication auth, @RequestBody ArrayList<Ship> shipList) {
         GamePlayer gamePlayer = gamePlayerRepo.findOne(gamePlayerId);
         if(auth.getName().isEmpty()) {
             return new ResponseEntity<>(responseentity("error", "No user given"), HttpStatus.UNAUTHORIZED);
@@ -229,13 +229,16 @@ public class SalvoController {
             return new ResponseEntity<>(responseentity("error", "No such game player"), HttpStatus.UNAUTHORIZED);
         } else if(gamePlayer.getPlayer().getEmail() != auth.getName()) {
             return new ResponseEntity<>(responseentity("error", "Not Correct player"), HttpStatus.UNAUTHORIZED);
-        } else if(gamePlayer.getShips() != null) {
+        } else if(gamePlayer.getShips().size()!=0) {
             return new ResponseEntity<>(responseentity("error", "Ships placed"), HttpStatus.FORBIDDEN);
         } else {
-            shipRepo.save(ships);
-            ships.forEach(ship -> gamePlayer.addShip(ship));
-            gamePlayerRepo.save(gamePlayer);
+            shipList.forEach(ship -> {
+                gamePlayer.addShip(ship);
+                shipRepo.save(ship);
+            });
+//            gamePlayerRepo.save(gamePlayer);
             return new ResponseEntity<>(responseentity("success", "Ship added"), HttpStatus.CREATED);
+
         }
     }
 

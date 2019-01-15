@@ -166,8 +166,10 @@ var oneGame = new Vue({
 					// body: `shipType=${ this.addEmail }&locations=${ this.addPassword }`,
                     headers: {
                         'Accept': 'application/json',
-                        'Content-Type': 'application/x-www-form-urlencoded'
-                    }
+                        'Content-Type': 'application/json'
+					}, 
+					body: JSON.stringify([{ "shipType": "destroyer", "locations": ["A1", "B1", "C1"] },
+					{ "shipType": "patrol boat", "locations": ["H5", "H6"] }])
             })
             .then(function (data) {
                 console.log('Request success: ', data);
