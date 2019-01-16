@@ -19,16 +19,20 @@ var oneGame = new Vue({
 		showRadio: false,
 		checkShipDirection: null,
 		selectedCell: null,
+		shipLength: null,
 		aircraftButton: true,
 		battleshipButton: true,
 		destroyerButton: true,
 		submarineButton: true,
 		patrolButton: true,
+		cellNumber: null,
+		cellAlpha: null,
 		allShips: [],
 		oneShip: {
 			shipType: "",
 			locations: []
-		}
+		},
+		oneShipLocations: []
 	},
 	created() {
 		this.makeTable();
@@ -147,6 +151,23 @@ var oneGame = new Vue({
 					console.log('Request failure: ', error);
 				});
 		},
+		chooseShip(ev) {
+			this.chosenShip = ev.target.value;
+			console.log(this.chosenShip);
+			if (this.checkShipDirection == null) {
+				document.getElementById("showMessage").innerHTML = "Please choose horizontal or vertical"
+			} else {
+				document.getElementById("showMessage").innerHTML = "Please choose a place to set the stern"
+			}
+			this.showRadio = true;
+			this.oneShip.shipType = this.chosenShip;
+			console.log(this.oneShip);
+		},
+		decideDirection(ev) {
+			console.log(ev.target.value);
+			this.checkShipDirection = ev.target.value;
+			document.getElementById("showMessage").innerHTML = "Please choose a place to set the stern";
+		},
 		placeShips() {
 			fetch("/api/games/players/" + this.gamePlayerId + "/ships", {
 					credentials: 'include',
@@ -176,69 +197,60 @@ var oneGame = new Vue({
 				});
 		},
 		setShip(location) {
+
 			if (this.chosenShip == null) {
 				alert("Please choose a ship!")
 			} else if (this.checkShipDirection == null) {
 				alert("Please choose a direction!")
 			} else {
-				if (this.selectedCell == null) {
-					this.selectedCell = location;
-					this.shipFunction();
-				} else {
-					if (this.selectedCell == location) {
-						document.querySelector("#" + this.selectedCell).classList.remove("chosenLocation");
-						this.oneShip.locations.pop();
-						console.log(this.oneShip);
-						this.selectedCell = null;
-						// console.log(this.selectedCell);
+				if (this.chosenShip != null && this.checkShipDirection != null) {
+					if (this.chosenShip == "aircraft carrier") {
+						this.shipLength = 5;
+					} else if (this.chosenShip == "battleship") {
+						this.shipLength = 4;
+					} else if (this.chosenShip == "patrol boat") {
+						this.shipLength = 2;
 					} else {
-						// document.querySelector("#" + this.selectedCell).classList.remove("chosenLocation");
-						// this.oneShip.locations.pop();
-						this.selectedCell = location;
-						this.shipFunction();
+						this.shipLength = 3;
 					}
+					this.shipFunction(location, this.shipLength)
 				}
 			}
 		},
-		shipFunction() {
-					document.querySelector("#" + this.selectedCell).classList.add("chosenLocation");
-					this.oneShip.locations.push(this.selectedCell);
-					console.log(this.oneShip);
-					document.getElementById("showMessage").innerHTML = "Please choose a place to set the stern";
-					let cellNumber = this.selectedCell.substr(1, 1);
-					let cellAlpha = this.selectedCell.substr(0, 1);
-					let sternCell = null;
-					// if(this.checkShipDirection == "horizontal") {
-					// 	if(cellAlpha == "A" || "B" || "c") {
-					// 		sternCell = 
-					// 	}
+		shipFunction(location, shipLength) {
+			this.selectedCell = location;
+			this.cellNumber = this.selectedCell.substr(1, 1);
+			this.cellAlpha = this.selectedCell.substr(0, 1);
+			if (this.checkShipDirection == "horizontal") {
+				var selectedNumbers = [];
+				for (var i = 0; i < shipLength; i++) {
+					selectedNumbers.push(Number(this.cellNumber) + i);
+				}
+				if (selectedNumbers[selectedNumbers.length - 1] < 9) {
+					selectedNumbers.forEach(number => {
+						console.log("#" + this.cellAlpha + parseInt(number));
+						document.querySelector("#" + this.cellAlpha + parseInt(number)).classList.add("chosenLocation");
+						this.oneShipLocations.push(this.cellAlpha + parseInt(number));
+					});
+				} else {
+					// for(var j = 0; j < selectedNumbers; j++) {
+
 					// }
-					if (this.chosenShip == "aircraft") {
-						// document.getElementById("showMessage").innerHTML = "Please choose 5 cells"
-					} else if (this.chosenShip == "battleship") {
-						// document.getElementById("showMessage").innerHTML = "Please choose 4 cells"
-					} else if (this.chosenShip == "patrol") {
-						// document.getElementById("showMessage").innerHTML = "Please choose 2 cells"
-					} else {
-						// document.getElementById("showMessage").innerHTML = "Please choose 3 cells"
-					}
-		},
-		chooseShip(ev) {
-			this.chosenShip = ev.target.value;
-			console.log(this.chosenShip);
-			if (this.checkShipDirection == null) {
-				document.getElementById("showMessage").innerHTML = "Please choose horizontal or vertical"
-			} else {
-				document.getElementById("showMessage").innerHTML = "Please choose a place to set the bow"
+					var newSelectedNumbers = selectedNumbers.filter(num => num < 9);
+					newSelectedNumbers.forEach(num => {
+						document.querySelector("#" + this.cellAlpha + parseInt(num)).classList.add("noLocation");
+					})
+					
+				}
 			}
-			this.showRadio = true;
-			this.oneShip.shipType = this.chosenShip;
-			console.log(this.oneShip);
 		},
-		decideDirection(ev) {
-			console.log(ev.target.value);
-			this.checkShipDirection = ev.target.value;
-			document.getElementById("showMessage").innerHTML = "Please choose a place to set bow";
+		removeHover() {
+			if (this.chosenShip != null && this.checkShipDirection != null) {
+				this.oneShipLocations.forEach(oneCell => {
+					document.querySelector("#" + oneCell).classList.remove("chosenLocation");
+				});
+			}
+			this.oneShipLocations = [];
 		}
 	}
 })
