@@ -35,14 +35,14 @@
                         <tbody>
                             <tr v-for="(location, index2) in locationArray" :key="index2">
                                 <td>{{ location[0] }}</td>
-                                <td :id=location[1] :data-ship=`${location[1]}` @mouseover="setShip(location[1])" @mouseleave="removeHover(location[1])"></td>
-                                <td :id=location[2] :data-ship=`${location[2]}` @mouseover="setShip(location[2])" @mouseleave="removeHover(location[2])"></td>
-                                <td :id=location[3] :data-ship=`${location[3]}` @mouseover="setShip(location[3])" @mouseleave="removeHover(location[3])"></td>
-                                <td :id=location[4] :data-ship=`${location[4]}` @mouseover="setShip(location[4])" @mouseleave="removeHover(location[4])"></td>
-                                <td :id=location[5] :data-ship=`${location[5]}` @mouseover="setShip(location[5])" @mouseleave="removeHover(location[5])"></td>
-                                <td :id=location[6] :data-ship=`${location[6]}` @mouseover="setShip(location[6])" @mouseleave="removeHover(location[6])"></td>
-                                <td :id=location[7] :data-ship=`${location[7]}` @mouseover="setShip(location[7])" @mouseleave="removeHover(location[7])"></td>
-                                <td :id=location[8] :data-ship=`${location[8]}` @mouseover="setShip(location[8])" @mouseleave="removeHover(location[8])"></td>
+                                <td :id=location[1] :data-ship=`${location[1]}` @mouseover="setShip(location[1])" @mouseleave="removeHover(location[1])" @click="pushShip"></td>
+                                <td :id=location[2] :data-ship=`${location[2]}` @mouseover="setShip(location[2])" @mouseleave="removeHover(location[2])" @click="pushShip"></td>
+                                <td :id=location[3] :data-ship=`${location[3]}` @mouseover="setShip(location[3])" @mouseleave="removeHover(location[3])" @click="pushShip"></td>
+                                <td :id=location[4] :data-ship=`${location[4]}` @mouseover="setShip(location[4])" @mouseleave="removeHover(location[4])" @click="pushShip"></td>
+                                <td :id=location[5] :data-ship=`${location[5]}` @mouseover="setShip(location[5])" @mouseleave="removeHover(location[5])" @click="pushShip"></td>
+                                <td :id=location[6] :data-ship=`${location[6]}` @mouseover="setShip(location[6])" @mouseleave="removeHover(location[6])" @click="pushShip"></td>
+                                <td :id=location[7] :data-ship=`${location[7]}` @mouseover="setShip(location[7])" @mouseleave="removeHover(location[7])" @click="pushShip"></td>
+                                <td :id=location[8] :data-ship=`${location[8]}` @mouseover="setShip(location[8])" @mouseleave="removeHover(location[8])" @click="pushShip"></td>
                             </tr>
                         </tbody>
                     </table>

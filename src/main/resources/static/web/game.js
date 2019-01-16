@@ -28,11 +28,29 @@ var oneGame = new Vue({
 		cellNumber: null,
 		cellAlpha: null,
 		allShips: [],
-		oneShip: {
+		aircraft: {
 			shipType: "",
 			locations: []
 		},
-		oneShipLocations: []
+		battleship: {
+			shipType: "",
+			locations: []
+		},
+		destroyer: {
+			shipType: "",
+			locations: []
+		},
+		submarine: {
+			shipType: "",
+			locations: []
+		},
+		patrol: {
+			shipType: "",
+			locations: []
+		},
+		oneShipLocations: [],
+		badSelectedNumbers: [],
+		badOneShipLocations: [],
 	},
 	created() {
 		this.makeTable();
@@ -160,8 +178,6 @@ var oneGame = new Vue({
 				document.getElementById("showMessage").innerHTML = "Please choose a place to set the stern"
 			}
 			this.showRadio = true;
-			this.oneShip.shipType = this.chosenShip;
-			console.log(this.oneShip);
 		},
 		decideDirection(ev) {
 			console.log(ev.target.value);
@@ -197,27 +213,29 @@ var oneGame = new Vue({
 				});
 		},
 		setShip(location) {
-
-			if (this.chosenShip == null) {
-				alert("Please choose a ship!")
-			} else if (this.checkShipDirection == null) {
-				alert("Please choose a direction!")
-			} else {
-				if (this.chosenShip != null && this.checkShipDirection != null) {
-					if (this.chosenShip == "aircraft carrier") {
-						this.shipLength = 5;
-					} else if (this.chosenShip == "battleship") {
-						this.shipLength = 4;
-					} else if (this.chosenShip == "patrol boat") {
-						this.shipLength = 2;
-					} else {
-						this.shipLength = 3;
-					}
-					this.shipFunction(location, this.shipLength)
+			if (this.chosenShip != null && this.checkShipDirection != null) {
+				var oneShip = {};
+				if (this.chosenShip == "aircraft carrier") {
+					this.shipLength = 5;
+					oneShip = this.aircraft;
+				} else if (this.chosenShip == "battleship") {
+					this.shipLength = 4;
+					oneShip = this.battleship;
+				} else if (this.chosenShip == "patrol boat") {
+					this.shipLength = 2;
+					oneShip = this.patrol;
+				} else if(this.chosenShip == "destroyer"){
+					this.shipLength = 3;
+					oneShip = this.destroyer;
+				} else if(this.chosenShip == "submarine") {
+					this.shipLength = 3;
+					oneShip = this.submarine;
 				}
+				this.shipFunction(location, this.shipLength, oneShip)
+
 			}
 		},
-		shipFunction(location, shipLength) {
+		shipFunction(location, shipLength, oneShip) {
 			this.selectedCell = location;
 			this.cellNumber = this.selectedCell.substr(1, 1);
 			this.cellAlpha = this.selectedCell.substr(0, 1);
@@ -228,29 +246,59 @@ var oneGame = new Vue({
 				}
 				if (selectedNumbers[selectedNumbers.length - 1] < 9) {
 					selectedNumbers.forEach(number => {
-						console.log("#" + this.cellAlpha + parseInt(number));
+						// console.log("#" + this.cellAlpha + parseInt(number));
 						document.querySelector("#" + this.cellAlpha + parseInt(number)).classList.add("chosenLocation");
 						this.oneShipLocations.push(this.cellAlpha + parseInt(number));
 					});
+					oneShip.locations = this.oneShipLocations;
+					oneShip.shipType = this.chosenShip;
 				} else {
-					// for(var j = 0; j < selectedNumbers; j++) {
-
-					// }
-					var newSelectedNumbers = selectedNumbers.filter(num => num < 9);
-					newSelectedNumbers.forEach(num => {
+					this.badSelectedNumbers = selectedNumbers.filter(num => num < 9);
+					this.badSelectedNumbers.forEach(num => {
 						document.querySelector("#" + this.cellAlpha + parseInt(num)).classList.add("noLocation");
-					})
-					
+						this.badOneShipLocations.push(this.cellAlpha + parseInt(num));
+					});
+					// console.log(this.badOneShipLocations);
+
 				}
 			}
 		},
 		removeHover() {
 			if (this.chosenShip != null && this.checkShipDirection != null) {
-				this.oneShipLocations.forEach(oneCell => {
-					document.querySelector("#" + oneCell).classList.remove("chosenLocation");
-				});
+				if (this.badOneShipLocations.length > 0) {
+					this.badOneShipLocations.forEach(oneCell => {
+						document.querySelector("#" + oneCell).classList.remove("noLocation");
+					});
+					this.badOneShipLocations = [];
+				} else {
+					this.oneShipLocations.forEach(oneCell => {
+						document.querySelector("#" + oneCell).classList.remove("chosenLocation");
+					});
+					this.oneShipLocations = [];
+				}
 			}
-			this.oneShipLocations = [];
+		},
+		pushShip() {
+			if(this.chosenShip == "aircraft carrier") {
+				this.allShips.push(this.aircraft);
+				this.aircraftButton = false;
+			} else if (this.chosenShip == "battleship") {
+				this.allShips.push(this.battleship);
+				this.battleshipButton = false;
+			} else if (this.chosenShip == "patrol boat") {
+				this.allShips.push(this.patrol);
+				this.patrolButton = false;
+			} else if(this.chosenShip == "destroyer"){
+				this.allShips.push(this.destroyer);
+				this.destroyerButton = false;
+			} else if(this.chosenShip == "submarine") {
+				this.allShips.push(this.submarine);
+				this.submarineButton = false;
+			}
+			this.allShips.map(ship => ship.locations.forEach(cell => {
+				document.querySelector("#" + cell).classList.add("shipLocation")
+			}));
+			console.log(this.allShips);
 		}
 	}
 })
