@@ -142,19 +142,6 @@ var oneGame = new Vue({
 				}
 			}
 		},
-		// writeTurn() {
-		// 	for (var i = 0; i < this.oneGameData.salvoes.length; i++) {
-		// 		if (this.opponentPlayerId == this.oneGameData.salvoes[i].gamePlayerId) {
-		// 			this.oneGameData.salvoes[i].locations.forEach(loc => {
-		// 				document.querySelector(`#${loc}`).innerHTML = this.oneGameData.salvoes[i].turn;
-		// 			})
-		// 		} else {
-		// 			this.oneGameData.salvoes[i].locations.forEach(loc => {
-		// 				document.querySelector(`#salvo${loc}`).innerHTML = this.oneGameData.salvoes[i].turn;
-		// 			})
-		// 		}
-		// 	}
-		// },
 		loseUser() {
 			this.showLogout = false;
 			fetch("/api/logout", {
@@ -213,7 +200,7 @@ var oneGame = new Vue({
 				});
 		},
 		setShip(location) {
-			if (this.chosenShip != null && this.checkShipDirection != null) {
+			if (this.chosenShip != "" && this.checkShipDirection != null) {
 				var oneShip = {};
 				if (this.chosenShip == "aircraft carrier") {
 					this.shipLength = 5;
@@ -224,10 +211,10 @@ var oneGame = new Vue({
 				} else if (this.chosenShip == "patrol boat") {
 					this.shipLength = 2;
 					oneShip = this.patrol;
-				} else if(this.chosenShip == "destroyer"){
+				} else if (this.chosenShip == "destroyer") {
 					this.shipLength = 3;
 					oneShip = this.destroyer;
-				} else if(this.chosenShip == "submarine") {
+				} else if (this.chosenShip == "submarine") {
 					this.shipLength = 3;
 					oneShip = this.submarine;
 				}
@@ -244,12 +231,14 @@ var oneGame = new Vue({
 				for (var i = 0; i < shipLength; i++) {
 					selectedNumbers.push(Number(this.cellNumber) + i);
 				}
+				console.log(selectedNumbers)
 				if (selectedNumbers[selectedNumbers.length - 1] < 9) {
 					selectedNumbers.forEach(number => {
 						// console.log("#" + this.cellAlpha + parseInt(number));
 						document.querySelector("#" + this.cellAlpha + parseInt(number)).classList.add("chosenLocation");
 						this.oneShipLocations.push(this.cellAlpha + parseInt(number));
 					});
+					console.log(this.oneShipLocations)
 					oneShip.locations = this.oneShipLocations;
 					oneShip.shipType = this.chosenShip;
 				} else {
@@ -264,41 +253,49 @@ var oneGame = new Vue({
 			}
 		},
 		removeHover() {
-			if (this.chosenShip != null && this.checkShipDirection != null) {
-				if (this.badOneShipLocations.length > 0) {
-					this.badOneShipLocations.forEach(oneCell => {
-						document.querySelector("#" + oneCell).classList.remove("noLocation");
-					});
-					this.badOneShipLocations = [];
-				} else {
-					this.oneShipLocations.forEach(oneCell => {
-						document.querySelector("#" + oneCell).classList.remove("chosenLocation");
-					});
-					this.oneShipLocations = [];
-				}
+			// if (this.chosenShip != null && this.checkShipDirection != null) {
+			if (this.badOneShipLocations.length > 0) {
+				this.badOneShipLocations.forEach(oneCell => {
+					document.querySelector("#" + oneCell).classList.remove("noLocation");
+				});
+				this.badOneShipLocations = [];
+			} else {
+				this.oneShipLocations.forEach(oneCell => {
+					document.querySelector("#" + oneCell).classList.remove("chosenLocation");
+				});
+				this.oneShipLocations = [];
 			}
+			// }
 		},
 		pushShip() {
-			if(this.chosenShip == "aircraft carrier") {
-				this.allShips.push(this.aircraft);
-				this.aircraftButton = false;
-			} else if (this.chosenShip == "battleship") {
-				this.allShips.push(this.battleship);
-				this.battleshipButton = false;
-			} else if (this.chosenShip == "patrol boat") {
-				this.allShips.push(this.patrol);
-				this.patrolButton = false;
-			} else if(this.chosenShip == "destroyer"){
-				this.allShips.push(this.destroyer);
-				this.destroyerButton = false;
-			} else if(this.chosenShip == "submarine") {
-				this.allShips.push(this.submarine);
-				this.submarineButton = false;
+			if (this.oneShipLocations.length == this.shipLength) {
+				if (this.chosenShip == "aircraft carrier") {
+					this.allShips.push(this.aircraft);
+					this.aircraftButton = false;
+				} else if (this.chosenShip == "battleship") {
+					this.allShips.push(this.battleship);
+					this.battleshipButton = false;
+				} else if (this.chosenShip == "patrol boat") {
+					this.allShips.push(this.patrol);
+					this.patrolButton = false;
+				} else if (this.chosenShip == "destroyer") {
+					this.allShips.push(this.destroyer);
+					this.destroyerButton = false;
+				} else if (this.chosenShip == "submarine") {
+					this.allShips.push(this.submarine);
+					this.submarineButton = false;
+				}
+				this.allShips.map(ship => ship.locations.forEach(cell => {
+					document.querySelector("#" + cell).classList.add("shipLocation")
+				}));
+				this.chosenShip = "";
+				this.checkShipDirection = null;
+				this.showRadio = false;
+				this.selectedCell = null;
+				console.log(this.allShips);
+			} else {
+				alert("wrong place")
 			}
-			this.allShips.map(ship => ship.locations.forEach(cell => {
-				document.querySelector("#" + cell).classList.add("shipLocation")
-			}));
-			console.log(this.allShips);
 		}
 	}
 })
