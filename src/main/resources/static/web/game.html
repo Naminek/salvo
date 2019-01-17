@@ -111,7 +111,7 @@
 
             <br>
             <div>
-                <button v-on:click="placeShips">Place ships</button>
+                <button v-if="placeShipsButton" v-on:click="placeShips">Place ships</button>
             </div>
         </div>
 
