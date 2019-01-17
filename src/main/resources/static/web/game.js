@@ -249,15 +249,15 @@ var oneGame = new Vue({
 					});
 					// console.log(this.badOneShipLocations);
 				}
-			} else if(this.checkShipDirection == "vertical") {
+			} else if (this.checkShipDirection == "vertical") {
 				let cellAlphaNum = this.cellAlpha.charCodeAt(0);
 				// console.log(cellAlphaNum);
 				let selectedAlphaNums = [];
-				for(var j = 0; j < shipLength; j++){
+				for (var j = 0; j < shipLength; j++) {
 					selectedAlphaNums.unshift(cellAlphaNum - j);
 				}
 				// console.log(selectedAlphaNums);
-				if(selectedAlphaNums[0] > 64) {
+				if (selectedAlphaNums[0] > 64) {
 					selectedAlphaNums.forEach(alphaNum => {
 						document.querySelector("#" + String.fromCharCode(alphaNum) + this.cellNumber).classList.add("chosenLocation");
 						this.oneShipLocations.push(String.fromCharCode(alphaNum) + this.cellNumber);
