@@ -50,7 +50,6 @@ var oneGame = new Vue({
 			locations: []
 		},
 		oneShipLocations: [],
-		badSelectedNumbers: [],
 		badOneShipLocations: []
 	},
 	created() {
@@ -228,7 +227,7 @@ var oneGame = new Vue({
 			this.cellNumber = this.selectedCell.substr(1, 1);
 			this.cellAlpha = this.selectedCell.substr(0, 1);
 			if (this.checkShipDirection == "horizontal") {
-				var selectedNumbers = [];
+				let selectedNumbers = [];
 				for (var i = 0; i < shipLength; i++) {
 					selectedNumbers.push(Number(this.cellNumber) + i);
 				}
@@ -243,13 +242,34 @@ var oneGame = new Vue({
 					oneShip.locations = this.oneShipLocations;
 					oneShip.shipType = this.chosenShip;
 				} else {
-					this.badSelectedNumbers = selectedNumbers.filter(num => num < 9);
-					this.badSelectedNumbers.forEach(num => {
+					let badSelectedNumbers = selectedNumbers.filter(num => num < 9);
+					badSelectedNumbers.forEach(num => {
 						document.querySelector("#" + this.cellAlpha + parseInt(num)).classList.add("noLocation");
 						this.badOneShipLocations.push(this.cellAlpha + parseInt(num));
 					});
 					// console.log(this.badOneShipLocations);
-
+				}
+			} else if(this.checkShipDirection == "vertical") {
+				let cellAlphaNum = this.cellAlpha.charCodeAt(0);
+				// console.log(cellAlphaNum);
+				let selectedAlphaNums = [];
+				for(var j = 0; j < shipLength; j++){
+					selectedAlphaNums.unshift(cellAlphaNum - j);
+				}
+				// console.log(selectedAlphaNums);
+				if(selectedAlphaNums[0] > 64) {
+					selectedAlphaNums.forEach(alphaNum => {
+						document.querySelector("#" + String.fromCharCode(alphaNum) + this.cellNumber).classList.add("chosenLocation");
+						this.oneShipLocations.push(String.fromCharCode(alphaNum) + this.cellNumber);
+					});
+					oneShip.locations = this.oneShipLocations;
+					oneShip.shipType = this.chosenShip;
+				} else {
+					let badSelectedAlphaNums = selectedAlphaNums.filter(num => num > 64);
+					badSelectedAlphaNums.forEach(alphaNum => {
+						document.querySelector("#" + String.fromCharCode(alphaNum) + this.cellNumber).classList.add("noLocation");
+						this.badOneShipLocations.push(String.fromCharCode(alphaNum) + this.cellNumber);
+					});
 				}
 			}
 		},
@@ -269,7 +289,7 @@ var oneGame = new Vue({
 			// }
 		},
 		pushShip(loc) {
-			if (this.chosenShip == "" && this.allShips.length > 0) {
+			if (this.checkShipDirection == null && this.allShips.length > 0) {
 				this.replaceShip(loc);
 			} else {
 
@@ -326,7 +346,6 @@ var oneGame = new Vue({
 		},
 		replaceShip(loc) {
 			this.selectedCell = loc
-			// if (this.chosenShip == "" && this.allShips.length > 0) {
 			for (var i = 0; i < this.allShips.length; i++) {
 				if (this.allShips[i].locations.includes(this.selectedCell)) {
 					this.chosenShip = this.allShips[i].shipType;
@@ -350,9 +369,8 @@ var oneGame = new Vue({
 				}
 			}
 			document.getElementById("showMessage").innerHTML = "Please choose horizontal or vertical"
-			console.log(this.allShips);
-			console.log(this.chosenShip);
+			// console.log(this.allShips);
+			// console.log(this.chosenShip);
 		}
-		// }
 	}
 })
