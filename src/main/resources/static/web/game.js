@@ -54,12 +54,12 @@ var oneGame = new Vue({
 		badOneShipLocations: []
 	},
 	created() {
-		this.makeTable();
+		this.makeTable()
 	},
 	mounted() {
 		this.getUrl(),
-			this.loadOneGame(),
-			this.checkShipData()
+			this.loadOneGame()
+			// this.checkShipData()
 	},
 	methods: {
 		loadOneGame() {
@@ -78,6 +78,7 @@ var oneGame = new Vue({
 					this.markShips();
 					this.markSalvo();
 					// this.writeTurn();
+					this.checkShipData();
 				})
 				.catch(function (error) {
 					console.log(error);
@@ -237,7 +238,7 @@ var oneGame = new Vue({
 							});
 						}
 					});
-					console.log(this.oneShipLocations)
+					// console.log(this.oneShipLocations)
 					oneShip.locations = this.oneShipLocations;
 					oneShip.shipType = this.chosenShip;
 				} else {
@@ -266,7 +267,7 @@ var oneGame = new Vue({
 							});
 						}
 					});
-					console.log(this.oneShipLocations);
+					// console.log(this.oneShipLocations);
 					oneShip.locations = this.oneShipLocations;
 					oneShip.shipType = this.chosenShip;
 				} else {
@@ -279,20 +280,15 @@ var oneGame = new Vue({
 			}
 		},
 		removeHover() {
-			// if (this.chosenShip != null && this.checkShipDirection != null) {
-			// if (this.badOneShipLocations.length > 0) {
 			this.badOneShipLocations.forEach(oneCell => {
 				document.querySelector("#" + oneCell).classList.remove("noLocation");
 			});
 			this.badOneShipLocations = [];
-			// } else {
 			this.oneShipLocations.forEach(oneCell => {
 				document.querySelector("#" + oneCell).classList.remove("noLocation");
 				document.querySelector("#" + oneCell).classList.remove("chosenLocation");
 			});
 			this.oneShipLocations = [];
-			// }
-			// }
 		},
 		pushShip(loc) {
 			if (this.checkShipDirection == null && this.allShips.length == 0) {
@@ -336,7 +332,6 @@ var oneGame = new Vue({
 							this.placeShipsButton = true;
 							document.getElementById("showMessage").innerHTML = 'Please push "Place ships" button!'
 						}
-
 					}
 				} else {
 					alert("wrong place")
@@ -387,7 +382,7 @@ var oneGame = new Vue({
 			// console.log(this.chosenShip);
 		},
 		checkShipData() {
-			if (this.oneGameData.ships != null) {
+			if (this.oneGameData.ships.length > 0) {
 				this.aircraftButton = false;
 				this.battleshipButton = false;
 				this.patrolButton = false;
