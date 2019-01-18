@@ -20,11 +20,6 @@ var oneGame = new Vue({
 		checkShipDirection: null,
 		selectedCell: null,
 		shipLength: null,
-		aircraftButton: true,
-		battleshipButton: true,
-		destroyerButton: true,
-		submarineButton: true,
-		patrolButton: true,
 		placeShipsButton: false,
 		cellNumber: null,
 		cellAlpha: null,
@@ -304,19 +299,19 @@ var oneGame = new Vue({
 						} else {
 							if (this.chosenShip == "aircraft carrier") {
 								this.allShips.push(this.aircraft);
-								this.aircraftButton = false;
+								document.getElementById("aircraft").disabled = true;
 							} else if (this.chosenShip == "battleship") {
 								this.allShips.push(this.battleship);
-								this.battleshipButton = false;
+								document.getElementById("battleship").disabled = true;
 							} else if (this.chosenShip == "patrol boat") {
 								this.allShips.push(this.patrol);
-								this.patrolButton = false;
+								document.getElementById("patrol").disabled = true;
 							} else if (this.chosenShip == "destroyer") {
 								this.allShips.push(this.destroyer);
-								this.destroyerButton = false;
+								document.getElementById("destroyer").disabled = true;
 							} else if (this.chosenShip == "submarine") {
 								this.allShips.push(this.submarine);
-								this.submarineButton = false;
+								document.getElementById("submarine").disabled = true;
 							}
 							this.allShips.map(ship => ship.locations.forEach(cell => {
 								document.querySelector("#" + cell).classList.remove("chosenLocation");
@@ -363,8 +358,6 @@ var oneGame = new Vue({
 					this.showRadio = true;
 					this.allShips[i].locations.forEach(location => {
 						document.querySelector("#" + location).classList.remove("shipLocation");
-						// document.querySelector("#" + location).classList.remove("noLocation");
-						// console.log(location);
 					});
 					var tempoLocations = this.allShips[i].locations;
 					var checkCellNum = tempoLocations.map(loc => loc.substr(1, 1));
@@ -381,30 +374,29 @@ var oneGame = new Vue({
 					}
 					
 					if (this.chosenShip == "aircraft carrier") {
-						this.aircraftButton = true;
+						document.getElementById("aircraft").disabled = false;
 					} else if (this.chosenShip == "battleship") {
-						this.battleshipButton = true;
+						document.getElementById("battleship").disabled = false;
 					} else if (this.chosenShip == "patrol boat") {
-						this.patrolButton = true;
+						document.getElementById("patrol").disabled = false;
 					} else if (this.chosenShip == "destroyer") {
-						this.destroyerButton = true;
+						document.getElementById("destroyer").disabled = false;
 					} else if (this.chosenShip == "submarine") {
-						this.submarineButton = true;
+						document.getElementById("submarine").disabled = false;
 					}
 				}
 			}
-			
-			// document.getElementById("showMessage").innerHTML = "Please choose horizontal or vertical"
+			document.getElementById("showMessage").innerHTML = "Please choose a place to set a ship"
 			// console.log(this.allShips);
 			// console.log(this.chosenShip);
 		},
 		checkShipData() {
 			if (this.oneGameData.ships.length > 0) {
-				this.aircraftButton = false;
-				this.battleshipButton = false;
-				this.patrolButton = false;
-				this.submarineButton = false;
-				this.destroyerButton = false;
+				document.getElementById("aircraft").disabled = true;
+				document.getElementById("battleship").disabled = true;
+				document.getElementById("patrol").disabled = true;
+				document.getElementById("destroyer").disabled = true;
+				document.getElementById("submarine").disabled = true;
 				document.getElementById("showMessage").innerHTML = "Your ships are placed"
 			}
 		}

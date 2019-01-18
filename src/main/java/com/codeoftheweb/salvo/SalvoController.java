@@ -19,13 +19,15 @@ public class SalvoController {
     private GamePlayerRepository gamePlayerRepo;
     private PlayerRepository playerRepo;
     private ShipRepository shipRepo;
+    private SalvoRepository salvoRepo;
 
     @Autowired
-    public SalvoController(GameRepository gameRepo, GamePlayerRepository gamePlayerRepo, PlayerRepository playerRepo, ShipRepository shipRepo) {
+    public SalvoController(GameRepository gameRepo, GamePlayerRepository gamePlayerRepo, PlayerRepository playerRepo, ShipRepository shipRepo, SalvoRepository salvoRepo) {
         this.gameRepo = gameRepo;
         this.gamePlayerRepo = gamePlayerRepo;
         this.playerRepo = playerRepo;
         this.shipRepo = shipRepo;
+        this.salvoRepo = salvoRepo;
     }
 
 
@@ -229,19 +231,37 @@ public class SalvoController {
             return new ResponseEntity<>(responseentity("error", "No such game player"), HttpStatus.UNAUTHORIZED);
         } else if(gamePlayer.getPlayer().getEmail() != auth.getName()) {
             return new ResponseEntity<>(responseentity("error", "Not Correct player"), HttpStatus.UNAUTHORIZED);
-        } else if(gamePlayer.getShips().size()!=0) {
+        } else if(gamePlayer.getShips().size() != 0) {
             return new ResponseEntity<>(responseentity("error", "Ships placed"), HttpStatus.FORBIDDEN);
         } else {
             shipList.forEach(ship -> {
                 gamePlayer.addShip(ship);
                 shipRepo.save(ship);
             });
-//            gamePlayerRepo.save(gamePlayer);
+//            gamePlayerRepo.save(gamePlayer); i don't have to save but update the information of gp because he is already existing
             return new ResponseEntity<>(responseentity("success", "Ship added"), HttpStatus.CREATED);
 
         }
     }
 
+    @RequestMapping(value = "/games/players/{gamePlayerId}/salvos", method = RequestMethod.POST)
+    public ResponseEntity<Map<String, Object>> getSalvos(@PathVariable Long gamePlayerId, Authentication auth,
+                                                          @RequestBody ArrayList<Salvo> salvoLocations ) {
+        GamePlayer gamePlayer = gamePlayerRepo.findOne(gamePlayerId);
+       
+        if(auth.getName().isEmpty()) {
+            return new ResponseEntity<>(responseentity("error", "No user given"), HttpStatus.UNAUTHORIZED);
+        } else if(gamePlayer == null) {
+            return new ResponseEntity<>(responseentity("error", "No such game player"), HttpStatus.UNAUTHORIZED);
+        } else if(gamePlayer.getPlayer().getEmail() != auth.getName()) {
+            return new ResponseEntity<>(responseentity("error", "Not Correct player"), HttpStatus.UNAUTHORIZED);
+        } else if(gamePlayer.getSalvos().size() != 0) {
+            return new ResponseEntity<>(responseentity("error", "salvo placed"), HttpStatus.FORBIDDEN);
+        } else {
+
+        }
+
+    }
 
 }
 
