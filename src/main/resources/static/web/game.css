@@ -74,10 +74,34 @@
     background-color: blue;
 }
 
+#aircraft:hover {
+    width: 250px;
+    height: 50px;
+    background-color: rgb(149, 204, 248);
+}
+
+#aircraft:disabled {
+    width: 250px;
+    height: 50px;
+    background-color:rgb(16, 2, 90);
+}
+
 #battleship {
     width: 200px;
     height: 50px;
     background-color: blue;
+}
+
+#battleship:hover {
+    width: 200px;
+    height: 50px;
+    background-color: rgb(149, 204, 248);
+}
+
+#battleship:disabled {
+    width: 200px;
+    height: 50px;
+    background-color:rgb(16, 2, 90);
 }
 
 #destroyer, #submarine {
@@ -86,10 +110,34 @@
     background-color: blue;
 }
 
+#destroyer:hover, #submarine:hover {
+    width: 150px;
+    height: 50px;
+    background-color: rgb(149, 204, 248);
+}
+
+#destroyer:disabled, #submarine:disabled {
+    width: 150px;
+    height: 50px;
+    background-color:rgb(16, 2, 90);
+}
+
 #patrol {
     width: 100px;
     height: 50px;
     background-color: blue;
+}
+
+#patrol:hover {
+    width: 100px;
+    height: 50px;
+    background-color: rgb(149, 204, 248);
+}
+
+#patrol:disabled {
+    width: 100px;
+    height: 50px;
+    background-color:rgb(16, 2, 90);
 }
 
 #placingShip {
@@ -104,4 +152,5 @@
 #showMessage {
     color: crimson;
 }
+
 
