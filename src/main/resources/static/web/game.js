@@ -59,7 +59,7 @@ var oneGame = new Vue({
 	mounted() {
 		this.getUrl(),
 			this.loadOneGame()
-			// this.checkShipData()
+		// this.checkShipData()
 	},
 	methods: {
 		loadOneGame() {
@@ -119,7 +119,7 @@ var oneGame = new Vue({
 			this.oneGameData.ships.forEach(ship => ship.locations.forEach(loc =>
 				this.myShipsArr.push(loc)
 			))
-			console.log(this.myShipsArr)
+			// console.log(this.myShipsArr)
 			this.myShipsArr.forEach(loc => {
 				document.querySelector(`#${loc}`).classList.add("shipLocation");
 				// document.querySelector(`#${loc}`).innerHTML = '<div class="shipLocation"></div>';
@@ -195,7 +195,7 @@ var oneGame = new Vue({
 					alert("Failure");
 				});
 		},
-		setShip(location) {
+		gridHover(location) {
 			if (this.chosenShip != "" && this.checkShipDirection != null) {
 				var oneShip = {};
 				if (this.chosenShip == "aircraft carrier") {
@@ -214,11 +214,11 @@ var oneGame = new Vue({
 					this.shipLength = 3;
 					oneShip = this.submarine;
 				}
-				this.shipFunction(location, this.shipLength, oneShip)
+				this.showShadow(location, this.shipLength, oneShip)
 
 			}
 		},
-		shipFunction(location, shipLength, oneShip) {
+		showShadow(location, shipLength, oneShip) {
 			this.selectedCell = location;
 			this.cellNumber = this.selectedCell.substr(1, 1);
 			this.cellAlpha = this.selectedCell.substr(0, 1);
@@ -291,50 +291,52 @@ var oneGame = new Vue({
 			this.oneShipLocations = [];
 		},
 		pushShip(loc) {
-			if (this.checkShipDirection == null && this.allShips.length == 0) {
-				alert("please choose a ship and orientation!")
-			} else if (this.checkShipDirection == null && this.allShips.length > 0) {
-				this.replaceShip(loc);
-			} else {
-
-				if (this.oneShipLocations.length == this.shipLength) {
-					// console.log(this.checkLocations());
-					if (this.checkLocations() == false) {
-						alert("already ship located")
-					} else {
-						if (this.chosenShip == "aircraft carrier") {
-							this.allShips.push(this.aircraft);
-							this.aircraftButton = false;
-						} else if (this.chosenShip == "battleship") {
-							this.allShips.push(this.battleship);
-							this.battleshipButton = false;
-						} else if (this.chosenShip == "patrol boat") {
-							this.allShips.push(this.patrol);
-							this.patrolButton = false;
-						} else if (this.chosenShip == "destroyer") {
-							this.allShips.push(this.destroyer);
-							this.destroyerButton = false;
-						} else if (this.chosenShip == "submarine") {
-							this.allShips.push(this.submarine);
-							this.submarineButton = false;
-						}
-						this.allShips.map(ship => ship.locations.forEach(cell => {
-							document.querySelector("#" + cell).classList.add("shipLocation")
-						}));
-						this.chosenShip = "";
-						this.checkShipDirection = null;
-						this.showRadio = false;
-						// this.selectedCell = null;
-						console.log(this.chosenShip);
-						console.log(this.allShips);
-						document.getElementById("showMessage").innerHTML = "Please choose next ship"
-						if (this.allShips.length == 5) {
-							this.placeShipsButton = true;
-							document.getElementById("showMessage").innerHTML = 'Please push "Place ships" button!'
-						}
-					}
+			if (this.oneGameData.ships.length == 0) {
+				if (this.checkShipDirection == null && this.allShips.length == 0) {
+					alert("please choose a ship and orientation!")
+				} else if (this.checkShipDirection == null && this.allShips.length > 0) {
+					this.replaceShip(loc);
 				} else {
-					alert("wrong place")
+					if (this.oneShipLocations.length == this.shipLength) {
+						// console.log(this.checkLocations());
+						if (this.checkLocations() == false) {
+							alert("already ship located")
+						} else {
+							if (this.chosenShip == "aircraft carrier") {
+								this.allShips.push(this.aircraft);
+								this.aircraftButton = false;
+							} else if (this.chosenShip == "battleship") {
+								this.allShips.push(this.battleship);
+								this.battleshipButton = false;
+							} else if (this.chosenShip == "patrol boat") {
+								this.allShips.push(this.patrol);
+								this.patrolButton = false;
+							} else if (this.chosenShip == "destroyer") {
+								this.allShips.push(this.destroyer);
+								this.destroyerButton = false;
+							} else if (this.chosenShip == "submarine") {
+								this.allShips.push(this.submarine);
+								this.submarineButton = false;
+							}
+							this.allShips.map(ship => ship.locations.forEach(cell => {
+								document.querySelector("#" + cell).classList.remove("chosenLocation");
+								document.querySelector("#" + cell).classList.add("shipLocation");
+							}));
+							this.chosenShip = "";
+							this.checkShipDirection = null;
+							this.showRadio = false;
+							// this.selectedCell = null;
+							console.log(this.chosenShip);
+							console.log(this.allShips);
+							document.getElementById("showMessage").innerHTML = "Please choose next ship"
+							if (this.allShips.length == 5) {
+								this.placeShipsButton = true;
+								document.getElementById("showMessage").innerHTML = 'Please push "Place ships" button!'
+							}
+						}
+					} else {
+						alert("wrong place")
+					}
 				}
 			}
 		},
@@ -361,9 +363,23 @@ var oneGame = new Vue({
 					this.showRadio = true;
 					this.allShips[i].locations.forEach(location => {
 						document.querySelector("#" + location).classList.remove("shipLocation");
-						console.log(location);
+						// document.querySelector("#" + location).classList.remove("noLocation");
+						// console.log(location);
 					});
+					var tempoLocations = this.allShips[i].locations;
+					var checkCellNum = tempoLocations.map(loc => loc.substr(1, 1));
+					
 					this.allShips.splice(this.allShips.indexOf(this.allShips[i]), 1);
+					// console.log(checkCellNum);
+					if(checkCellNum[0] == checkCellNum[1]) {
+						this.checkShipDirection = "vertical";
+						// console.log()
+						this.gridHover(tempoLocations[tempoLocations.length - 1]);
+					} else {
+						this.checkShipDirection = "horizontal";
+						this.gridHover(tempoLocations[0]);
+					}
+					
 					if (this.chosenShip == "aircraft carrier") {
 						this.aircraftButton = true;
 					} else if (this.chosenShip == "battleship") {
@@ -377,7 +393,8 @@ var oneGame = new Vue({
 					}
 				}
 			}
-			document.getElementById("showMessage").innerHTML = "Please choose horizontal or vertical"
+			
+			// document.getElementById("showMessage").innerHTML = "Please choose horizontal or vertical"
 			// console.log(this.allShips);
 			// console.log(this.chosenShip);
 		},
