@@ -244,24 +244,29 @@ public class SalvoController {
         }
     }
 
-    @RequestMapping(value = "/games/players/{gamePlayerId}/salvos", method = RequestMethod.POST)
-    public ResponseEntity<Map<String, Object>> getSalvos(@PathVariable Long gamePlayerId, Authentication auth,
-                                                          @RequestBody ArrayList<Salvo> salvoLocations ) {
-        GamePlayer gamePlayer = gamePlayerRepo.findOne(gamePlayerId);
-       
-        if(auth.getName().isEmpty()) {
-            return new ResponseEntity<>(responseentity("error", "No user given"), HttpStatus.UNAUTHORIZED);
-        } else if(gamePlayer == null) {
-            return new ResponseEntity<>(responseentity("error", "No such game player"), HttpStatus.UNAUTHORIZED);
-        } else if(gamePlayer.getPlayer().getEmail() != auth.getName()) {
-            return new ResponseEntity<>(responseentity("error", "Not Correct player"), HttpStatus.UNAUTHORIZED);
-        } else if(gamePlayer.getSalvos().size() != 0) {
-            return new ResponseEntity<>(responseentity("error", "salvo placed"), HttpStatus.FORBIDDEN);
-        } else {
-
-        }
-
-    }
+//    @RequestMapping(value = "/games/players/{gamePlayerId}/salvos", method = RequestMethod.POST)
+//    public ResponseEntity<Map<String, Object>> getSalvos(@PathVariable Long gamePlayerId, Authentication auth,
+//                                                          @RequestBody ArrayList<Salvo> salvoLocations ) {
+//        GamePlayer gamePlayer = gamePlayerRepo.findOne(gamePlayerId);
+//        gameRepo.findAll().forEach(gm -> {
+//            if(gm.getGamePlayers().contains(gamePlayer)) {
+//                Game game = gm;
+//            }
+//        });
+//        System.out.println(game);
+//        if(auth.getName().isEmpty()) {
+//            return new ResponseEntity<>(responseentity("error", "No user given"), HttpStatus.UNAUTHORIZED);
+//        } else if(gamePlayer == null) {
+//            return new ResponseEntity<>(responseentity("error", "No such game player"), HttpStatus.UNAUTHORIZED);
+//        } else if(gamePlayer.getPlayer().getEmail() != auth.getName()) {
+//            return new ResponseEntity<>(responseentity("error", "Not Correct player"), HttpStatus.UNAUTHORIZED);
+//        } else if(gamePlayer.getSalvos().size() != 0) {
+//            return new ResponseEntity<>(responseentity("error", "salvo placed"), HttpStatus.FORBIDDEN);
+//        } else {
+//
+//        }
+//
+//    }
 
 }
 
