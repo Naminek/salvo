@@ -147,7 +147,7 @@ public class SalvoController {
                 put("created", gamePlayer.getGame().getCreatedDate());
                 put("gamePlayers", getGamePlayers(gamePlayer.getGame()));
                 put("ships", getShips(gamePlayer));
-                put("salvoes", getSalvoes(gamePlayer.getGame().getGamePlayers()));
+                put("salvos", getSalvos(gamePlayer.getGame().getGamePlayers()));
             }};
         } else {
             return new ResponseEntity<>("Wrong user", HttpStatus.UNAUTHORIZED);
@@ -172,7 +172,7 @@ public class SalvoController {
                 }}).collect(Collectors.toList());
     }
 
-    private List<HashMap<String, Object>> getSalvoes(Set<GamePlayer> gamePlayer) {
+    private List<HashMap<String, Object>> getSalvos(Set<GamePlayer> gamePlayer) {
         return gamePlayer.stream()
                 .flatMap(oneGamePlayer -> oneGamePlayer.getSalvos()
                         .stream().map(salvo -> new LinkedHashMap<String, Object>() {{

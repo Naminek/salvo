@@ -48,7 +48,9 @@ var oneGame = new Vue({
 		oneShipLocations: [],
 		badOneShipLocations: [],
 		salvoLocationsArray: [],
-		salvosAreChosen: false
+		salvosAreChosen: false,
+		showTurnNum: false,
+		currentTurn: null
 	},
 	created() {
 		this.makeTable()
@@ -75,7 +77,7 @@ var oneGame = new Vue({
 					this.markShips();
 					this.markSalvo();
 					// this.writeTurn();
-					this.checkShipData();
+					this.checkShipAndSalvoData();
 				})
 				.catch(function (error) {
 					console.log(error);
@@ -123,21 +125,21 @@ var oneGame = new Vue({
 			})
 		},
 		markSalvo() {
-			for (var i = 0; i < this.oneGameData.salvoes.length; i++) {
-				if (this.opponentPlayerId == this.oneGameData.salvoes[i].gamePlayerId) {
-					for (var j = 0; j < this.oneGameData.salvoes[i].locations.length; j++) {
-						if (this.myShipsArr.includes(this.oneGameData.salvoes[i].locations[j])) {
-							// document.querySelector(`#${this.oneGameData.salvoes[i].locations[j]}`).classList.add("hitShip");
-							document.querySelector(`#${this.oneGameData.salvoes[i].locations[j]}`).innerHTML = '<div class="hitShip">' + this.oneGameData.salvoes[i].turn + '</div>';
+			for (var i = 0; i < this.oneGameData.salvos.length; i++) {
+				if (this.opponentPlayerId == this.oneGameData.salvos[i].gamePlayerId) {
+					for (var j = 0; j < this.oneGameData.salvos[i].locations.length; j++) {
+						if (this.myShipsArr.includes(this.oneGameData.salvos[i].locations[j])) {
+							// document.querySelector(`#${this.oneGameData.salvos[i].locations[j]}`).classList.add("hitShip");
+							document.querySelector(`#${this.oneGameData.salvos[i].locations[j]}`).innerHTML = '<div class="hitShip">' + this.oneGameData.salvos[i].turn + '</div>';
 						} else {
-							// document.querySelector(`#${this.oneGameData.salvoes[i].locations[j]}`).classList.add("salvoLocation");
-							document.querySelector(`#${this.oneGameData.salvoes[i].locations[j]}`).innerHTML = '<div class="salvoLocation">' + this.oneGameData.salvoes[i].turn + '</div>';
+							// document.querySelector(`#${this.oneGameData.salvos[i].locations[j]}`).classList.add("salvoLocation");
+							document.querySelector(`#${this.oneGameData.salvos[i].locations[j]}`).innerHTML = '<div class="salvoLocation">' + this.oneGameData.salvos[i].turn + '</div>';
 						}
 					}
-				} else if (this.viewingPlayerId == this.oneGameData.salvoes[i].gamePlayerId) {
-					for (var k = 0; k < this.oneGameData.salvoes[i].locations.length; k++) {
-						// document.querySelector(`#salvo${this.oneGameData.salvoes[i].locations[k]}`).classList.add("salvoLocation");
-						document.querySelector(`#salvo${this.oneGameData.salvoes[i].locations[k]}`).innerHTML = '<div class="salvoLocation">' + this.oneGameData.salvoes[i].turn + '</div>';
+				} else if (this.viewingPlayerId == this.oneGameData.salvos[i].gamePlayerId) {
+					for (var k = 0; k < this.oneGameData.salvos[i].locations.length; k++) {
+						// document.querySelector(`#salvo${this.oneGameData.salvos[i].locations[k]}`).classList.add("salvoLocation");
+						document.querySelector(`#salvo${this.oneGameData.salvos[i].locations[k]}`).innerHTML = '<div class="salvoLocation">' + this.oneGameData.salvos[i].turn + '</div>';
 					}
 				}
 			}
@@ -392,32 +394,58 @@ var oneGame = new Vue({
 			// console.log(this.allShips);
 			// console.log(this.chosenShip);
 		},
-		checkShipData() {
+		checkShipAndSalvoData() {
 			if (this.oneGameData.ships.length > 0) {
 				document.getElementById("aircraft").disabled = true;
 				document.getElementById("battleship").disabled = true;
 				document.getElementById("patrol").disabled = true;
 				document.getElementById("destroyer").disabled = true;
 				document.getElementById("submarine").disabled = true;
-				document.getElementById("showMessage").innerHTML = "Your ships are placed"
+				document.getElementById("showMessage").innerHTML = "Your ships are placed";
+
+				this.currentTurn = this.oneGameData.salvos.length + 1;
+				this.showTurnNum = true;
 			}
 		},
 		setSalvo(salvoLoc) {
-			if (this.salvoLocationsArray.includes(salvoLoc)) {
-				this.salvoLocationsArray.splice(this.salvoLocationsArray.indexOf(salvoLoc, 1));
-				document.querySelector("#salvo" + salvoLoc).classList.remove("salvoLocation");
-				console.log(this.salvoLocationsArray);
-			} else {
-				this.salvoLocationsArray.push(salvoLoc);
-				document.querySelector("#salvo" + salvoLoc).classList.add("salvoLocation");
-				console.log(this.salvoLocationsArray);
-				if (this.salvoLocationsArray.length > 5) {
-					alert("You can't choose more than 5 locations")
-				}
-				if (this.salvoLocationsArray.length == 5) {
-					this.salvosAreChosen = true;
+			if (this.oneGameData.ships.length > 0) {
+				if (this.salvoLocationsArray.includes(salvoLoc)) {
+					this.salvoLocationsArray.splice(this.salvoLocationsArray.indexOf(salvoLoc, 1));
+					document.querySelector("#salvo" + salvoLoc).classList.remove("salvoLocation");
+					console.log(this.salvoLocationsArray);
+				} else {
+					this.salvoLocationsArray.push(salvoLoc);
+					document.querySelector("#salvo" + salvoLoc).classList.add("salvoLocation");
+					console.log(this.salvoLocationsArray);
+					if (this.salvoLocationsArray.length > 5) {
+						alert("You can't choose more than 5 locations")
+					}
+					if (this.salvoLocationsArray.length == 5) {
+						this.salvosAreChosen = true;
+					}
 				}
 			}
+		},
+		placeSalvos() {
+			fetch("/api/games/players/" + this.gamePlayerId + "/salvos", {
+					credentials: 'include',
+					method: "POST",
+					// body: `shipType=${ this.addEmail }&locations=${ this.addPassword }`,
+					headers: {
+						'Accept': 'application/json',
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify(this.salvoLocationsArray)
+				})
+				.then(function (data) {
+					console.log('Request success: ', data);
+					window.location.reload();
+					alert("You attacked!!");
+				})
+				.catch(function (error) {
+					console.log('Request failure: ', error);
+					alert("Failure");
+				});
 		}
 	}
 })

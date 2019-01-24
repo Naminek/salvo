@@ -78,8 +78,8 @@
                                 <td :id=`salvo${salvo[8]}` @click="setSalvo(salvo[8])"></td>
                             </tr>
                         </tbody>
-
                     </table>
+                    <p v-if="showTurnNum">Turn: {{currentTurn}}</p>
                 </div>
             </div>
 
@@ -98,7 +98,7 @@
                     <button value="destroyer" @click="chooseShip($event)" id="destroyer">Destroyer</button><br>
                     <button value="submarine" @click="chooseShip($event)" id="submarine">Submarine</button><br>
                     <button value="patrol boat" @click="chooseShip($event)" id="patrol">Patrol Boat</button>
-                    <button v-if="placeShipsButton" v-on:click="placeShips" class="mt-2">Place ships</button>
+                    
                 </div>
                 <div class="col-4">
                     <p>You are placing...</p>
@@ -108,13 +108,13 @@
                     </div>
                 </div>
                 <div class="col-4">
-                    <button v-if="salvosAreChosen">Attack!</button>
+                    <button v-if="salvosAreChosen" id="attack_button" @click="placeSalvos">Attack!</button>
                 </div>
             </div>
 
             <br>
             <div>
-                
+                <button v-if="placeShipsButton" @click="placeShips" class="mt-2">Place ships</button>
             </div>
         </div>
 
