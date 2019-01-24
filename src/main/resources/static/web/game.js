@@ -363,10 +363,10 @@ var oneGame = new Vue({
 					});
 					var tempoLocations = this.allShips[i].locations;
 					var checkCellNum = tempoLocations.map(loc => loc.substr(1, 1));
-					
+
 					this.allShips.splice(this.allShips.indexOf(this.allShips[i]), 1);
 					// console.log(checkCellNum);
-					if(checkCellNum[0] == checkCellNum[1]) {
+					if (checkCellNum[0] == checkCellNum[1]) {
 						this.checkShipDirection = "vertical";
 						// console.log()
 						this.gridHover(tempoLocations[tempoLocations.length - 1]);
@@ -374,7 +374,7 @@ var oneGame = new Vue({
 						this.checkShipDirection = "horizontal";
 						this.gridHover(tempoLocations[0]);
 					}
-					
+
 					if (this.chosenShip == "aircraft carrier") {
 						document.getElementById("aircraft").disabled = false;
 					} else if (this.chosenShip == "battleship") {
@@ -403,13 +403,21 @@ var oneGame = new Vue({
 			}
 		},
 		setSalvo(salvoLoc) {
-			console.log(salvoLoc);
-			this.salvoLocationsArray.push(salvoLoc);
-			document.querySelector("#salvo" + salvoLoc).classList.add("salvoLocation");
-			if(this.salvoLocationsArray.length == 5) {
-				this.salvosAreChosen = true;
+			if (this.salvoLocationsArray.includes(salvoLoc)) {
+				this.salvoLocationsArray.splice(this.salvoLocationsArray.indexOf(salvoLoc, 1));
+				document.querySelector("#salvo" + salvoLoc).classList.remove("salvoLocation");
+				console.log(this.salvoLocationsArray);
+			} else {
+				this.salvoLocationsArray.push(salvoLoc);
+				document.querySelector("#salvo" + salvoLoc).classList.add("salvoLocation");
+				console.log(this.salvoLocationsArray);
+				if (this.salvoLocationsArray.length > 5) {
+					alert("You can't choose more than 5 locations")
+				}
+				if (this.salvoLocationsArray.length == 5) {
+					this.salvosAreChosen = true;
+				}
 			}
-			
 		}
 	}
 })
