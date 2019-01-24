@@ -399,6 +399,9 @@ var oneGame = new Vue({
 				document.getElementById("submarine").disabled = true;
 				document.getElementById("showMessage").innerHTML = "Your ships are placed"
 			}
+		},
+		setSalvo(salvoLoc) {
+			console.log(salvoLoc)
 		}
 	}
 })
