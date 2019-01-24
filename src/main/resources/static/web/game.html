@@ -98,6 +98,7 @@
                     <button value="destroyer" @click="chooseShip($event)" id="destroyer">Destroyer</button><br>
                     <button value="submarine" @click="chooseShip($event)" id="submarine">Submarine</button><br>
                     <button value="patrol boat" @click="chooseShip($event)" id="patrol">Patrol Boat</button>
+                    <button v-if="placeShipsButton" v-on:click="placeShips" class="mt-2">Place ships</button>
                 </div>
                 <div class="col-4">
                     <p>You are placing...</p>
@@ -106,12 +107,14 @@
                         <p>Orientation: <span>{{checkShipDirection}}</span></p>
                     </div>
                 </div>
-                <div class="col-4"></div>
+                <div class="col-4">
+                    <button v-if="salvosAreChosen">Attack!</button>
+                </div>
             </div>
 
             <br>
             <div>
-                <button v-if="placeShipsButton" v-on:click="placeShips">Place ships</button>
+                
             </div>
         </div>
 

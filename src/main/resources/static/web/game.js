@@ -46,7 +46,9 @@ var oneGame = new Vue({
 			locations: []
 		},
 		oneShipLocations: [],
-		badOneShipLocations: []
+		badOneShipLocations: [],
+		salvoLocationsArray: [],
+		salvosAreChosen: false
 	},
 	created() {
 		this.makeTable()
@@ -401,7 +403,13 @@ var oneGame = new Vue({
 			}
 		},
 		setSalvo(salvoLoc) {
-			console.log(salvoLoc)
+			console.log(salvoLoc);
+			this.salvoLocationsArray.push(salvoLoc);
+			document.querySelector("#salvo" + salvoLoc).classList.add("salvoLocation");
+			if(this.salvoLocationsArray.length == 5) {
+				this.salvosAreChosen = true;
+			}
+			
 		}
 	}
 })
