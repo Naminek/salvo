@@ -50,7 +50,8 @@ var oneGame = new Vue({
 		salvoLocationsArray: [],
 		salvosAreChosen: false,
 		showTurnNum: false,
-		currentTurn: null
+		currentTurn: null,
+		showingSalvoLocations: ""
 	},
 	created() {
 		this.makeTable()
@@ -403,39 +404,51 @@ var oneGame = new Vue({
 				document.getElementById("submarine").disabled = true;
 				document.getElementById("showMessage").innerHTML = "Your ships are placed";
 
-				this.currentTurn = this.oneGameData.salvos.length + 1;
+				let turnArray = [];
+				this.oneGameData.salvos.forEach(salvo => {
+					if (salvo.gamePlayerId == this.viewingPlayerId) {
+						turnArray.push(salvo.turn);
+					}
+				});
+				if (turnArray.length == 0) {
+					this.currentTurn = 1
+				} else {
+					this.currentTurn = Math.max(...turnArray) + 1;
+				}
 				this.showTurnNum = true;
 			}
 		},
 		setSalvo(salvoLoc) {
 			if (this.oneGameData.ships.length > 0) {
-				if (this.salvoLocationsArray.includes(salvoLoc)) {
-					this.salvoLocationsArray.splice(this.salvoLocationsArray.indexOf(salvoLoc, 1));
+				if (this.salvoLocationsArray.length != 0 && this.salvoLocationsArray.includes(salvoLoc)) {
+					let index = this.salvoLocationsArray.findIndex(salvo => salvo == salvoLoc);
+					this.salvoLocationsArray.splice(index, 1);
 					document.querySelector("#salvo" + salvoLoc).classList.remove("salvoLocation");
 					console.log(this.salvoLocationsArray);
 				} else {
-					this.salvoLocationsArray.push(salvoLoc);
-					document.querySelector("#salvo" + salvoLoc).classList.add("salvoLocation");
-					console.log(this.salvoLocationsArray);
-					if (this.salvoLocationsArray.length > 5) {
+					if (this.salvoLocationsArray.length == 5) {
 						alert("You can't choose more than 5 locations")
+					} else {
+						this.salvoLocationsArray.push(salvoLoc);
+						document.querySelector("#salvo" + salvoLoc).classList.add("salvoLocation");
+						console.log(this.salvoLocationsArray);
 					}
 					if (this.salvoLocationsArray.length == 5) {
 						this.salvosAreChosen = true;
 					}
 				}
+				this.showingSalvoLocations = this.salvoLocationsArray.join(",");
 			}
 		},
 		placeSalvos() {
 			fetch("/api/games/players/" + this.gamePlayerId + "/salvos", {
 					credentials: 'include',
 					method: "POST",
-					// body: `shipType=${ this.addEmail }&locations=${ this.addPassword }`,
 					headers: {
 						'Accept': 'application/json',
 						'Content-Type': 'application/json'
 					},
-					body: JSON.stringify(this.salvoLocationsArray)
+					body: JSON.stringify({turn: this.currentTurn, salvoLocations: this.salvoLocationsArray})
 				})
 				.then(function (data) {
 					console.log('Request success: ', data);

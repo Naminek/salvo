@@ -255,7 +255,7 @@ public class SalvoController {
         } else if (gamePlayer.getPlayer().getEmail() != auth.getName()) {
             return new ResponseEntity<>(responseentity("error", "Not Correct player"), HttpStatus.UNAUTHORIZED);
         } else if (gamePlayer.getSalvos().size() != 0 && checkSalvoTurn(gamePlayer,salvoLocations)) {
-            return new ResponseEntity<>(responseentity("error", "salvo placed"), HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(responseentity("error", "salvos are already placed in this turn"), HttpStatus.FORBIDDEN);
         } else {
             gamePlayer.addSalvo(salvoLocations);
             salvoRepo.save(salvoLocations);

@@ -79,7 +79,7 @@
                             </tr>
                         </tbody>
                     </table>
-                    <p v-if="showTurnNum">Turn: {{currentTurn}}</p>
+                    <p v-if="showTurnNum">Turn: {{currentTurn}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Please choose 5 places to attack</p>
                 </div>
             </div>
 
@@ -108,6 +108,7 @@
                     </div>
                 </div>
                 <div class="col-4">
+                    <p v-if="showTurnNum">You choose... <span>{{showingSalvoLocations}}</span></p>
                     <button v-if="salvosAreChosen" id="attack_button" @click="placeSalvos">Attack!</button>
                 </div>
             </div>
