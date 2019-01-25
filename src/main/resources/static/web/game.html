@@ -17,12 +17,19 @@
             <p>Now Loading...</p>
         </div>
         <div v-show="!loading" class="container">
+            <div class="row">
+                <div class="col-2">
+                    <form id="logout-form" v-if="showLogout">
+                        <button v-on:click="loseUser">Log out</button>
+                    </form>
+                </div>
+                <div class="col-10">
+                    <p id="players"><span>{{ viewingPlayer }} (YOU)</span> vs <span>{{ opponentPlayer }}</span></p>
+                </div>
+            </div>
+            <div class="row">
 
-            <form id="logout-form" v-if="showLogout">
-                <button v-on:click="loseUser">Log out</button>
-            </form>
-
-            <p id="players" class="mt-3"><span>{{ viewingPlayer }} (YOU)</span> vs <span>{{ opponentPlayer }}</span></p>
+            </div>
             <div class="row" id="locations">
                 <div class="col-6">
                     <table>
@@ -79,7 +86,8 @@
                             </tr>
                         </tbody>
                     </table>
-                    <p v-if="showTurnNum">Turn: {{currentTurn}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Please choose 5 places to attack</p>
+                    <p v-if="showTurnNum" id="turnNumber">Turn: {{currentTurn}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Please
+                        choose 5 places to attack</p>
                 </div>
             </div>
 
@@ -98,12 +106,12 @@
                     <button value="destroyer" @click="chooseShip($event)" id="destroyer">Destroyer</button><br>
                     <button value="submarine" @click="chooseShip($event)" id="submarine">Submarine</button><br>
                     <button value="patrol boat" @click="chooseShip($event)" id="patrol">Patrol Boat</button>
-                    
+
                 </div>
                 <div class="col-4">
                     <p>You are placing...</p>
                     <div id="placingShip">
-                        <p>Ship Type: <span>  {{chosenShip}}</span></p>
+                        <p>Ship Type: <span> {{chosenShip}}</span></p>
                         <p>Orientation: <span>{{checkShipDirection}}</span></p>
                     </div>
                 </div>
@@ -115,7 +123,7 @@
 
             <br>
             <div>
-                <button v-if="placeShipsButton" @click="placeShips" class="mt-2">Place ships</button>
+                <button v-if="placeShipsButton" @click="placeShips" class="mt-2" id="placeShipButton">Place ships</button>
             </div>
         </div>
 

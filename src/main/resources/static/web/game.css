@@ -153,9 +153,20 @@
     color: crimson;
 }
 
+#turnNumber {
+    color: crimson;
+}
+
 #attack_button {
     margin-top: 40px;
     width: 200px;
     height: 100px;
     background-color:rgb(247, 67, 35);
+}
+
+#placeShipButton {
+    margin-top: 20px;
+    width: 200px;
+    height: 50px;
+    background-color:rgb(247, 208, 35);
 }

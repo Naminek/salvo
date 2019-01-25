@@ -51,7 +51,41 @@ var oneGame = new Vue({
 		salvosAreChosen: false,
 		showTurnNum: false,
 		currentTurn: null,
-		showingSalvoLocations: ""
+		showingSalvoLocations: "",
+		// hitResults: [{
+		// 	"turn": 1,
+		// 	"attack": [{
+		// 		"gamePlayerId": 2,
+		// 		"hits": [{
+		// 			"hitship": "destroyer",
+		// 			"timesOfHit": 2
+		// 		}]
+		// 	}, {
+		// 		"gamePlayerId": 1,
+		// 		"hits": [{
+		// 			"hitship": "destroyer",
+		// 			"timesOfHit": 1
+		// 		}, {
+		// 			"hitship": "patrol boat",
+		// 			"timesOfHit": 1
+		// 		}]
+		// 	}]
+		// }, {
+		// 	"turn": 2,
+		// 	"attack": [{
+		// 		"gamePlayerId": 2,
+		// 		"hits": [{
+		// 			"hitship": "patrol boat",
+		// 			"timesOfHit": 1
+		// 		}]
+		// 	}, {
+		// 		"gamePlayerId": 1,
+		// 		"hits": [{
+		// 			"hitship": "patrol boat",
+		// 			"timesOfHit": 1
+		// 		}]
+		// 	}]
+		// }]
 	},
 	created() {
 		this.makeTable()
@@ -448,7 +482,10 @@ var oneGame = new Vue({
 						'Accept': 'application/json',
 						'Content-Type': 'application/json'
 					},
-					body: JSON.stringify({turn: this.currentTurn, salvoLocations: this.salvoLocationsArray})
+					body: JSON.stringify({
+						turn: this.currentTurn,
+						salvoLocations: this.salvoLocationsArray
+					})
 				})
 				.then(function (data) {
 					console.log('Request success: ', data);
