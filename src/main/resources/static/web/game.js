@@ -57,11 +57,14 @@ var oneGame = new Vue({
 			"attack": [{
 				"turn": 1,
 				"hits": [{
-					"hitShip": "patrol boat",
-					"hitPlace": "B4"
+					"hitShip": "destroyer",
+					"hitPlace": "B5"
+				}, {
+					"hitShip": "destroyer",
+					"hitPlace": "C5"
 				}, {
 					"hitShip": "patrol boat",
-					"hitPlace": "B5"
+					"hitPlace": "F1"
 				}]
 			}, {
 				"turn": 2,
@@ -78,14 +81,11 @@ var oneGame = new Vue({
 			"attack": [{
 				"turn": 1,
 				"hits": [{
-					"hitShip": "destroyer",
-					"hitPlace": "B5"
-				}, {
-					"hitShip": "destroyer",
-					"hitPlace": "C5"
+					"hitShip": "patrol boat",
+					"hitPlace": "B4"
 				}, {
 					"hitShip": "patrol boat",
-					"hitPlace": "F1"
+					"hitPlace": "B5"
 				}]
 			}, {
 				"turn": 2,
@@ -128,6 +128,7 @@ var oneGame = new Vue({
 					// this.writeTurn();
 					this.checkShipAndSalvoData();
 					this.showAttackResults();
+					this.markHitSalvo();
 
 				})
 				.catch(function (error) {
@@ -194,6 +195,24 @@ var oneGame = new Vue({
 					}
 				}
 			}
+		},
+		markHitSalvo() {
+			
+			this.hitResults.forEach(result => {
+				let myHitSalvo = [];
+				if(result.gamePlayerId == this.viewingPlayerId) {
+					for(var i = 0; i < result.attack.length; i++) {
+						myHitSalvo = result.attack[i].hits.map(hit => hit.hitPlace);
+						console.log(myHitSalvo);
+						myHitSalvo.forEach(salvo =>{
+							document.querySelector("#salvo" + salvo).classList.add("hitSalvo");
+						})
+						
+					}
+				}
+				
+			});
+			
 		},
 		loseUser() {
 			this.showLogout = false;
@@ -515,21 +534,23 @@ var oneGame = new Vue({
 		},
 
 		showAttackResults() {
-			let oneResult = {
-				"turn": null,
-				"hits": null
-			};
-			let oneHitResult = {};
-
+			
 			for (var i = 0; i < this.hitResults.length; i++) {
 
 				for (var j = 0; j < this.hitResults[i].attack.length; j++) {
+					let oneResult = {
+						// "turn": null,
+						// "hits": null
+					};
+					let oneHitResult = {};
 					oneResult.turn = this.hitResults[i].attack[j].turn;
+					console.log(oneResult.turn);
 					oneHitResult = this.hitResults[i].attack[j].hits.reduce((acc, it) => ({
 						...acc,
 						[it.hitShip]: (acc[it.hitShip] || 0) + 1
 					}), {});
 					oneResult.hits = oneHitResult;
+					console.log(oneResult.hits);
 					console.log(oneResult);
 					if (this.hitResults[i].gamePlayerId == this.viewingPlayerId) {
 						this.myAttacks.push(oneResult);
@@ -539,6 +560,7 @@ var oneGame = new Vue({
 				}
 
 			}
+			
 			console.log(this.myAttacks);
 			console.log(this.opponentAttacks);
 		}

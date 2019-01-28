@@ -27,7 +27,7 @@
                     <p id="players"><span>{{ viewingPlayer }} (YOU)</span> vs <span>{{ opponentPlayer }}</span></p>
                 </div>
             </div>
-            
+
             <div class="row" id="locations">
                 <div class="col-6">
                     <table>
@@ -125,8 +125,30 @@
             </div>
 
             <div class="row">
-                <table>
-                    
+                <table class="table">
+                    <!-- <thead class="thead-light">
+                        
+                            <th>turn</th>
+                            <th>Hits on you</th>
+                            <th>Hits on opponent</th>
+                        
+                    </thead> -->
+                    <tbody>
+                        <!-- <tr> -->
+                        <tr>
+                            <th>turn</th>
+                            <td v-for="(turn, index4) in myAttacks" :key="index4">{{turn.turn}}</td>
+                        </tr>
+                        <tr>
+                            <th>Hits on you</th>
+                            <td v-for="(opponentAttack, index5) in opponentAttacks" :key="index5">{{opponentAttack.hits}}</td>
+                        </tr>
+                        <tr>
+                            <th>Hits on opponent</th>
+                            <td v-for="(myAttack, index6) in myAttacks" :key="index6">{{myAttack.hits}}</td>
+                        </tr>
+                        <!-- </tr> -->
+                    </tbody>
                 </table>
             </div>
         </div>

@@ -183,6 +183,22 @@ public class SalvoController {
                 ).collect(Collectors.toList());
     }
 
+    private GamePlayer getOpponent(GamePlayer gamePlayer) {
+        Game game = gamePlayer.getGame();
+        HashMap<String, GamePlayer> helperMap = new HashMap<>();
+        game.getGamePlayers().forEach(gp -> {
+            if(gp.getGamePlayerId() != gamePlayer.getGamePlayerId()) {
+                helperMap.put("opponent", gp);
+            }
+        });
+        return helperMap.get("opponent");
+    }
+
+    private List<HashMap<String, Object>> getHitResults(GamePlayer gamePlayer) {
+        
+    }
+
+
     @RequestMapping(value = "/players", method = RequestMethod.POST)
     public ResponseEntity<Map<String, Object>> createUser(@RequestParam("email") String email, @RequestParam("password") String password) {
         Player player = playerRepo.findByUserName(email);
