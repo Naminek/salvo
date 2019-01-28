@@ -52,40 +52,54 @@ var oneGame = new Vue({
 		showTurnNum: false,
 		currentTurn: null,
 		showingSalvoLocations: "",
-		// hitResults: [{
-		// 	"turn": 1,
-		// 	"attack": [{
-		// 		"gamePlayerId": 2,
-		// 		"hits": [{
-		// 			"hitship": "destroyer",
-		// 			"timesOfHit": 2
-		// 		}]
-		// 	}, {
-		// 		"gamePlayerId": 1,
-		// 		"hits": [{
-		// 			"hitship": "destroyer",
-		// 			"timesOfHit": 1
-		// 		}, {
-		// 			"hitship": "patrol boat",
-		// 			"timesOfHit": 1
-		// 		}]
-		// 	}]
-		// }, {
-		// 	"turn": 2,
-		// 	"attack": [{
-		// 		"gamePlayerId": 2,
-		// 		"hits": [{
-		// 			"hitship": "patrol boat",
-		// 			"timesOfHit": 1
-		// 		}]
-		// 	}, {
-		// 		"gamePlayerId": 1,
-		// 		"hits": [{
-		// 			"hitship": "patrol boat",
-		// 			"timesOfHit": 1
-		// 		}]
-		// 	}]
-		// }]
+		hitResults: [{
+			"gamePlayerId": 1,
+			"attack": [{
+				"turn": 1,
+				"hits": [{
+					"hitShip": "patrol boat",
+					"hitPlace": "B4"
+				}, {
+					"hitShip": "patrol boat",
+					"hitPlace": "B5"
+				}]
+			}, {
+				"turn": 2,
+				"hits": [{
+					"hitShip": "destroyer",
+					"hitPlace": "D5"
+				}, {
+					"hitShip": "patrol boat",
+					"hitPlace": "F2"
+				}]
+			}]
+		}, {
+			"gamePlayerId": 2,
+			"attack": [{
+				"turn": 1,
+				"hits": [{
+					"hitShip": "destroyer",
+					"hitPlace": "B5"
+				}, {
+					"hitShip": "destroyer",
+					"hitPlace": "C5"
+				}, {
+					"hitShip": "patrol boat",
+					"hitPlace": "F1"
+				}]
+			}, {
+				"turn": 2,
+				"hits": [{
+					"hitShip": "destroyer",
+					"hitPlace": "E1"
+				}, {
+					"hitShip": "submarine",
+					"hitPlace": "H3"
+				}]
+			}]
+		}],
+		myAttacks: [],
+		opponentAttacks: []
 	},
 	created() {
 		this.makeTable()
@@ -93,7 +107,7 @@ var oneGame = new Vue({
 	mounted() {
 		this.getUrl(),
 			this.loadOneGame()
-		// this.checkShipData()
+			
 	},
 	methods: {
 		loadOneGame() {
@@ -113,6 +127,8 @@ var oneGame = new Vue({
 					this.markSalvo();
 					// this.writeTurn();
 					this.checkShipAndSalvoData();
+					this.showAttackResults();
+
 				})
 				.catch(function (error) {
 					console.log(error);
@@ -496,6 +512,35 @@ var oneGame = new Vue({
 					console.log('Request failure: ', error);
 					alert("Failure");
 				});
+		},
+
+		showAttackResults() {
+			let oneResult = {
+				"turn": null,
+				"hits": null
+			};
+			let oneHitResult = {};
+
+			for (var i = 0; i < this.hitResults.length; i++) {
+
+				for (var j = 0; j < this.hitResults[i].attack.length; j++) {
+					oneResult.turn = this.hitResults[i].attack[j].turn;
+					oneHitResult = this.hitResults[i].attack[j].hits.reduce((acc, it) => ({
+						...acc,
+						[it.hitShip]: (acc[it.hitShip] || 0) + 1
+					}), {});
+					oneResult.hits = oneHitResult;
+					console.log(oneResult);
+					if (this.hitResults[i].gamePlayerId == this.viewingPlayerId) {
+						this.myAttacks.push(oneResult);
+					} else if (this.hitResults[i].gamePlayerId == this.opponentPlayerId) {
+						this.opponentAttacks.push(oneResult);
+					}
+				}
+
+			}
+			console.log(this.myAttacks);
+			console.log(this.opponentAttacks);
 		}
 	}
 })
