@@ -1,5 +1,7 @@
 package com.codeoftheweb.salvo;
 
+//import com.sun.org.apache.xerces.internal.xs.datatypes.ObjectList;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 @RestController
@@ -142,12 +145,16 @@ public class SalvoController {
     public Object getGameView(@PathVariable("nn") Long gamePlayerId, Authentication auth) {
         GamePlayer gamePlayer = gamePlayerRepo.findOne(gamePlayerId);
         if (auth.getName() == gamePlayer.getPlayer().getEmail()) {
+            List salvoLocations = Arrays.asList(gamePlayer.getSalvos().stream().map(salvo -> salvo.getSalvoLocations()));
+            System.out.println(salvoLocations);
             return new LinkedHashMap<String, Object>() {{
                 put("gameId", gamePlayer.getGame().getGameId());
                 put("created", gamePlayer.getGame().getCreatedDate());
                 put("gamePlayers", getGamePlayers(gamePlayer.getGame()));
                 put("ships", getShips(gamePlayer));
                 put("salvos", getSalvos(gamePlayer.getGame().getGamePlayers()));
+                put("test", salvoLocations);
+                put("test2", getHitResults(gamePlayer));
             }};
         } else {
             return new ResponseEntity<>("Wrong user", HttpStatus.UNAUTHORIZED);
@@ -187,7 +194,7 @@ public class SalvoController {
         Game game = gamePlayer.getGame();
         HashMap<String, GamePlayer> helperMap = new HashMap<>();
         game.getGamePlayers().forEach(gp -> {
-            if(gp.getGamePlayerId() != gamePlayer.getGamePlayerId()) {
+            if (gp.getGamePlayerId() != gamePlayer.getGamePlayerId()) {
                 helperMap.put("opponent", gp);
             }
         });
@@ -195,7 +202,29 @@ public class SalvoController {
     }
 
     private List<HashMap<String, Object>> getHitResults(GamePlayer gamePlayer) {
-        
+
+        List<List> salvoLocations = new ArrayList<>();
+        gamePlayer.getSalvos().stream().forEach(salvo ->
+                salvoLocations.add(salvo.getSalvoLocations()));
+
+        System.out.println(salvoLocations);
+
+        List<HashMap<String, Object>> result = new ArrayList<>();
+
+
+        getOpponent(gamePlayer).getShips().stream().forEach(ship -> {
+            for (int i = 0; i < salvoLocations.size(); i++) {
+                for (int j = 0; j < salvoLocations.get(i).size(); j++) {
+                    if (ship.getlocations().contains(salvoLocations.get(i).get(j))) {
+                        HashMap<String, Object> tempMap = new HashMap<>();
+                        tempMap.put("hitShip", ship.getShipType());
+                        tempMap.put("hitPlace", salvoLocations.get(i).get(j));
+                        result.add(tempMap);
+                    }
+                }
+            }
+        });
+        return result;
     }
 
 
@@ -270,7 +299,7 @@ public class SalvoController {
             return new ResponseEntity<>(responseentity("error", "No such game player"), HttpStatus.UNAUTHORIZED);
         } else if (gamePlayer.getPlayer().getEmail() != auth.getName()) {
             return new ResponseEntity<>(responseentity("error", "Not Correct player"), HttpStatus.UNAUTHORIZED);
-        } else if (gamePlayer.getSalvos().size() != 0 && checkSalvoTurn(gamePlayer,salvoLocations)) {
+        } else if (gamePlayer.getSalvos().size() != 0 && checkSalvoTurn(gamePlayer, salvoLocations)) {
             return new ResponseEntity<>(responseentity("error", "salvos are already placed in this turn"), HttpStatus.FORBIDDEN);
         } else {
             gamePlayer.addSalvo(salvoLocations);
@@ -289,8 +318,6 @@ public class SalvoController {
         });
         return false;
     }
-
-
 
 
 }
