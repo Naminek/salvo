@@ -145,16 +145,14 @@ public class SalvoController {
     public Object getGameView(@PathVariable("nn") Long gamePlayerId, Authentication auth) {
         GamePlayer gamePlayer = gamePlayerRepo.findOne(gamePlayerId);
         if (auth.getName() == gamePlayer.getPlayer().getEmail()) {
-            List salvoLocations = Arrays.asList(gamePlayer.getSalvos().stream().map(salvo -> salvo.getSalvoLocations()));
-            System.out.println(salvoLocations);
             return new LinkedHashMap<String, Object>() {{
                 put("gameId", gamePlayer.getGame().getGameId());
                 put("created", gamePlayer.getGame().getCreatedDate());
                 put("gamePlayers", getGamePlayers(gamePlayer.getGame()));
                 put("ships", getShips(gamePlayer));
                 put("salvos", getSalvos(gamePlayer.getGame().getGamePlayers()));
-                put("test", salvoLocations);
-                put("test2", getHitResults(gamePlayer));
+                put("MyHitResults", getHitResults(gamePlayer));
+                put("opponentHitResults", getHitResults(getOpponent(gamePlayer)));
             }};
         } else {
             return new ResponseEntity<>("Wrong user", HttpStatus.UNAUTHORIZED);
@@ -203,6 +201,16 @@ public class SalvoController {
 
     private List<HashMap<String, Object>> getHitResults(GamePlayer gamePlayer) {
 
+        List<HashMap<String, Object>> testList = gamePlayer.getSalvos().stream().map(salvo ->
+            new LinkedHashMap<String, Object>() {{
+                put("turn", salvo.getTurn());
+                put("locations", salvo.getSalvoLocations());
+            }}
+        ).collect(Collectors.toList());
+
+        System.out.println(testList);
+
+
         List<List> salvoLocations = new ArrayList<>();
         gamePlayer.getSalvos().stream().forEach(salvo ->
                 salvoLocations.add(salvo.getSalvoLocations()));
@@ -211,8 +219,8 @@ public class SalvoController {
 
         List<HashMap<String, Object>> result = new ArrayList<>();
 
-
         getOpponent(gamePlayer).getShips().stream().forEach(ship -> {
+
             for (int i = 0; i < salvoLocations.size(); i++) {
                 for (int j = 0; j < salvoLocations.get(i).size(); j++) {
                     if (ship.getlocations().contains(salvoLocations.get(i).get(j))) {
@@ -225,6 +233,20 @@ public class SalvoController {
             }
         });
         return result;
+
+//        getOpponent(gamePlayer).getShips().stream().forEach(ship -> {
+//            for (int i = 0; i < salvoLocations.size(); i++) {
+//                for (int j = 0; j < salvoLocations.get(i).size(); j++) {
+//                    if (ship.getlocations().contains(salvoLocations.get(i).get(j))) {
+//                        HashMap<String, Object> tempMap = new HashMap<>();
+//                        tempMap.put("hitShip", ship.getShipType());
+//                        tempMap.put("hitPlace", salvoLocations.get(i).get(j));
+//                        result.add(tempMap);
+//                    }
+//                }
+//            }
+//        });
+//        return result;
     }
 
 
