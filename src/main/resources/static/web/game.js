@@ -52,54 +52,56 @@ var oneGame = new Vue({
 		showTurnNum: false,
 		currentTurn: null,
 		showingSalvoLocations: "",
-		hitResults: [{
-			"gamePlayerId": 1,
-			"attack": [{
-				"turn": 1,
-				"hits": [{
-					"hitShip": "destroyer",
-					"hitPlace": "B5"
-				}, {
-					"hitShip": "destroyer",
-					"hitPlace": "C5"
-				}, {
-					"hitShip": "patrol boat",
-					"hitPlace": "F1"
-				}]
-			}, {
-				"turn": 2,
-				"hits": [{
-					"hitShip": "destroyer",
-					"hitPlace": "D5"
-				}, {
-					"hitShip": "patrol boat",
-					"hitPlace": "F2"
-				}]
-			}]
-		}, {
-			"gamePlayerId": 2,
-			"attack": [{
-				"turn": 1,
-				"hits": [{
-					"hitShip": "patrol boat",
-					"hitPlace": "B4"
-				}, {
-					"hitShip": "patrol boat",
-					"hitPlace": "B5"
-				}]
-			}, {
-				"turn": 2,
-				"hits": [{
-					"hitShip": "destroyer",
-					"hitPlace": "E1"
-				}, {
-					"hitShip": "submarine",
-					"hitPlace": "H3"
-				}]
-			}]
-		}],
+		// hitResults: [{
+		// 	"gamePlayerId": 1,
+		// 	"attack": [{
+		// 		"turn": 1,
+		// 		"hits": [{
+		// 			"hitShip": "destroyer",
+		// 			"hitPlace": "B5"
+		// 		}, {
+		// 			"hitShip": "destroyer",
+		// 			"hitPlace": "C5"
+		// 		}, {
+		// 			"hitShip": "patrol boat",
+		// 			"hitPlace": "F1"
+		// 		}]
+		// 	}, {
+		// 		"turn": 2,
+		// 		"hits": [{
+		// 			"hitShip": "destroyer",
+		// 			"hitPlace": "D5"
+		// 		}, {
+		// 			"hitShip": "patrol boat",
+		// 			"hitPlace": "F2"
+		// 		}]
+		// 	}]
+		// }, {
+		// 	"gamePlayerId": 2,
+		// 	"attack": [{
+		// 		"turn": 1,
+		// 		"hits": [{
+		// 			"hitShip": "patrol boat",
+		// 			"hitPlace": "B4"
+		// 		}, {
+		// 			"hitShip": "patrol boat",
+		// 			"hitPlace": "B5"
+		// 		}]
+		// 	}, {
+		// 		"turn": 2,
+		// 		"hits": [{
+		// 			"hitShip": "destroyer",
+		// 			"hitPlace": "E1"
+		// 		}, {
+		// 			"hitShip": "submarine",
+		// 			"hitPlace": "H3"
+		// 		}]
+		// 	}]
+		// }],
+		hitResults: null,
 		myAttacks: [],
-		opponentAttacks: []
+		opponentAttacks: [],
+		arrayToShowTable: []
 	},
 	created() {
 		this.makeTable()
@@ -107,7 +109,7 @@ var oneGame = new Vue({
 	mounted() {
 		this.getUrl(),
 			this.loadOneGame()
-			
+
 	},
 	methods: {
 		loadOneGame() {
@@ -118,6 +120,7 @@ var oneGame = new Vue({
 				.then(json => {
 					this.oneGameData = json;
 					this.gamePlayers = json.gamePlayers;
+					this.hitResults = json.hitResults;
 					this.loading = false;
 					console.log(this.oneGameData);
 					console.log(this.gamePlayers);
@@ -197,22 +200,22 @@ var oneGame = new Vue({
 			}
 		},
 		markHitSalvo() {
-			
+
 			this.hitResults.forEach(result => {
 				let myHitSalvo = [];
-				if(result.gamePlayerId == this.viewingPlayerId) {
-					for(var i = 0; i < result.attack.length; i++) {
+				if (result.gamePlayerId == this.viewingPlayerId) {
+					for (var i = 0; i < result.attack.length; i++) {
 						myHitSalvo = result.attack[i].hits.map(hit => hit.hitPlace);
 						console.log(myHitSalvo);
-						myHitSalvo.forEach(salvo =>{
+						myHitSalvo.forEach(salvo => {
 							document.querySelector("#salvo" + salvo).classList.add("hitSalvo");
 						})
-						
+
 					}
 				}
-				
+
 			});
-			
+
 		},
 		loseUser() {
 			this.showLogout = false;
@@ -534,7 +537,7 @@ var oneGame = new Vue({
 		},
 
 		showAttackResults() {
-			
+
 			for (var i = 0; i < this.hitResults.length; i++) {
 
 				for (var j = 0; j < this.hitResults[i].attack.length; j++) {
@@ -554,15 +557,52 @@ var oneGame = new Vue({
 					console.log(oneResult);
 					if (this.hitResults[i].gamePlayerId == this.viewingPlayerId) {
 						this.myAttacks.push(oneResult);
+						this.compareTurn(this.myAttacks);
 					} else if (this.hitResults[i].gamePlayerId == this.opponentPlayerId) {
 						this.opponentAttacks.push(oneResult);
+						this.compareTurn(this.opponentAttacks);
 					}
+
 				}
 
 			}
+			let maxTurn = this.currentTurn - 1;
 			
+			for (var i = 0; i < maxTurn; i++) {
+				let oneHitObject = {};
+				oneHitObject.turn = i + 1;
+				for (var j = 0; j < this.myAttacks.length; j++) {
+					if (oneHitObject.turn == this.myAttacks[j].turn) {
+						oneHitObject.myHits = this.myAttacks[j].hits;
+					}
+				}
+				for (var k = 0; k < this.opponentAttacks.length; k++) {
+					if (oneHitObject.turn == this.opponentAttacks[k].turn) {
+						oneHitObject.opponentHits = this.opponentAttacks[k].hits;
+					}
+				}
+				this.arrayToShowTable.push(oneHitObject);
+				this.compareTurn(this.arrayToShowTable);
+			}
 			console.log(this.myAttacks);
 			console.log(this.opponentAttacks);
+			console.log(this.arrayToShowTable);
+
+		},
+		compareTurn(array) {
+			function compare(a, b) {
+				const turnA = a.turn;
+				const turnB = b.turn;
+
+				let comparison = 0;
+				if (turnA > turnB) {
+					comparison = 1;
+				} else if (turnA < turnB) {
+					comparison = -1;
+				}
+				return comparison;
+			}
+			array.sort(compare);
 		}
 	}
 })
