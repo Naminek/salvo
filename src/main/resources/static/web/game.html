@@ -123,34 +123,42 @@
             <div>
                 <button v-if="placeShipsButton" @click="placeShips" class="mt-2" id="placeShipButton">Place ships</button>
             </div>
-
+            
             <div class="row">
-                <table class="table">
-                    <!-- <thead class="thead-light">
-                        
+                <table class="table mt-2">
+                    <thead class="thead-light">
+                        <tr>
                             <th>turn</th>
                             <th>Hits on you</th>
                             <th>Hits on opponent</th>
-                        
-                    </thead> -->
+                        </tr>
+                    </thead>
                     <tbody>
-                        <!-- <tr> -->
-                        <tr>
-                            <th>turn</th>
-                            <td v-for="(turn, index4) in myAttacks" :key="index4">{{turn.turn}}</td>
+                        <tr v-for="(attack, index4) in arrayToShowTable" :key="index4">
+                            <td>{{ attack.turn }}</td>
+                            <td>{{ attack.opponentHits }}</td>
+                            <td>{{ attack.myHits }}</td>
                         </tr>
-                        <tr>
-                            <th>Hits on you</th>
-                            <td v-for="(opponentAttack, index5) in opponentAttacks" :key="index5">{{opponentAttack.hits}}</td>
-                        </tr>
-                        <tr>
-                            <th>Hits on opponent</th>
-                            <td v-for="(myAttack, index6) in myAttacks" :key="index6">{{myAttack.hits}}</td>
-                        </tr>
-                        <!-- </tr> -->
                     </tbody>
+
                 </table>
             </div>
+            <div class="row">
+                    <div class="col-2">
+                        <p>Opponent ships</p>
+                    </div>
+                    <div class="col-8">
+                        <button id="opponent_aircraft">Aircraft Carrier</button>
+                        <button id="opponent_battleship">Battleship</button>
+                        <button id="opponent_destroyer">Destroyer</button>
+                        <button id="opponent_submarine">Submarine</button>
+                        <button id="opponent_patrol">Patrol Boat</button>
+                    </div>
+                    <div class="col-2">
+                        <p><span id="opponent_shipcolor">&#9632;</span>: arriving ships</p>
+                        <p><span id="hitcolor">&#9632;</span>: ships you sank</p>
+                    </div>
+                </div>
         </div>
 
 

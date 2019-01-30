@@ -178,3 +178,23 @@
     height: 50px;
     background-color:rgb(247, 208, 35);
 }
+
+#opponent_aircraft, #opponent_battleship,
+#opponent_destroyer, #opponent_submarine,
+#opponent_patrol {
+    background-color: rgb(60, 203, 228);
+}
+
+#opponent_aircraft:disabled, #opponent_battleship:disabled,
+#opponent_destroyer:disabled, #opponent_submarine:disabled,
+#opponent_patrol:disabled {
+    background-color: rgb(173, 24, 24);
+}
+
+#hitcolor {
+    color: rgb(173, 24, 24);
+}
+
+#opponent_shipcolor {
+    color: rgb(60, 203, 228);
+}

@@ -132,6 +132,7 @@ var oneGame = new Vue({
 					this.checkShipAndSalvoData();
 					this.showAttackResults();
 					this.markHitSalvo();
+					this.checkSink();
 
 				})
 				.catch(function (error) {
@@ -547,14 +548,14 @@ var oneGame = new Vue({
 					};
 					let oneHitResult = {};
 					oneResult.turn = this.hitResults[i].attack[j].turn;
-					console.log(oneResult.turn);
+					// console.log(oneResult.turn);
 					oneHitResult = this.hitResults[i].attack[j].hits.reduce((acc, it) => ({
 						...acc,
 						[it.hitShip]: (acc[it.hitShip] || 0) + 1
 					}), {});
 					oneResult.hits = oneHitResult;
-					console.log(oneResult.hits);
-					console.log(oneResult);
+					// console.log(oneResult.hits);
+					// console.log(oneResult);
 					if (this.hitResults[i].gamePlayerId == this.viewingPlayerId) {
 						this.myAttacks.push(oneResult);
 						this.compareTurn(this.myAttacks);
@@ -567,7 +568,7 @@ var oneGame = new Vue({
 
 			}
 			let maxTurn = this.currentTurn - 1;
-			
+
 			for (var i = 0; i < maxTurn; i++) {
 				let oneHitObject = {};
 				oneHitObject.turn = i + 1;
@@ -603,6 +604,52 @@ var oneGame = new Vue({
 				return comparison;
 			}
 			array.sort(compare);
+		},
+		checkSink() {
+			let myAttack = this.hitResults[0].attack
+			let opponentAircraft = 0;
+			let opponentBattleship = 0;
+			let opponentDestroyer = 0;
+			let opponentSubmarine = 0;
+			let opponentPatrol = 0;
+			for (var i = 0; i < myAttack.length; i++) {
+				for (var j = 0; j < myAttack[i].hits.length; j++) {
+
+
+					if (myAttack[i].hits[j].hitShip == "Aircraft Carrier") {
+						opponentAircraft = opponentAircraft + 1;
+					}
+					if (myAttack[i].hits[j].hitShip == "Battleship") {
+						opponentBattleship = opponentBattleship + 1;
+					}
+					if (myAttack[i].hits[j].hitShip == "Destroyer") {
+						opponentDestroyer = opponentDestroyer + 1;
+					}
+					if (myAttack[i].hits[j].hitShip == "Submarine") {
+						opponentSubmarine = opponentSubmarine + 1;
+					}
+					if (myAttack[i].hits[j].hitShip == "Patrol Boat") {
+						opponentPatrol = opponentPatrol + 1;
+					}
+					console.log(opponentDestroyer);
+					if (opponentAircraft == 5) {
+						document.getElementById("opponent_aircraft").disabled = true;
+					}
+					if (opponentBattleship == 4) {
+						document.getElementById("opponent_battleship").disabled = true;
+					}
+					if (opponentDestroyer == 3) {
+						document.getElementById("opponent_destroyer").disabled = true;
+					}
+					if (opponentSubmarine == 3) {
+						document.getElementById("opponent_submarine").disabled = true;
+					}
+					if (opponentPatrol == 2) {
+						document.getElementById("opponent_patrol").disabled = true;
+					}
+				}
+
+			}
 		}
 	}
 })
