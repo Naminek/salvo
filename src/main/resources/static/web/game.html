@@ -123,42 +123,58 @@
             <div>
                 <button v-if="placeShipsButton" @click="placeShips" class="mt-2" id="placeShipButton">Place ships</button>
             </div>
-            
+
             <div class="row">
                 <table class="table mt-2">
                     <thead class="thead-light">
                         <tr>
                             <th>turn</th>
-                            <th>Hits on you</th>
-                            <th>Hits on opponent</th>
+                            <th colspan="5">Hits on you</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr v-for="(attack, index4) in arrayToShowTable" :key="index4">
                             <td>{{ attack.turn }}</td>
-                            <td>{{ attack.opponentHits }}</td>
-                            <td>{{ attack.myHits }}</td>
+                            <td v-for="(opponentHit, index7) in attack.opponentHits" :key="index7">{{
+                                    opponentHit.shipType }}: {{ opponentHit.damage }}</td>
+                        </tr>
+                    </tbody>
+
+                </table>
+                <table class="table">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>turn</th>
+                            <th colspan="5">Hits on opponent</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(attack, index6) in arrayToShowTable" :key="index6">
+                            <td>{{ attack.turn }}</td>
+                            
+                                <td v-for="(myHit, index5) in attack.myHits">{{ myHit.shipType }}: {{ myHit.damage }}</td>
                         </tr>
                     </tbody>
 
                 </table>
             </div>
             <div class="row">
-                    <div class="col-2">
-                        <p>Opponent ships</p>
-                    </div>
-                    <div class="col-8">
-                        <button id="opponent_aircraft">Aircraft Carrier</button>
-                        <button id="opponent_battleship">Battleship</button>
-                        <button id="opponent_destroyer">Destroyer</button>
-                        <button id="opponent_submarine">Submarine</button>
-                        <button id="opponent_patrol">Patrol Boat</button>
-                    </div>
-                    <div class="col-2">
-                        <p><span id="opponent_shipcolor">&#9632;</span>: arriving ships</p>
-                        <p><span id="hitcolor">&#9632;</span>: ships you sank</p>
-                    </div>
+                <div class="col-2">
+                    <p>Opponent ships</p>
                 </div>
+                <div class="col-7">
+                    <button id="opponent_aircraft">Aircraft Carrier</button>
+                    <button id="opponent_battleship">Battleship</button>
+                    <button id="opponent_destroyer">Destroyer</button>
+                    <button id="opponent_submarine">Submarine</button>
+                    <button id="opponent_patrol">Patrol Boat</button>
+                </div>
+                <div class="col-3">
+                    <p><span id="opponent_shipcolor">&#9632;</span>: arriving ships</p>
+                    <p><span id="hitcolor">&#9632;</span>: ships you sank!!</p>
+                </div>
+            </div>
         </div>
 
 

@@ -209,7 +209,7 @@ var oneGame = new Vue({
 						myHitSalvo = result.attack[i].hits.map(hit => hit.hitPlace);
 						console.log(myHitSalvo);
 						myHitSalvo.forEach(salvo => {
-							document.querySelector("#salvo" + salvo).classList.add("hitSalvo");
+							document.querySelector("#salvo" + salvo).classList.add("shipLocation");
 						})
 
 					}
@@ -540,22 +540,32 @@ var oneGame = new Vue({
 		showAttackResults() {
 
 			for (var i = 0; i < this.hitResults.length; i++) {
-
+				console.log(this.hitResults[i].gamePlayerId);
 				for (var j = 0; j < this.hitResults[i].attack.length; j++) {
 					let oneResult = {
-						// "turn": null,
-						// "hits": null
+						"turn": null,
+						"hits": []
 					};
-					let oneHitResult = {};
 					oneResult.turn = this.hitResults[i].attack[j].turn;
 					// console.log(oneResult.turn);
 					oneHitResult = this.hitResults[i].attack[j].hits.reduce((acc, it) => ({
 						...acc,
 						[it.hitShip]: (acc[it.hitShip] || 0) + 1
 					}), {});
-					oneResult.hits = oneHitResult;
-					// console.log(oneResult.hits);
-					// console.log(oneResult);
+					// oneResult.hits = oneHitResult;
+					let resultsKeys = Object.keys(oneHitResult);
+					let resultsValue = Object.values(oneHitResult);
+					for (var k = 0; k < resultsKeys.length; k++) {
+						let combertOneResult = {
+							"shipType": null,
+							"damage": null
+						}
+						combertOneResult.shipType = resultsKeys[k];
+						combertOneResult.damage = resultsValue[k];
+						// console.log(combertOneResult);
+						oneResult.hits.push(combertOneResult);
+						// console.log(oneResult);
+					}
 					if (this.hitResults[i].gamePlayerId == this.viewingPlayerId) {
 						this.myAttacks.push(oneResult);
 						this.compareTurn(this.myAttacks);
@@ -563,10 +573,11 @@ var oneGame = new Vue({
 						this.opponentAttacks.push(oneResult);
 						this.compareTurn(this.opponentAttacks);
 					}
-
 				}
 
+
 			}
+
 			let maxTurn = this.currentTurn - 1;
 
 			for (var i = 0; i < maxTurn; i++) {
@@ -614,24 +625,22 @@ var oneGame = new Vue({
 			let opponentPatrol = 0;
 			for (var i = 0; i < myAttack.length; i++) {
 				for (var j = 0; j < myAttack[i].hits.length; j++) {
-
-
-					if (myAttack[i].hits[j].hitShip == "Aircraft Carrier") {
+					if (myAttack[i].hits[j].hitShip == "aircraft carrier") {
 						opponentAircraft = opponentAircraft + 1;
 					}
-					if (myAttack[i].hits[j].hitShip == "Battleship") {
+					if (myAttack[i].hits[j].hitShip == "battleship") {
 						opponentBattleship = opponentBattleship + 1;
 					}
-					if (myAttack[i].hits[j].hitShip == "Destroyer") {
+					if (myAttack[i].hits[j].hitShip == "destroyer") {
 						opponentDestroyer = opponentDestroyer + 1;
 					}
-					if (myAttack[i].hits[j].hitShip == "Submarine") {
+					if (myAttack[i].hits[j].hitShip == "submarine") {
 						opponentSubmarine = opponentSubmarine + 1;
 					}
-					if (myAttack[i].hits[j].hitShip == "Patrol Boat") {
+					if (myAttack[i].hits[j].hitShip == "patrol boat") {
 						opponentPatrol = opponentPatrol + 1;
 					}
-					console.log(opponentDestroyer);
+
 					if (opponentAircraft == 5) {
 						document.getElementById("opponent_aircraft").disabled = true;
 					}

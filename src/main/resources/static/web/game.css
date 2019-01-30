@@ -50,13 +50,13 @@
     
 }
 
-.hitSalvo {
+/* .hitSalvo {
     background-color: rgb(40, 30, 128);
     border-color: rgb(40, 30, 128);
     border-radius: 2%;
     height: 100%;
     width: 100%;
-}
+} */
 
 .hitShip {
     background-color: red;
