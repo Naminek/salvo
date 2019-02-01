@@ -13,7 +13,7 @@ public class Salvo {
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native", strategy = "native")
     private long id;
-    private int turn;
+    private Integer turn;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="gamePlayer_id")
@@ -39,11 +39,11 @@ public class Salvo {
         this.id = id;
     }
 
-    public long getTurn() {
+    public Integer getTurn() {
         return turn;
     }
 
-    public void setTurn(int turn) {
+    public void setTurn(Integer turn) {
         this.turn = turn;
     }
 

@@ -158,7 +158,7 @@ public class SalvoController {
         }
     }
 
-    private List<HashMap<String, Object>> getGamePlayers(Game game) {
+    private List<Map<String, Object>> getGamePlayers(Game game) {
         return game.getGamePlayers()
                 .stream()
                 .map(gamePlayer -> new LinkedHashMap<String, Object>() {{
@@ -167,7 +167,7 @@ public class SalvoController {
                 }}).collect(Collectors.toList());
     }
 
-    private List<HashMap<String, Object>> getShips(GamePlayer gamePlayer) {
+    private List<Map<String, Object>> getShips(GamePlayer gamePlayer) {
         return gamePlayer.getShips()
                 .stream()
                 .map(ship -> new LinkedHashMap<String, Object>() {{
@@ -176,7 +176,7 @@ public class SalvoController {
                 }}).collect(Collectors.toList());
     }
 
-    private List<HashMap<String, Object>> getSalvos(Set<GamePlayer> gamePlayer) {
+    private List<Map<String, Object>> getSalvos(Set<GamePlayer> gamePlayer) {
         return gamePlayer.stream()
                 .flatMap(oneGamePlayer -> oneGamePlayer.getSalvos()
                         .stream().map(salvo -> new LinkedHashMap<String, Object>() {{
@@ -189,7 +189,7 @@ public class SalvoController {
 
     private GamePlayer getOpponent(GamePlayer gamePlayer) {
         Game game = gamePlayer.getGame();
-        HashMap<String, GamePlayer> helperMap = new HashMap<>();
+        LinkedHashMap<String, GamePlayer> helperMap = new LinkedHashMap<>();
         game.getGamePlayers().forEach(gp -> {
             if (gp.getGamePlayerId() != gamePlayer.getGamePlayerId()) {
                 helperMap.put("opponent", gp);
@@ -198,49 +198,89 @@ public class SalvoController {
         return helperMap.get("opponent");
     }
 
-    private List<HashMap<String, Object>> getHitResults(GamePlayer gamePlayer) {
-        List<HashMap<String, Object>> hitList = gamePlayer.getSalvos().stream().map(salvo ->
+    private List<Map<String, Object>> getHitResults(GamePlayer gamePlayer) {
+        List<Salvo> salvoList = gamePlayer.getSalvos().stream().collect(Collectors.toList());
+        Comparator<Salvo> compareSalvo = new Comparator<Salvo>() {
+            @Override
+            public int compare(Salvo o1, Salvo o2) {
+                return o1.getTurn().compareTo(o2.getTurn());
+            }
+        };
+        Collections.sort(salvoList, compareSalvo);
+        List<String> sunkShipList = new ArrayList<>();
+        List<Map<String, Object>> hitList = salvoList.stream().map(salvo ->
                 new LinkedHashMap<String, Object>() {{
                     put("turn", salvo.getTurn());
-                    put("hits", getOneHitReault(salvo.getSalvoLocations(), gamePlayer));
+                    put("hits", getOneHitReault(salvo.getSalvoLocations(), gamePlayer, sunkShipList));
+//                    System.out.println(sunkShipList);
+//                    System.out.println(sunkShipList.size());
+//                    if(sunkShipList.size() == 5) {
+//                        put("gameIsOver", true);
+//                    } else {
+//                        put("gameIsOver", false);
+//                    }
                 }}
         ).collect(Collectors.toList());
+
         return hitList;
     }
 
-    public List<HashMap<String, Object>> getOneHitReault(List<String> salvoLocations, GamePlayer gamePlayer) {
 
-        List<HashMap<String, Object>> result = new ArrayList<>();
+    private List<Map<String, Object>> getOneHitReault(List<String> salvoLocations, GamePlayer gamePlayer, List<String> sunkShipList) {
+
+        List<Map<String, Object>> result = new ArrayList<>();
         if (getOpponent(gamePlayer).getShips() != null) {
             getOpponent(gamePlayer).getShips().stream().forEach(ship -> {
                 for (int i = 0; i < salvoLocations.size(); i++) {
                     if (ship.getlocations().contains(salvoLocations.get(i))) {
-                        HashMap<String, Object> tempMap = new HashMap<>();
+                        Map<String, Object> tempMap = new LinkedHashMap<>();
                         tempMap.put("hitShip", ship.getShipType());
                         tempMap.put("hitPlace", salvoLocations.get(i));
+                        ship.setDamage(ship.getDamage() + 1);
+                        tempMap.put("totalDamage", ship.getDamage());
+//                        if ((ship.getShipType() == "aircraft carrier") && ship.getDamage() == 5) {
+//                            tempMap.put("isSunk", true);
+//                            sunkShipList.add(ship.getShipType());
+//                        } else if ((ship.getShipType() == "battleship") && ship.getDamage() == 4) {
+//                            tempMap.put("isSunk", true);
+//                            sunkShipList.add(ship.getShipType());
+//                        } else if ((ship.getShipType() == "destroyer") && ship.getDamage() == 3) {
+//                            tempMap.put("isSunk", true);
+//                            sunkShipList.add(ship.getShipType());
+//                        } else if ((ship.getShipType() == "submarine") && ship.getDamage() == 3) {
+//                            tempMap.put("isSunk", true);
+//                            sunkShipList.add(ship.getShipType());
+//                        } else if ((ship.getShipType() == "patrol boat") && ship.getDamage() == 2) {
+//                            tempMap.put("isSunk", true);
+//                            sunkShipList.add(ship.getShipType());
+//                        } else {
+//                            tempMap.put("isSunk", false);
+//                        }
+
                         result.add(tempMap);
                     }
                 }
             });
         }
         return result;
-
     }
 
-    private List<HashMap<String, Object>> getResults(GamePlayer gamePlayer) {
-        List<HashMap<String, Object>> resultData = new ArrayList<>();
-        HashMap<String, Object> myMap = new HashMap<>();
+
+    private List<Map<String, Object>> getResults(GamePlayer gamePlayer) {
+        List<Map<String, Object>> resultData = new ArrayList<>();
+        Map<String, Object> myMap = new LinkedHashMap<>();
         myMap.put("gamePlayerId", gamePlayer.getGamePlayerId());
         myMap.put("attack", getHitResults(gamePlayer));
         resultData.add(0, myMap);
         if (getOpponent(gamePlayer) != null) {
-            HashMap<String, Object> opponentMap = new HashMap<>();
+            Map<String, Object> opponentMap = new LinkedHashMap<>();
             opponentMap.put("gamePlayerId", getOpponent(gamePlayer).getGamePlayerId());
             opponentMap.put("attack", getHitResults(getOpponent(gamePlayer)));
             resultData.add(1, opponentMap);
         }
         return resultData;
     }
+
 
 
     @RequestMapping(value = "/players", method = RequestMethod.POST)

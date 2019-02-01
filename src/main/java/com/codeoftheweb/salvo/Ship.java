@@ -21,6 +21,9 @@ public class Ship {
 //    private Set<String> shipLocations = new HashSet<>();
     private List<String> locations = new ArrayList<>();
 
+    private int damage;
+    private int hitPoints;
+
     public Ship() {
 
     }
@@ -28,6 +31,8 @@ public class Ship {
     public Ship(String shipType, List<String> locations) {
         this.shipType = shipType;
         this.locations = locations;
+        this.damage = 0;
+        this.hitPoints = locations.size();
     }
 
     public long getShipId() {
@@ -61,5 +66,13 @@ public class Ship {
 
     public void setlocation(List<String> locations) {
         this.locations = locations;
+    }
+
+    public int getDamage() {
+        return damage;
+    }
+
+    public void setDamage(int damage) {
+        this.damage = damage;
     }
 }

@@ -80,15 +80,15 @@ public class SalvoApplication {
             List<String> locations7 = Arrays.asList("A2", "A3", "A4");
             List<String> locations8 = Arrays.asList("G6", "H6");
 
-            Ship ship1 = new Ship("Destroyer", locations1);
-            Ship ship2 = new Ship("Submarine", locations2);
-            Ship ship3 = new Ship("Patrol Boat", locations3);
-            Ship ship4 = new Ship("Destroyer", locations4);
-            Ship ship5 = new Ship("Patrol Boat", locations5);
-            Ship ship6 = new Ship("Patrol Boat", locations6);
-            Ship ship7 = new Ship("Submarine", locations7);
-            Ship ship8 = new Ship("Patrol Boat", locations8);
-            Ship ship9 = new Ship("Destroyer", locations4);
+            Ship ship1 = new Ship("destroyer", locations1);
+            Ship ship2 = new Ship("submarine", locations2);
+            Ship ship3 = new Ship("patrol boat", locations3);
+            Ship ship4 = new Ship("destroyer", locations4);
+            Ship ship5 = new Ship("patrol boat", locations5);
+            Ship ship6 = new Ship("patrol boat", locations6);
+            Ship ship7 = new Ship("submarine", locations7);
+            Ship ship8 = new Ship("patrol boat", locations8);
+            Ship ship9 = new Ship("destroyer", locations4);
 
             gamePlayer1.addShip(ship1);
             gamePlayer1.addShip(ship2);
