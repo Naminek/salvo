@@ -212,7 +212,7 @@ public class SalvoController {
                 new LinkedHashMap<String, Object>() {{
                     put("turn", salvo.getTurn());
                     put("hits", getOneHitReault(salvo.getSalvoLocations(), gamePlayer, sunkShipList));
-                    System.out.println(sunkShipList);
+//                    System.out.println(sunkShipList);
                     if(sunkShipList.size() == 5) {
                         put("gameIsOver", true);
                     } else {

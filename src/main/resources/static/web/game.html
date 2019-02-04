@@ -73,14 +73,14 @@
                         <tbody>
                             <tr v-for="(salvo, index3) in locationArray" :key="index3">
                                 <td>{{ salvo[0] }}</td>
-                                <td :id=`salvo${salvo[1]}` @click="setSalvo(salvo[1])"></td>
-                                <td :id=`salvo${salvo[2]}` @click="setSalvo(salvo[2])"></td>
-                                <td :id=`salvo${salvo[3]}` @click="setSalvo(salvo[3])"></td>
-                                <td :id=`salvo${salvo[4]}` @click="setSalvo(salvo[4])"></td>
-                                <td :id=`salvo${salvo[5]}` @click="setSalvo(salvo[5])"></td>
-                                <td :id=`salvo${salvo[6]}` @click="setSalvo(salvo[6])"></td>
-                                <td :id=`salvo${salvo[7]}` @click="setSalvo(salvo[7])"></td>
-                                <td :id=`salvo${salvo[8]}` @click="setSalvo(salvo[8])"></td>
+                                <td :id=`salvo${salvo[1]}` @click="checkSalvo(salvo[1])"></td>
+                                <td :id=`salvo${salvo[2]}` @click="checkSalvo(salvo[2])"></td>
+                                <td :id=`salvo${salvo[3]}` @click="checkSalvo(salvo[3])"></td>
+                                <td :id=`salvo${salvo[4]}` @click="checkSalvo(salvo[4])"></td>
+                                <td :id=`salvo${salvo[5]}` @click="checkSalvo(salvo[5])"></td>
+                                <td :id=`salvo${salvo[6]}` @click="checkSalvo(salvo[6])"></td>
+                                <td :id=`salvo${salvo[7]}` @click="checkSalvo(salvo[7])"></td>
+                                <td :id=`salvo${salvo[8]}` @click="checkSalvo(salvo[8])"></td>
                             </tr>
                         </tbody>
                     </table>

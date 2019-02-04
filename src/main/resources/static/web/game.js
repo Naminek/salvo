@@ -491,27 +491,46 @@ var oneGame = new Vue({
 				this.showTurnNum = true;
 			}
 		},
-		setSalvo(salvoLoc) {
+		checkSalvo(salvoLoc) {
 			if (this.oneGameData.ships.length > 0) {
-				if (this.salvoLocationsArray.length != 0 && this.salvoLocationsArray.includes(salvoLoc)) {
-					let index = this.salvoLocationsArray.findIndex(salvo => salvo == salvoLoc);
-					this.salvoLocationsArray.splice(index, 1);
-					document.querySelector("#salvo" + salvoLoc).classList.remove("salvoLocation");
-					console.log(this.salvoLocationsArray);
-				} else {
-					if (this.salvoLocationsArray.length == 5) {
-						alert("You can't choose more than 5 locations")
+				if(this.oneGameData.salvos.length > 0) {
+					const mySalvos = [];
+					this.oneGameData.salvos.forEach(salvo => {
+						if(salvo.gamePlayerId == this.viewingPlayerId) {
+							mySalvos.push(salvo.locations);
+						}
+					});
+					const allMySalvos = [].concat.apply([], mySalvos);
+					if(allMySalvos.includes(salvoLoc)) {
+						alert("You already attack this place")
 					} else {
-						this.salvoLocationsArray.push(salvoLoc);
-						document.querySelector("#salvo" + salvoLoc).classList.add("salvoLocation");
-						console.log(this.salvoLocationsArray);
+						this.setSalvo(salvoLoc);
 					}
-					if (this.salvoLocationsArray.length == 5) {
-						this.salvosAreChosen = true;
-					}
+				} else {
+					this.setSalvo(salvoLoc);
 				}
-				this.showingSalvoLocations = this.salvoLocationsArray.join(",");
+				
 			}
+		},
+		setSalvo(salvoLocation) {
+			if (this.salvoLocationsArray.length != 0 && this.salvoLocationsArray.includes(salvoLocation)) {
+				let index = this.salvoLocationsArray.findIndex(salvo => salvo == salvoLocation);
+				this.salvoLocationsArray.splice(index, 1);
+				document.querySelector("#salvo" + salvoLocation).classList.remove("salvoLocation");
+				console.log(this.salvoLocationsArray);
+			} else {
+				if (this.salvoLocationsArray.length == 5) {
+					alert("You can't choose more than 5 locations")
+				} else {
+					this.salvoLocationsArray.push(salvoLocation);
+					document.querySelector("#salvo" + salvoLocation).classList.add("salvoLocation");
+					console.log(this.salvoLocationsArray);
+				}
+				if (this.salvoLocationsArray.length == 5) {
+					this.salvosAreChosen = true;
+				}
+			}
+			this.showingSalvoLocations = this.salvoLocationsArray.join(",");
 		},
 		placeSalvos() {
 			fetch("/api/games/players/" + this.gamePlayerId + "/salvos", {
