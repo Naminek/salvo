@@ -493,15 +493,15 @@ var oneGame = new Vue({
 		},
 		checkSalvo(salvoLoc) {
 			if (this.oneGameData.ships.length > 0) {
-				if(this.oneGameData.salvos.length > 0) {
+				if (this.oneGameData.salvos.length > 0) {
 					const mySalvos = [];
 					this.oneGameData.salvos.forEach(salvo => {
-						if(salvo.gamePlayerId == this.viewingPlayerId) {
+						if (salvo.gamePlayerId == this.viewingPlayerId) {
 							mySalvos.push(salvo.locations);
 						}
 					});
 					const allMySalvos = [].concat.apply([], mySalvos);
-					if(allMySalvos.includes(salvoLoc)) {
+					if (allMySalvos.includes(salvoLoc)) {
 						alert("You already attack this place")
 					} else {
 						this.setSalvo(salvoLoc);
@@ -509,7 +509,7 @@ var oneGame = new Vue({
 				} else {
 					this.setSalvo(salvoLoc);
 				}
-				
+
 			}
 		},
 		setSalvo(salvoLocation) {
@@ -679,5 +679,32 @@ var oneGame = new Vue({
 
 			}
 		}
+		// checkSink() {
+		// 	if (this.hitResults[0].attack.length > 0) {
+		// 		for (var i = 0; this.hitResults[0].attack.length; i++) {
+		// 			this.hitResults[0].attack[i].hits.forEach(hit => {
+		// 				if (hit.isSunk == true) {
+		// 					const sunkShip = hit.hitShip;
+		// 					console.log(sunkShip);
+		// 					if (sunkShip == "aircraft carrier") {
+		// 						document.getElementById("opponent_aircraft").disabled = true;
+		// 					}
+		// 					if (sunkShip == "battleship") {
+		// 						document.getElementById("opponent_battleship").disabled = true;
+		// 					}
+		// 					if (sunkShip == "destroyer") {
+		// 						document.getElementById("opponent_destroyer").disabled = true;
+		// 					}
+		// 					if (sunkShip == "submarine") {
+		// 						document.getElementById("opponent_submarine").disabled = true;
+		// 					}
+		// 					if (sunkShip == "patrol boat") {
+		// 						document.getElementById("opponent_patrol").disabled = true;
+		// 					}
+		// 				}
+		// 			});
+		// 		}
+		// 	}
+		// }
 	}
 })

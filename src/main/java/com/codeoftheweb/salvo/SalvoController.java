@@ -152,6 +152,16 @@ public class SalvoController {
                 put("ships", getShips(gamePlayer));
                 put("salvos", getSalvos(gamePlayer.getGame().getGamePlayers()));
                 put("hitResults", getResults(gamePlayer));
+                if(getOpponent(gamePlayer) != null) {
+                    put("opponentPlayer", true);
+                } else {
+                    put("opponentPlayer", false);
+                }
+                if(getOpponent(gamePlayer) != null && getOpponent(gamePlayer).getShips().size() > 0) {
+                    put("opponentShipsSet", true);
+                } else {
+                    put("opponentShipsSet", false);
+                }
             }};
         } else {
             return new ResponseEntity<>("Wrong user", HttpStatus.UNAUTHORIZED);
