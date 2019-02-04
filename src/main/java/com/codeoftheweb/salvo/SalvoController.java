@@ -212,13 +212,12 @@ public class SalvoController {
                 new LinkedHashMap<String, Object>() {{
                     put("turn", salvo.getTurn());
                     put("hits", getOneHitReault(salvo.getSalvoLocations(), gamePlayer, sunkShipList));
-//                    System.out.println(sunkShipList);
-//                    System.out.println(sunkShipList.size());
-//                    if(sunkShipList.size() == 5) {
-//                        put("gameIsOver", true);
-//                    } else {
-//                        put("gameIsOver", false);
-//                    }
+                    System.out.println(sunkShipList);
+                    if(sunkShipList.size() == 5) {
+                        put("gameIsOver", true);
+                    } else {
+                        put("gameIsOver", false);
+                    }
                 }}
         ).collect(Collectors.toList());
 
@@ -227,7 +226,6 @@ public class SalvoController {
 
 
     private List<Map<String, Object>> getOneHitReault(List<String> salvoLocations, GamePlayer gamePlayer, List<String> sunkShipList) {
-
         List<Map<String, Object>> result = new ArrayList<>();
         if (getOpponent(gamePlayer).getShips() != null) {
             getOpponent(gamePlayer).getShips().stream().forEach(ship -> {
@@ -238,24 +236,30 @@ public class SalvoController {
                         tempMap.put("hitPlace", salvoLocations.get(i));
                         ship.setDamage(ship.getDamage() + 1);
                         tempMap.put("totalDamage", ship.getDamage());
-//                        if ((ship.getShipType() == "aircraft carrier") && ship.getDamage() == 5) {
-//                            tempMap.put("isSunk", true);
-//                            sunkShipList.add(ship.getShipType());
-//                        } else if ((ship.getShipType() == "battleship") && ship.getDamage() == 4) {
-//                            tempMap.put("isSunk", true);
-//                            sunkShipList.add(ship.getShipType());
-//                        } else if ((ship.getShipType() == "destroyer") && ship.getDamage() == 3) {
-//                            tempMap.put("isSunk", true);
-//                            sunkShipList.add(ship.getShipType());
-//                        } else if ((ship.getShipType() == "submarine") && ship.getDamage() == 3) {
-//                            tempMap.put("isSunk", true);
-//                            sunkShipList.add(ship.getShipType());
-//                        } else if ((ship.getShipType() == "patrol boat") && ship.getDamage() == 2) {
-//                            tempMap.put("isSunk", true);
-//                            sunkShipList.add(ship.getShipType());
-//                        } else {
-//                            tempMap.put("isSunk", false);
-//                        }
+
+                        String aircraft = "aircraft carrier";
+                        String battleship = "battleship";
+                        String destroyer = "destroyer";
+                        String submarine = "submarine";
+                        String patrol = "patrol boat";
+                        if (ship.getShipType().equals(aircraft) && ship.getDamage() == 5) {
+                            tempMap.put("isSunk", true);
+                            sunkShipList.add(ship.getShipType());
+                        } else if (ship.getShipType().equals(battleship) && ship.getDamage() == 4) {
+                            tempMap.put("isSunk", true);
+                            sunkShipList.add(ship.getShipType());
+                        } else if (ship.getShipType().equals(destroyer) && ship.getDamage() == 3) {
+                            tempMap.put("isSunk", true);
+                            sunkShipList.add(ship.getShipType());
+                        } else if (ship.getShipType().equals(submarine) && ship.getDamage() == 3) {
+                            tempMap.put("isSunk", true);
+                            sunkShipList.add(ship.getShipType());
+                        } else if (ship.getShipType().equals(patrol) && ship.getDamage() == 2) {
+                            tempMap.put("isSunk", true);
+                            sunkShipList.add(ship.getShipType());
+                        } else {
+                            tempMap.put("isSunk", false);
+                        }
 
                         result.add(tempMap);
                     }
