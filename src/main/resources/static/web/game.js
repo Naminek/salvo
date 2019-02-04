@@ -261,7 +261,7 @@ var oneGame = new Vue({
 				.then(function (data) {
 					console.log('Request success: ', data);
 
-					if (data.status == 200) {
+					if (data.status == 201) {
 						window.location.reload();
 						alert("You placed all ships!!");
 					}
