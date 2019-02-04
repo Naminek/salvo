@@ -406,14 +406,12 @@ public class SalvoController {
     }
 
     private boolean checkSalvoTurn(GamePlayer gamePlayer, Salvo salvoLocations) {
-        gamePlayer.getSalvos().stream().map(salvo -> {
-            if (salvo.getTurn() == salvoLocations.getTurn()) {
-                return true;
-            } else {
-                return false;
-            }
-        });
-        return false;
+        List<Integer> myTurnList = gamePlayer.getSalvos().stream().map(salvo -> salvo.getTurn()).collect(Collectors.toList());
+        if(myTurnList.contains(salvoLocations.getTurn())) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
 

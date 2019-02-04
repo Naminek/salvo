@@ -109,6 +109,7 @@ var oneGame = new Vue({
 	mounted() {
 		this.getUrl(),
 			this.loadOneGame()
+		// this.interval = setInterval(this.loadOneGame, 10000)
 
 	},
 	methods: {
@@ -251,7 +252,6 @@ var oneGame = new Vue({
 			fetch("/api/games/players/" + this.gamePlayerId + "/ships", {
 					credentials: 'include',
 					method: "POST",
-					// body: `shipType=${ this.addEmail }&locations=${ this.addPassword }`,
 					headers: {
 						'Accept': 'application/json',
 						'Content-Type': 'application/json'
@@ -260,8 +260,15 @@ var oneGame = new Vue({
 				})
 				.then(function (data) {
 					console.log('Request success: ', data);
-					window.location.reload();
-					alert("You placed all ships!!");
+
+					if (data.status == 200) {
+						window.location.reload();
+						alert("You placed all ships!!");
+					}
+					if (data.status == 403) {
+						window.location.reload();
+						alert("You can't place more than 5 ships");
+					}
 				})
 				.catch(function (error) {
 					console.log('Request failure: ', error);
@@ -497,6 +504,8 @@ var oneGame = new Vue({
 					alert("No opponent player");
 				} else if (this.oneGameData.opponentShipsSet == false) {
 					alert("Please wait until opponent player place ships");
+				} else if (this.oneGameData.lastTurn.myLastTurn > this.oneGameData.lastTurn.opponentLastTurn) {
+					alert("Please wait for opponent's attack")
 				} else {
 					if (this.oneGameData.salvos.length > 0) {
 						const mySalvos = [];
@@ -552,8 +561,15 @@ var oneGame = new Vue({
 				})
 				.then(function (data) {
 					console.log('Request success: ', data);
-					window.location.reload();
-					alert("You attacked!!");
+					
+					if (data.status == 201) {
+						window.location.reload();
+						alert("You attacked!!");
+					}
+					if (data.status == 403) {
+						window.location.reload();
+						alert("You already attacked in this turn");
+					}
 				})
 				.catch(function (error) {
 					console.log('Request failure: ', error);
