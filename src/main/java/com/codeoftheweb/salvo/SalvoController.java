@@ -162,6 +162,7 @@ public class SalvoController {
                 } else {
                     put("opponentShipsSet", false);
                 }
+                put("lastTurn", getTurns(gamePlayer));
             }};
         } else {
             return new ResponseEntity<>("Wrong user", HttpStatus.UNAUTHORIZED);
@@ -293,6 +294,33 @@ public class SalvoController {
             resultData.add(1, opponentMap);
         }
         return resultData;
+    }
+
+    private Integer checkLastTurn(GamePlayer gamePlayer) {
+        List<Integer> turnList = gamePlayer.getSalvos().stream().map(salvo -> salvo.getTurn()).collect(Collectors.toList());
+        Comparator<Integer> compareTurn = new Comparator<Integer>() {
+            @Override
+            public int compare(Integer o1, Integer o2) {
+                return o1.compareTo(o2);
+            }
+        };
+        Collections.sort(turnList, compareTurn);
+        return turnList.get(turnList.size() - 1);
+    }
+
+    private Map<String, Integer> getTurns(GamePlayer gamePlayer) {
+        Map<String, Integer> turns = new LinkedHashMap<>();
+        if(gamePlayer.getSalvos().size() > 0) {
+            turns.put("myLastTurn", checkLastTurn(gamePlayer));
+        } else {
+            turns.put("myLastTurn", null);
+        }
+        if(getOpponent(gamePlayer) != null && getOpponent(gamePlayer).getSalvos().size() > 0) {
+            turns.put("opponentLastTurn", checkLastTurn(getOpponent(gamePlayer)));
+        } else {
+            turns.put("opponentLastTurn", null);
+        }
+        return turns;
     }
 
 

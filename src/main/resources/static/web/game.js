@@ -493,23 +493,28 @@ var oneGame = new Vue({
 		},
 		checkSalvo(salvoLoc) {
 			if (this.oneGameData.ships.length > 0) {
-				if (this.oneGameData.salvos.length > 0) {
-					const mySalvos = [];
-					this.oneGameData.salvos.forEach(salvo => {
-						if (salvo.gamePlayerId == this.viewingPlayerId) {
-							mySalvos.push(salvo.locations);
+				if (this.oneGameData.opponentPlayer == false) {
+					alert("No opponent player");
+				} else if (this.oneGameData.opponentShipsSet == false) {
+					alert("Please wait until opponent player place ships");
+				} else {
+					if (this.oneGameData.salvos.length > 0) {
+						const mySalvos = [];
+						this.oneGameData.salvos.forEach(salvo => {
+							if (salvo.gamePlayerId == this.viewingPlayerId) {
+								mySalvos.push(salvo.locations);
+							}
+						});
+						const allMySalvos = [].concat.apply([], mySalvos);
+						if (allMySalvos.includes(salvoLoc)) {
+							alert("You already attack this place")
+						} else {
+							this.setSalvo(salvoLoc);
 						}
-					});
-					const allMySalvos = [].concat.apply([], mySalvos);
-					if (allMySalvos.includes(salvoLoc)) {
-						alert("You already attack this place")
 					} else {
 						this.setSalvo(salvoLoc);
 					}
-				} else {
-					this.setSalvo(salvoLoc);
 				}
-
 			}
 		},
 		setSalvo(salvoLocation) {
