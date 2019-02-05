@@ -161,7 +161,7 @@
     color: crimson;
 }
 
-#turnNumber {
+#turnNumber, #finishMessage {
     color: crimson;
 }
 
@@ -197,4 +197,14 @@
 
 #opponent_shipcolor {
     color: rgb(60, 203, 228);
+}
+
+.attacking_player_opponent {
+    background-color: rgb(76, 150, 247);
+    min-width: 200px;
+}
+
+.attacking_player_me {
+    background-color: rgb(247, 90, 51);
+    min-width: 200px;
 }

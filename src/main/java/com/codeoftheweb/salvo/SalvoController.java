@@ -1,6 +1,5 @@
 package com.codeoftheweb.salvo;
 
-//import com.sun.org.apache.xerces.internal.xs.datatypes.ObjectList;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 
 @RestController
@@ -140,6 +138,10 @@ public class SalvoController {
                 }}).collect(Collectors.toList());
     }
 
+//    private Double setScores(GamePlayer gamePlayer) {
+//
+//    }
+
 
     @RequestMapping(value = "/game_view/{nn}", method = RequestMethod.GET)
     public Object getGameView(@PathVariable("nn") Long gamePlayerId, Authentication auth) {
@@ -226,8 +228,10 @@ public class SalvoController {
 //                    System.out.println(sunkShipList);
                     if(sunkShipList.size() == 5) {
                         put("gameIsOver", true);
+
                     } else {
                         put("gameIsOver", false);
+
                     }
                 }}
         ).collect(Collectors.toList());
@@ -297,15 +301,19 @@ public class SalvoController {
     }
 
     private Integer checkLastTurn(GamePlayer gamePlayer) {
-        List<Integer> turnList = gamePlayer.getSalvos().stream().map(salvo -> salvo.getTurn()).collect(Collectors.toList());
-        Comparator<Integer> compareTurn = new Comparator<Integer>() {
-            @Override
-            public int compare(Integer o1, Integer o2) {
-                return o1.compareTo(o2);
-            }
-        };
-        Collections.sort(turnList, compareTurn);
-        return turnList.get(turnList.size() - 1);
+        if(gamePlayer.getSalvos().size() > 0) {
+            List<Integer> turnList = gamePlayer.getSalvos().stream().map(salvo -> salvo.getTurn()).collect(Collectors.toList());
+            Comparator<Integer> compareTurn = new Comparator<Integer>() {
+                @Override
+                public int compare(Integer o1, Integer o2) {
+                    return o1.compareTo(o2);
+                }
+            };
+            Collections.sort(turnList, compareTurn);
+            return turnList.get(turnList.size() - 1);
+        } else {
+            return null;
+        }
     }
 
     private Map<String, Integer> getTurns(GamePlayer gamePlayer) {
@@ -322,6 +330,8 @@ public class SalvoController {
         }
         return turns;
     }
+
+
 
 
 
@@ -398,6 +408,9 @@ public class SalvoController {
             return new ResponseEntity<>(responseentity("error", "Not Correct player"), HttpStatus.UNAUTHORIZED);
         } else if (gamePlayer.getSalvos().size() != 0 && checkSalvoTurn(gamePlayer, salvoLocations)) {
             return new ResponseEntity<>(responseentity("error", "salvos are already placed in this turn"), HttpStatus.FORBIDDEN);
+        } else if ((checkLastTurn(gamePlayer) != null && checkLastTurn(getOpponent(gamePlayer)) != null && checkLastTurn(gamePlayer) > checkLastTurn(getOpponent(gamePlayer)))
+                || checkLastTurn(gamePlayer) != null && checkLastTurn(getOpponent(gamePlayer)) == null) {
+            return new ResponseEntity<>(responseentity("error", "Opponent player's turn"), HttpStatus.NOT_ACCEPTABLE);
         } else {
             gamePlayer.addSalvo(salvoLocations);
             salvoRepo.save(salvoLocations);

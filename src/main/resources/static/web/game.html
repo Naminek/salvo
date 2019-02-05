@@ -23,8 +23,11 @@
                         <button v-on:click="loseUser">Log out</button>
                     </form>
                 </div>
-                <div class="col-10">
+                <div class="col-6">
                     <p id="players"><span>{{ viewingPlayer }} (YOU)</span> vs <span>{{ opponentPlayer }}</span></p>
+                </div>
+                <div class="col-4">
+                    <button id="attacking_player" v-if="opponentShipPlaced">{{attackingPlayer}}</button>
                 </div>
             </div>
 
@@ -84,8 +87,11 @@
                             </tr>
                         </tbody>
                     </table>
+                    <div>
                     <p v-if="showTurnNum" id="turnNumber">Turn: {{currentTurn}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Please
                         choose 5 places to attack</p>
+                        <p v-if="game_is_over" id="finishMessage">{{finishMessage}}</p>
+                    </div>
                 </div>
             </div>
 
@@ -98,8 +104,7 @@
                                 class="ml-2" />vertical</label>
 
                     </div>
-                    <button value="aircraft carrier" @click="chooseShip($event)" id="aircraft">Aircraft
-                        Carrier</button><br>
+                    <button value="aircraft carrier" @click="chooseShip($event)" id="aircraft">Aircraft Carrier</button><br>
                     <button value="battleship" @click="chooseShip($event)" id="battleship">Battleship</button><br>
                     <button value="destroyer" @click="chooseShip($event)" id="destroyer">Destroyer</button><br>
                     <button value="submarine" @click="chooseShip($event)" id="submarine">Submarine</button><br>

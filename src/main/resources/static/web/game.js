@@ -52,64 +52,25 @@ var oneGame = new Vue({
 		showTurnNum: false,
 		currentTurn: null,
 		showingSalvoLocations: "",
-		// hitResults: [{
-		// 	"gamePlayerId": 1,
-		// 	"attack": [{
-		// 		"turn": 1,
-		// 		"hits": [{
-		// 			"hitShip": "destroyer",
-		// 			"hitPlace": "B5"
-		// 		}, {
-		// 			"hitShip": "destroyer",
-		// 			"hitPlace": "C5"
-		// 		}, {
-		// 			"hitShip": "patrol boat",
-		// 			"hitPlace": "F1"
-		// 		}]
-		// 	}, {
-		// 		"turn": 2,
-		// 		"hits": [{
-		// 			"hitShip": "destroyer",
-		// 			"hitPlace": "D5"
-		// 		}, {
-		// 			"hitShip": "patrol boat",
-		// 			"hitPlace": "F2"
-		// 		}]
-		// 	}]
-		// }, {
-		// 	"gamePlayerId": 2,
-		// 	"attack": [{
-		// 		"turn": 1,
-		// 		"hits": [{
-		// 			"hitShip": "patrol boat",
-		// 			"hitPlace": "B4"
-		// 		}, {
-		// 			"hitShip": "patrol boat",
-		// 			"hitPlace": "B5"
-		// 		}]
-		// 	}, {
-		// 		"turn": 2,
-		// 		"hits": [{
-		// 			"hitShip": "destroyer",
-		// 			"hitPlace": "E1"
-		// 		}, {
-		// 			"hitShip": "submarine",
-		// 			"hitPlace": "H3"
-		// 		}]
-		// 	}]
-		// }],
 		hitResults: null,
 		myAttacks: [],
 		opponentAttacks: [],
-		arrayToShowTable: []
+		arrayToShowTable: [],
+		attackingPlayer: null,
+		myFinishingStatus: null,
+		opponentFinishingStatus: null,
+		opponentShipPlaced: false,
+		interval: "",
+		finishMessage: "",
+		game_is_over: false
 	},
 	created() {
 		this.makeTable()
 	},
 	mounted() {
-		this.getUrl(),
-			this.loadOneGame()
-		// this.interval = setInterval(this.loadOneGame, 10000)
+		this.getUrl();
+		this.loadOneGame();
+		this.startInterval();
 
 	},
 	methods: {
@@ -134,7 +95,8 @@ var oneGame = new Vue({
 					this.showAttackResults();
 					this.markHitSalvo();
 					this.checkSink();
-
+					// this.showAttackingPlayer();
+					this.alertWinner();
 				})
 				.catch(function (error) {
 					console.log(error);
@@ -504,8 +466,10 @@ var oneGame = new Vue({
 					alert("No opponent player");
 				} else if (this.oneGameData.opponentShipsSet == false) {
 					alert("Please wait until opponent player place ships");
-				} else if (this.oneGameData.lastTurn.myLastTurn > this.oneGameData.lastTurn.opponentLastTurn) {
-					alert("Please wait for opponent's attack")
+					// } else if (this.oneGameData.lastTurn.myLastTurn > this.oneGameData.lastTurn.opponentLastTurn) {
+					// 	alert("Please wait for opponent's attack")
+				} else if(this.myFinishingStatus == true || this.opponentFinishingStatus == true) {
+					alert("Game finished");
 				} else {
 					if (this.oneGameData.salvos.length > 0) {
 						const mySalvos = [];
@@ -561,7 +525,7 @@ var oneGame = new Vue({
 				})
 				.then(function (data) {
 					console.log('Request success: ', data);
-					
+
 					if (data.status == 201) {
 						window.location.reload();
 						alert("You attacked!!");
@@ -570,15 +534,17 @@ var oneGame = new Vue({
 						window.location.reload();
 						alert("You already attacked in this turn");
 					}
+					if (data.status == 406) {
+						window.location.reload();
+						alert("Please wait until opponent Player attack")
+					}
 				})
 				.catch(function (error) {
 					console.log('Request failure: ', error);
 					alert("Failure");
 				});
 		},
-
 		showAttackResults() {
-
 			for (var i = 0; i < this.hitResults.length; i++) {
 				console.log(this.hitResults[i].gamePlayerId);
 				for (var j = 0; j < this.hitResults[i].attack.length; j++) {
@@ -614,12 +580,8 @@ var oneGame = new Vue({
 						this.compareTurn(this.opponentAttacks);
 					}
 				}
-
-
 			}
-
 			let maxTurn = this.currentTurn - 1;
-
 			for (var i = 0; i < maxTurn; i++) {
 				let oneHitObject = {};
 				oneHitObject.turn = i + 1;
@@ -699,7 +661,7 @@ var oneGame = new Vue({
 				}
 
 			}
-		}
+		},
 		// checkSink() {
 		// 	if (this.hitResults[0].attack.length > 0) {
 		// 		for (var i = 0; this.hitResults[0].attack.length; i++) {
@@ -727,5 +689,57 @@ var oneGame = new Vue({
 		// 		}
 		// 	}
 		// }
+		showAttackingPlayer() {
+			if (this.oneGameData.ships.length > 0 && this.oneGameData.opponentShipsSet == true) {
+				this.opponentShipPlaced = true;
+				if ((this.oneGameData.lastTurn.myLastTurn != null && this.oneGameData.lastTurn.opponentLastTurn == null)
+				|| this.oneGameData.lastTurn.myLastTurn > this.oneGameData.lastTurn.opponentLastTurn) {
+					this.attackingPlayer = "Your opponent's turn";
+					document.querySelector("#attacking_player").classList.remove("attacking_player_me");
+					document.querySelector("#attacking_player").classList.add("attacking_player_opponent");
+				} else if(this.oneGameData.lastTurn.myLastTurn == null || this.oneGameData.lastTurn.myLastTurn <= this.oneGameData.lastTurn.opponentLastTurn){
+					this.attackingPlayer = "Your turn";
+					console.log(document.getElementById("attacking_player"))
+					console.log(document.querySelector("#attacking_player"));
+					document.querySelector("#attacking_player").classList.remove("attacking_player_opponent");
+					document.querySelector("#attacking_player").classList.add("attacking_player_me");
+				}
+			}
+		},
+		alertWinner() {
+			if (this.hitResults[0].attack.length > 0 && this.hitResults[1].attack.length > 0 && (this.oneGameData.lastTurn.myLastTurn == this.oneGameData.lastTurn.opponentLastTurn)) {
+				if (this.hitResults[0].attack[this.hitResults[0].attack.length - 1].gameIsOver == true 
+					|| this.hitResults[1].attack[this.hitResults[1].attack.length - 1].gameIsOver == true) {
+					this.myFinishingStatus = this.hitResults[0].attack[this.hitResults[0].attack.length - 1].gameIsOver;
+					this.opponentFinishingStatus = this.hitResults[1].attack[this.hitResults[1].attack.length - 1].gameIsOver;
+					if (this.myFinishingStatus == true && this.opponentFinishingStatus == true) {
+						alert("Tied game!!");
+						this.finishMessage = "finish: Tied game"
+						this.game_is_over = true;
+						this.showTurnNum = false;
+					} else if (this.myFinishingStatus == true && this.opponentFinishingStatus == false) {
+						alert("You won!!");
+						this.finishMessage = "finish: You won!"
+						this.game_is_over = true;
+						this.showTurnNum = false;
+					} else if (this.myFinishingStatus == false && this.opponentFinishingStatus == true) {
+						alert("You lost...");
+						this.finishMessage = "finish: You lost..."
+						this.game_is_over = true;
+						this.showTurnNum = false;
+					}
+				}
+				this.stopInterval();
+			}
+		},
+		setScore(){
+
+		},
+		startInterval() {
+			this.interval = setInterval(() => {window.location.reload()}, 10000);
+		},
+		stopInterval() {
+			clearInterval(this.interval);
+		}
 	}
 })
