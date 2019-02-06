@@ -428,6 +428,8 @@ public class SalvoController {
         } else if ((checkLastTurn(gamePlayer) != null && checkLastTurn(getOpponent(gamePlayer)) != null && checkLastTurn(gamePlayer) > checkLastTurn(getOpponent(gamePlayer)))
                 || checkLastTurn(gamePlayer) != null && checkLastTurn(getOpponent(gamePlayer)) == null) {
             return new ResponseEntity<>(responseentity("error", "Opponent player's turn"), HttpStatus.NOT_ACCEPTABLE);
+        } else if(checkIfGameIsOver(gamePlayer) || checkIfGameIsOver(getOpponent(gamePlayer))) {
+            return new ResponseEntity<>(responseentity("error", "Game finished"), HttpStatus.NOT_ACCEPTABLE);
         } else {
             gamePlayer.addSalvo(salvoLocations);
             salvoRepo.save(salvoLocations);
