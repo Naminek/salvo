@@ -28,6 +28,7 @@ var gameData = new Vue({
                     console.log(json);
                     this.viewingPlayer = json[0].player.email;
                     this.games = json[0].games;
+                    console.log(json[1]);
                     this.results = json[1];
                     console.log(this.games);
                     console.log(this.results);

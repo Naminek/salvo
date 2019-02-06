@@ -21,14 +21,16 @@ public class SalvoController {
     private PlayerRepository playerRepo;
     private ShipRepository shipRepo;
     private SalvoRepository salvoRepo;
+    private ScoreRepository scoreRepo;
 
     @Autowired
-    public SalvoController(GameRepository gameRepo, GamePlayerRepository gamePlayerRepo, PlayerRepository playerRepo, ShipRepository shipRepo, SalvoRepository salvoRepo) {
+    public SalvoController(GameRepository gameRepo, GamePlayerRepository gamePlayerRepo, PlayerRepository playerRepo, ShipRepository shipRepo, SalvoRepository salvoRepo, ScoreRepository scoreRepo) {
         this.gameRepo = gameRepo;
         this.gamePlayerRepo = gamePlayerRepo;
         this.playerRepo = playerRepo;
         this.shipRepo = shipRepo;
         this.salvoRepo = salvoRepo;
+        this.scoreRepo = scoreRepo;
     }
 
 
@@ -136,7 +138,6 @@ public class SalvoController {
                 put("ships", getShips(gamePlayer));
                 put("salvos", getSalvos(gamePlayer.getGame().getGamePlayers()));
                 put("hitResults", getResults(gamePlayer));
-                System.out.println("getGameView " + gamePlayer );
                 if(getOpponent(gamePlayer) != null) {
                     put("opponentPlayer", true);
                 } else {
@@ -148,6 +149,7 @@ public class SalvoController {
                     put("opponentShipsSet", false);
                 }
                 put("lastTurn", getTurns(gamePlayer));
+                put("winner", getWinner(gamePlayer));
             }};
         } else {
             return new ResponseEntity<>("Wrong user", HttpStatus.UNAUTHORIZED);
@@ -184,7 +186,6 @@ public class SalvoController {
     }
 
     private GamePlayer getOpponent(GamePlayer gamePlayer) {
-        System.out.println(gamePlayer);
         Game game = gamePlayer.getGame();
         LinkedHashMap<String, GamePlayer> helperMap = new LinkedHashMap<>();
         if(game.getGamePlayers().size() < 2) {
@@ -286,18 +287,7 @@ public class SalvoController {
         myMap.put("gamePlayerId", gamePlayer.getGamePlayerId());
         myMap.put("attack", getHitResults(gamePlayer));
         resultData.add(0, myMap);
-        Score score = new Score();
-//        if(checkIfGameIsOver(gamePlayer) && checkIfGameIsOver(getOpponent(gamePlayer))) {
-//            score.setScore(0.5);
-//            score.setFinishDate(new Date());
-//        } else if(checkIfGameIsOver(gamePlayer) && !checkIfGameIsOver(getOpponent(gamePlayer))) {
-//            score.setScore(1.0);
-//            score.setFinishDate(new Date());
-//        } else if(!checkIfGameIsOver(gamePlayer) && checkIfGameIsOver(getOpponent(gamePlayer))) {
-//            score.setScore(0.0);
-//            score.setFinishDate(new Date());
-//        }
-        gamePlayer.getPlayer().addScore(score);
+
         if (getOpponent(gamePlayer) != null) {
             Map<String, Object> opponentMap = new LinkedHashMap<>();
             opponentMap.put("gamePlayerId", getOpponent(gamePlayer).getGamePlayerId());
@@ -308,7 +298,7 @@ public class SalvoController {
     }
 
     private Integer checkLastTurn(GamePlayer gamePlayer) {
-        if(getOpponent(gamePlayer) != null && getOpponent(gamePlayer).getShips().size() > 0 && gamePlayer.getShips().size() > 0 && gamePlayer.getSalvos().size() > 0) {
+        if(gamePlayer.getSalvos().size() > 0) {
             List<Integer> turnList = gamePlayer.getSalvos().stream().map(salvo -> salvo.getTurn()).collect(Collectors.toList());
             Comparator<Integer> compareTurn = new Comparator<Integer>() {
                 @Override
@@ -347,6 +337,32 @@ public class SalvoController {
             }
         } else {
             return false;
+        }
+    }
+
+    private String getWinner(GamePlayer gamePlayer) {
+        if(getOpponent(gamePlayer) != null) {
+
+            if(checkIfGameIsOver(gamePlayer) && checkIfGameIsOver(getOpponent(gamePlayer))) {
+                Score score = new Score(0.5, new Date());
+                gamePlayer.getPlayer().addScore(score);
+                scoreRepo.save(score);
+                return "tied";
+            } else if (checkIfGameIsOver(gamePlayer)) {
+                Score score1 = new Score(1.0, new Date());
+                gamePlayer.getPlayer().addScore(score1);
+                scoreRepo.save(score1);
+                return gamePlayer.getPlayer().getEmail();
+            } else if (checkIfGameIsOver(getOpponent(gamePlayer))) {
+                Score score2 = new Score(0.0, new Date());
+                gamePlayer.getPlayer().addScore(score2);
+                scoreRepo.save(score2);
+                return getOpponent(gamePlayer).getPlayer().getEmail();
+            } else {
+                return null;
+            }
+        } else {
+            return null;
         }
     }
 
