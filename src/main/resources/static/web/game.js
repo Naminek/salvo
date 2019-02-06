@@ -70,7 +70,7 @@ var oneGame = new Vue({
 	mounted() {
 		this.getUrl();
 		this.loadOneGame();
-		this.startInterval();
+		// this.startInterval();
 
 	},
 	methods: {
@@ -236,6 +236,7 @@ var oneGame = new Vue({
 					console.log('Request failure: ', error);
 					alert("Failure");
 				});
+				this.startInterval();
 		},
 		gridHover(location) {
 			if (this.chosenShip != "" && this.checkShipDirection != null) {
@@ -619,76 +620,24 @@ var oneGame = new Vue({
 			array.sort(compare);
 		},
 		checkSink() {
-			let myAttack = this.hitResults[0].attack
-			let opponentAircraft = 0;
-			let opponentBattleship = 0;
-			let opponentDestroyer = 0;
-			let opponentSubmarine = 0;
-			let opponentPatrol = 0;
-			for (var i = 0; i < myAttack.length; i++) {
-				for (var j = 0; j < myAttack[i].hits.length; j++) {
-					if (myAttack[i].hits[j].hitShip == "aircraft carrier") {
-						opponentAircraft = opponentAircraft + 1;
-					}
-					if (myAttack[i].hits[j].hitShip == "battleship") {
-						opponentBattleship = opponentBattleship + 1;
-					}
-					if (myAttack[i].hits[j].hitShip == "destroyer") {
-						opponentDestroyer = opponentDestroyer + 1;
-					}
-					if (myAttack[i].hits[j].hitShip == "submarine") {
-						opponentSubmarine = opponentSubmarine + 1;
-					}
-					if (myAttack[i].hits[j].hitShip == "patrol boat") {
-						opponentPatrol = opponentPatrol + 1;
-					}
-
-					if (opponentAircraft == 5) {
-						document.getElementById("opponent_aircraft").disabled = true;
-					}
-					if (opponentBattleship == 4) {
-						document.getElementById("opponent_battleship").disabled = true;
-					}
-					if (opponentDestroyer == 3) {
-						document.getElementById("opponent_destroyer").disabled = true;
-					}
-					if (opponentSubmarine == 3) {
-						document.getElementById("opponent_submarine").disabled = true;
-					}
-					if (opponentPatrol == 2) {
-						document.getElementById("opponent_patrol").disabled = true;
-					}
+			if (this.hitResults[0].attack.length > 0) {
+				if(this.hitResults[0].attack[this.hitResults[0].attack.length - 1].isSunk.aircraftIsSunk == true) {
+					document.getElementById("opponent_aircraft").disabled = true;
 				}
-
+				if(this.hitResults[0].attack[this.hitResults[0].attack.length - 1].isSunk.battleshipIsSunk == true) {
+					document.getElementById("opponent_battleship").disabled = true;
+				}
+				if(this.hitResults[0].attack[this.hitResults[0].attack.length - 1].isSunk.destroyerIsSunk == true) {
+					document.getElementById("opponent_destroyer").disabled = true;
+				}
+				if(this.hitResults[0].attack[this.hitResults[0].attack.length - 1].isSunk.submarineIsSunk == true) {
+					document.getElementById("opponent_submarine").disabled = true;
+				}
+				if(this.hitResults[0].attack[this.hitResults[0].attack.length - 1].isSunk.patrolIsSunk == true) {
+					document.getElementById("opponent_patrol").disabled = true;
+				}
 			}
 		},
-		// checkSink() {
-		// 	if (this.hitResults[0].attack.length > 0) {
-		// 		for (var i = 0; this.hitResults[0].attack.length; i++) {
-		// 			this.hitResults[0].attack[i].hits.forEach(hit => {
-		// 				if (hit.isSunk == true) {
-		// 					const sunkShip = hit.hitShip;
-		// 					console.log(sunkShip);
-		// 					if (sunkShip == "aircraft carrier") {
-		// 						document.getElementById("opponent_aircraft").disabled = true;
-		// 					}
-		// 					if (sunkShip == "battleship") {
-		// 						document.getElementById("opponent_battleship").disabled = true;
-		// 					}
-		// 					if (sunkShip == "destroyer") {
-		// 						document.getElementById("opponent_destroyer").disabled = true;
-		// 					}
-		// 					if (sunkShip == "submarine") {
-		// 						document.getElementById("opponent_submarine").disabled = true;
-		// 					}
-		// 					if (sunkShip == "patrol boat") {
-		// 						document.getElementById("opponent_patrol").disabled = true;
-		// 					}
-		// 				}
-		// 			});
-		// 		}
-		// 	}
-		// }
 		showAttackingPlayer() {
 			if (this.oneGameData.ships.length > 0 && this.oneGameData.opponentShipsSet == true) {
 				this.opponentShipPlaced = true;
@@ -712,6 +661,9 @@ var oneGame = new Vue({
 					|| this.hitResults[1].attack[this.hitResults[1].attack.length - 1].gameIsOver == true) {
 					this.myFinishingStatus = this.hitResults[0].attack[this.hitResults[0].attack.length - 1].gameIsOver;
 					this.opponentFinishingStatus = this.hitResults[1].attack[this.hitResults[1].attack.length - 1].gameIsOver;
+					console.log(this.myFinishingStatus);
+					console.log(this.opponentFinishingStatus);
+
 					if (this.myFinishingStatus == true && this.opponentFinishingStatus == true) {
 						alert("Tied game!!");
 						this.finishMessage = "finish: Tied game"

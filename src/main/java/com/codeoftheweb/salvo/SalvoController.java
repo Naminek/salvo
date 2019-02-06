@@ -52,21 +52,6 @@ public class SalvoController {
         return playerRepo.findByUserName(authentication.getName());
     }
 
-//    private List<Map<String, Object>> getGames() {
-//        return gameRepo
-//                .findAll()
-//                .stream()
-//                .map(game -> new LinkedHashMap<String, Object>() {{
-//                    put("id", game.getGameId());
-//                    put("created", game.getCreatedDate());
-//                    put("finished", checkFinished(game.getScores()));
-//                    put("gamePlayers", game.getGamePlayers().stream().map(gamePlayer -> new LinkedHashMap<String, Object>() {{
-//                        put("id", gamePlayer.getGamePlayerId());
-//                        put("player", getPlayers(gamePlayer.getPlayer()));
-//                        put("score", gamePlayer.getScoreInGame(game));
-//                    }}).collect(Collectors.toList()));
-//                }}).collect(Collectors.toList());
-//    }
 
     private List<Map<String, Object>> getGames() {
         return gameRepo
@@ -138,9 +123,6 @@ public class SalvoController {
                 }}).collect(Collectors.toList());
     }
 
-//    private Double setScores(GamePlayer gamePlayer) {
-//
-//    }
 
 
     @RequestMapping(value = "/game_view/{nn}", method = RequestMethod.GET)
@@ -154,6 +136,7 @@ public class SalvoController {
                 put("ships", getShips(gamePlayer));
                 put("salvos", getSalvos(gamePlayer.getGame().getGamePlayers()));
                 put("hitResults", getResults(gamePlayer));
+                System.out.println("getGameView " + gamePlayer );
                 if(getOpponent(gamePlayer) != null) {
                     put("opponentPlayer", true);
                 } else {
@@ -201,13 +184,18 @@ public class SalvoController {
     }
 
     private GamePlayer getOpponent(GamePlayer gamePlayer) {
+        System.out.println(gamePlayer);
         Game game = gamePlayer.getGame();
         LinkedHashMap<String, GamePlayer> helperMap = new LinkedHashMap<>();
+        if(game.getGamePlayers().size() < 2) {
+            helperMap.put("opponent", null);
+        } else {
         game.getGamePlayers().forEach(gp -> {
             if (gp.getGamePlayerId() != gamePlayer.getGamePlayerId()) {
                 helperMap.put("opponent", gp);
             }
         });
+        }
         return helperMap.get("opponent");
     }
 
@@ -220,61 +208,68 @@ public class SalvoController {
             }
         };
         Collections.sort(salvoList, compareSalvo);
-        List<String> sunkShipList = new ArrayList<>();
+        Map<String, Integer> totalDamages = new LinkedHashMap<>();
+        Map<String, Object> isSunk = new LinkedHashMap<>();
+        totalDamages.put("aircraft carrier", 0);
+        isSunk.put("aircraftIsSunk", false);
+        totalDamages.put("battleship", 0);
+        isSunk.put("battleshipIsSunk", false);
+        totalDamages.put("destroyer", 0);
+        isSunk.put("destroyerIsSunk", false);
+        totalDamages.put("submarine", 0);
+        isSunk.put("submarineIsSunk", false);
+        totalDamages.put("patrol boat", 0);
+        isSunk.put("patrolIsSunk", false);
+
         List<Map<String, Object>> hitList = salvoList.stream().map(salvo ->
                 new LinkedHashMap<String, Object>() {{
                     put("turn", salvo.getTurn());
-                    put("hits", getOneHitReault(salvo.getSalvoLocations(), gamePlayer, sunkShipList));
-//                    System.out.println(sunkShipList);
-                    if(sunkShipList.size() == 5) {
+                    put("hits", getOneHitResult(salvo.getSalvoLocations(), gamePlayer, totalDamages));
+                    put("totalDamage", totalDamages);
+                        if (totalDamages.get("aircraft carrier") == 5) {
+                            isSunk.replace("aircraftIsSunk", true);
+                        }
+                        if (totalDamages.get("battleship") == 4) {
+                            isSunk.replace("battleshipIsSunk", true);
+                        }
+                        if (totalDamages.get("destroyer") == 3) {
+                            isSunk.replace("destroyerIsSunk", true);
+                        }
+                        if (totalDamages.get("submarine") == 3) {
+                            isSunk.replace("submarineIsSunk", true);
+                        }
+                        if (totalDamages.get("patrol boat") == 2) {
+                            isSunk.replace("patrolIsSunk", true);
+                        }
+                        put("isSunk", isSunk);
+                    if(isSunk.get("aircraftIsSunk").equals(true) && isSunk.get("battleshipIsSunk").equals(true)
+                            && isSunk.get("destroyerIsSunk").equals(true) && isSunk.get("submarineIsSunk").equals(true)
+                            && isSunk.get("patrolIsSunk").equals(true)) {
                         put("gameIsOver", true);
-
                     } else {
                         put("gameIsOver", false);
 
                     }
                 }}
         ).collect(Collectors.toList());
-
         return hitList;
     }
 
 
-    private List<Map<String, Object>> getOneHitReault(List<String> salvoLocations, GamePlayer gamePlayer, List<String> sunkShipList) {
+
+    private List<Map<String, Object>> getOneHitResult(List<String> salvoLocations, GamePlayer gamePlayer, Map<String, Integer> totalDamages) {
         List<Map<String, Object>> result = new ArrayList<>();
         if (getOpponent(gamePlayer).getShips() != null) {
+
             getOpponent(gamePlayer).getShips().stream().forEach(ship -> {
+//                System.out.println("gpig" + getOpponent(gamePlayer).getGamePlayerId() + " ship " + ship.getShipType() + " / " + ship.getDamage());
                 for (int i = 0; i < salvoLocations.size(); i++) {
                     if (ship.getlocations().contains(salvoLocations.get(i))) {
                         Map<String, Object> tempMap = new LinkedHashMap<>();
                         tempMap.put("hitShip", ship.getShipType());
                         tempMap.put("hitPlace", salvoLocations.get(i));
-                        ship.setDamage(ship.getDamage() + 1);
-                        tempMap.put("totalDamage", ship.getDamage());
 
-                        String aircraft = "aircraft carrier";
-                        String battleship = "battleship";
-                        String destroyer = "destroyer";
-                        String submarine = "submarine";
-                        String patrol = "patrol boat";
-                        if (ship.getShipType().equals(aircraft) && ship.getDamage() == 5) {
-                            tempMap.put("isSunk", true);
-                            sunkShipList.add(ship.getShipType());
-                        } else if (ship.getShipType().equals(battleship) && ship.getDamage() == 4) {
-                            tempMap.put("isSunk", true);
-                            sunkShipList.add(ship.getShipType());
-                        } else if (ship.getShipType().equals(destroyer) && ship.getDamage() == 3) {
-                            tempMap.put("isSunk", true);
-                            sunkShipList.add(ship.getShipType());
-                        } else if (ship.getShipType().equals(submarine) && ship.getDamage() == 3) {
-                            tempMap.put("isSunk", true);
-                            sunkShipList.add(ship.getShipType());
-                        } else if (ship.getShipType().equals(patrol) && ship.getDamage() == 2) {
-                            tempMap.put("isSunk", true);
-                            sunkShipList.add(ship.getShipType());
-                        } else {
-                            tempMap.put("isSunk", false);
-                        }
+                        totalDamages.replace(ship.getShipType(), totalDamages.get(ship.getShipType()) + 1);
 
                         result.add(tempMap);
                     }
@@ -291,6 +286,18 @@ public class SalvoController {
         myMap.put("gamePlayerId", gamePlayer.getGamePlayerId());
         myMap.put("attack", getHitResults(gamePlayer));
         resultData.add(0, myMap);
+        Score score = new Score();
+//        if(checkIfGameIsOver(gamePlayer) && checkIfGameIsOver(getOpponent(gamePlayer))) {
+//            score.setScore(0.5);
+//            score.setFinishDate(new Date());
+//        } else if(checkIfGameIsOver(gamePlayer) && !checkIfGameIsOver(getOpponent(gamePlayer))) {
+//            score.setScore(1.0);
+//            score.setFinishDate(new Date());
+//        } else if(!checkIfGameIsOver(gamePlayer) && checkIfGameIsOver(getOpponent(gamePlayer))) {
+//            score.setScore(0.0);
+//            score.setFinishDate(new Date());
+//        }
+        gamePlayer.getPlayer().addScore(score);
         if (getOpponent(gamePlayer) != null) {
             Map<String, Object> opponentMap = new LinkedHashMap<>();
             opponentMap.put("gamePlayerId", getOpponent(gamePlayer).getGamePlayerId());
@@ -301,7 +308,7 @@ public class SalvoController {
     }
 
     private Integer checkLastTurn(GamePlayer gamePlayer) {
-        if(gamePlayer.getSalvos().size() > 0) {
+        if(getOpponent(gamePlayer) != null && getOpponent(gamePlayer).getShips().size() > 0 && gamePlayer.getShips().size() > 0 && gamePlayer.getSalvos().size() > 0) {
             List<Integer> turnList = gamePlayer.getSalvos().stream().map(salvo -> salvo.getTurn()).collect(Collectors.toList());
             Comparator<Integer> compareTurn = new Comparator<Integer>() {
                 @Override
@@ -331,7 +338,17 @@ public class SalvoController {
         return turns;
     }
 
-
+    private boolean checkIfGameIsOver(GamePlayer gamePlayer) {
+        if(checkLastTurn(gamePlayer) != null && checkLastTurn(getOpponent(gamePlayer)) != null && checkLastTurn(gamePlayer) == checkLastTurn(getOpponent(gamePlayer))) {
+            if(getHitResults(gamePlayer).get(getHitResults(gamePlayer).size() - 1).get("gameIsOver").equals(true)) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
 
 
 
