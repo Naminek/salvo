@@ -33,7 +33,7 @@
 
             <div class="row" id="locations">
                 <div class="col-6">
-                    <table>
+                    <table class="ship_grid">
                         <thead>
                             <tr>
                                 <th v-for="(row, index1) in rowNumber" :key="index1">{{ row }}</th>
@@ -66,7 +66,7 @@
                 </div>
 
                 <div class="col-6">
-                    <table>
+                    <table class="salvo_grid">
                         <thead>
                             <tr>
                                 <th v-for="(row, index1) in rowNumber" :key="index1">{{ row }}</th>
@@ -88,8 +88,8 @@
                         </tbody>
                     </table>
                     <div>
-                    <p v-if="showTurnNum" id="turnNumber">Turn: {{currentTurn}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Please
-                        choose 5 places to attack</p>
+                        <p v-if="showTurnNum" id="turnNumber">Turn: {{currentTurn}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Please
+                            choose 5 places to attack</p>
                         <p v-if="game_is_over" id="finishMessage">{{finishMessage}}</p>
                     </div>
                 </div>
@@ -98,18 +98,19 @@
             <div class="row mt-3">
                 <div class="col-4">
                     <p id="ships_to_place">Your ships</p>
-                    <div v-if="showRadio">
-                        <label><input type="radio" name="direction" value="horizontal" @click="decideDirection($event)" />horizontal</label>
-                        <label><input type="radio" name="direction" value="vertical" @click="decideDirection($event)"
-                                class="ml-2" />vertical</label>
+                    <div class="ship_buttons">
+                        <div v-if="showRadio">
+                            <label><input type="radio" name="direction" value="horizontal" @click="decideDirection($event)" />horizontal</label>
+                            <label><input type="radio" name="direction" value="vertical" @click="decideDirection($event)"
+                                    class="ml-2" />vertical</label>
 
+                        </div>
+                        <button value="aircraft carrier" @click="chooseShip($event)" id="aircraft">Aircraft Carrier</button><br>
+                        <button value="battleship" @click="chooseShip($event)" id="battleship">Battleship</button><br>
+                        <button value="destroyer" @click="chooseShip($event)" id="destroyer">Destroyer</button><br>
+                        <button value="submarine" @click="chooseShip($event)" id="submarine">Submarine</button><br>
+                        <button value="patrol boat" @click="chooseShip($event)" id="patrol">Patrol Boat</button>
                     </div>
-                    <button value="aircraft carrier" @click="chooseShip($event)" id="aircraft">Aircraft Carrier</button><br>
-                    <button value="battleship" @click="chooseShip($event)" id="battleship">Battleship</button><br>
-                    <button value="destroyer" @click="chooseShip($event)" id="destroyer">Destroyer</button><br>
-                    <button value="submarine" @click="chooseShip($event)" id="submarine">Submarine</button><br>
-                    <button value="patrol boat" @click="chooseShip($event)" id="patrol">Patrol Boat</button>
-
                 </div>
                 <div class="col-4">
                     <p>You are placing...</p>
@@ -141,7 +142,7 @@
                         <tr v-for="(attack, index4) in arrayToShowTable" :key="index4">
                             <td>{{ attack.turn }}</td>
                             <td v-for="(opponentHit, index7) in attack.opponentHits" :key="index7">{{
-                                    opponentHit.shipType }}: {{ opponentHit.damage }}</td>
+                                opponentHit.shipType }}: {{ opponentHit.damage }}</td>
                         </tr>
                     </tbody>
 
@@ -157,8 +158,8 @@
                     <tbody>
                         <tr v-for="(attack, index6) in arrayToShowTable" :key="index6">
                             <td>{{ attack.turn }}</td>
-                            
-                                <td v-for="(myHit, index5) in attack.myHits">{{ myHit.shipType }}: {{ myHit.damage }}</td>
+
+                            <td v-for="(myHit, index5) in attack.myHits">{{ myHit.shipType }}: {{ myHit.damage }}</td>
                         </tr>
                     </tbody>
 

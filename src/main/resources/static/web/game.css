@@ -208,3 +208,11 @@
     background-color: rgb(247, 90, 51);
     min-width: 200px;
 }
+
+.salvo_grid {
+    cursor: pointer;
+}
+
+.ship_grid {
+    cursor: pointer;
+}

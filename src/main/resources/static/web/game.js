@@ -684,9 +684,7 @@ var oneGame = new Vue({
 				this.stopInterval();
 			}
 		},
-		setScore(){
-
-		},
+	
 		startInterval() {
 			this.interval = setInterval(() => {window.location.reload()}, 10000);
 		},

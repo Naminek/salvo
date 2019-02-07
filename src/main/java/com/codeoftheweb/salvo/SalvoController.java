@@ -342,21 +342,33 @@ public class SalvoController {
 
     private String getWinner(GamePlayer gamePlayer) {
         if(getOpponent(gamePlayer) != null) {
-
+            Score score = new Score();
             if(checkIfGameIsOver(gamePlayer) && checkIfGameIsOver(getOpponent(gamePlayer))) {
-                Score score = new Score(0.5, new Date());
-                gamePlayer.getPlayer().addScore(score);
-                scoreRepo.save(score);
+                if(checkIfScoreAdded(gamePlayer)) {
+                    score.setScore(0.5);
+                    score.setFinishDate(new Date());
+                    gamePlayer.getGame().addScore(score);
+                    gamePlayer.getPlayer().addScore(score);
+                    scoreRepo.save(score);
+                }
                 return "tied";
             } else if (checkIfGameIsOver(gamePlayer)) {
-                Score score1 = new Score(1.0, new Date());
-                gamePlayer.getPlayer().addScore(score1);
-                scoreRepo.save(score1);
+                if(checkIfScoreAdded(gamePlayer)) {
+                    score.setScore(1.0);
+                    score.setFinishDate(new Date());
+                    gamePlayer.getGame().addScore(score);
+                    gamePlayer.getPlayer().addScore(score);
+                    scoreRepo.save(score);
+                }
                 return gamePlayer.getPlayer().getEmail();
             } else if (checkIfGameIsOver(getOpponent(gamePlayer))) {
-                Score score2 = new Score(0.0, new Date());
-                gamePlayer.getPlayer().addScore(score2);
-                scoreRepo.save(score2);
+                if(checkIfScoreAdded(gamePlayer)) {
+                    score.setScore(0.0);
+                    score.setFinishDate(new Date());
+                    gamePlayer.getGame().addScore(score);
+                    gamePlayer.getPlayer().addScore(score);
+                    scoreRepo.save(score);
+                }
                 return getOpponent(gamePlayer).getPlayer().getEmail();
             } else {
                 return null;
@@ -364,6 +376,27 @@ public class SalvoController {
         } else {
             return null;
         }
+    }
+
+    private boolean checkIfScoreAdded(GamePlayer gamePlayer) {
+        if(gamePlayer.getGame().getScores().size() == 0) {
+            return true;
+//        } else if(gamePlayer.getGame().getScores().size() > 2) {
+//            return false;
+        } else {
+//            List<Score> scoreAdded = gamePlayer.getGame().getScores().stream().collect(Collectors.toList());
+//            scoreAdded.stream().filter(score -> score.getPlayer() == gamePlayer.getPlayer());
+//            if(scoreAdded.size() == 0) {
+//                return true;
+//            } else return false;
+            List<Score> scoreList = gamePlayer.getPlayer().getScores().stream().filter(score -> score.getGame() == gamePlayer.getGame()).collect(Collectors.toList());
+            if(scoreList.size() > 0) {
+                return false;
+            } else {
+                return true;
+            }
+        }
+
     }
 
 
@@ -461,6 +494,7 @@ public class SalvoController {
             return false;
         }
     }
+
 
 
 }
