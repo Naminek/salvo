@@ -381,14 +381,7 @@ public class SalvoController {
     private boolean checkIfScoreAdded(GamePlayer gamePlayer) {
         if(gamePlayer.getGame().getScores().size() == 0) {
             return true;
-//        } else if(gamePlayer.getGame().getScores().size() > 2) {
-//            return false;
         } else {
-//            List<Score> scoreAdded = gamePlayer.getGame().getScores().stream().collect(Collectors.toList());
-//            scoreAdded.stream().filter(score -> score.getPlayer() == gamePlayer.getPlayer());
-//            if(scoreAdded.size() == 0) {
-//                return true;
-//            } else return false;
             List<Score> scoreList = gamePlayer.getPlayer().getScores().stream().filter(score -> score.getGame() == gamePlayer.getGame()).collect(Collectors.toList());
             if(scoreList.size() > 0) {
                 return false;

@@ -695,7 +695,7 @@ var oneGame = new Vue({
 		},
 
 		startInterval() {
-			if (this.oneGameData.ships.length > 0) {
+			if (this.oneGameData.opponentShipsSet == true) {
 				if ((this.oneGameData.lastTurn.myLastTurn != null && this.oneGameData.lastTurn.opponentLastTurn == null) ||
 					this.oneGameData.lastTurn.myLastTurn > this.oneGameData.lastTurn.opponentLastTurn) {
 						this.myTurn = false;
