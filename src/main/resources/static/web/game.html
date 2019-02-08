@@ -18,8 +18,9 @@
         </div>
         <div v-show="!loading" class="container">
             <div class="row">
-                <div class="col-2">
-                    <form id="logout-form" v-if="showLogout">
+                <div class="col-2" id="link_buttons">
+                    <a href="games.html"><button>Back</button></a>
+                    <form id="logout-form" v-if="showLogout" class="ml-1">
                         <button v-on:click="loseUser">Log out</button>
                     </form>
                 </div>
@@ -27,7 +28,8 @@
                     <p id="players"><span>{{ viewingPlayer }} (YOU)</span> vs <span>{{ opponentPlayer }}</span></p>
                 </div>
                 <div class="col-4">
-                    <button id="attacking_player" v-if="opponentShipPlaced">{{attackingPlayer}}</button>
+                    <button v-if="opponentsTurn" class="opponent_turn">Opoonent's turn</button>
+                    <button v-if="myTurn" class="my_turn">My turn</button>
                 </div>
             </div>
 
@@ -100,7 +102,8 @@
                     <p id="ships_to_place">Your ships</p>
                     <div class="ship_buttons">
                         <div v-if="showRadio">
-                            <label><input type="radio" name="direction" value="horizontal" @click="decideDirection($event)" />horizontal</label>
+                            <label><input type="radio" name="direction" value="horizontal" @click="decideDirection($event)"
+                                    checked="checked" />horizontal</label>
                             <label><input type="radio" name="direction" value="vertical" @click="decideDirection($event)"
                                     class="ml-2" />vertical</label>
 

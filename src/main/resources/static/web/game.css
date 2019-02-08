@@ -199,12 +199,12 @@
     color: rgb(60, 203, 228);
 }
 
-.attacking_player_opponent {
+.opponent_turn {
     background-color: rgb(76, 150, 247);
     min-width: 200px;
 }
 
-.attacking_player_me {
+.my_turn {
     background-color: rgb(247, 90, 51);
     min-width: 200px;
 }
@@ -216,3 +216,9 @@
 .ship_grid {
     cursor: pointer;
 }
+
+#link_buttons {
+    display: flex;
+    justify-content: center;
+}
+
