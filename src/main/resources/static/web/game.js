@@ -63,7 +63,9 @@ var oneGame = new Vue({
 		myTurn: false,
 		interval: "",
 		finishMessage: "",
-		game_is_over: false
+		game_is_over: false,
+		allMySalvos: [],
+		mySalvo: []
 	},
 	created() {
 		this.makeTable()
@@ -466,6 +468,16 @@ var oneGame = new Vue({
 				this.showTurnNum = true;
 			}
 		},
+		salvoHover(salvoLoc) {
+			if(this.allMySalvos.includes(salvoLoc)) {
+				document.querySelector("#salvo" + salvoLoc).classList.remove("salvoHover");
+			} else {
+				document.querySelector("#salvo" + salvoLoc).classList.add("salvoHover");
+			}
+		},
+		removeSalvoHover(salvoLoc) {
+			document.querySelector("#salvo" + salvoLoc).classList.remove("salvoHover");
+		},
 		checkSalvo(salvoLoc) {
 			if (this.oneGameData.ships.length > 0) {
 				if (this.oneGameData.opponentPlayer == false) {
@@ -478,14 +490,14 @@ var oneGame = new Vue({
 					alert("Game finished");
 				} else {
 					if (this.oneGameData.salvos.length > 0) {
-						const mySalvos = [];
+						this.mySalvos = [];
 						this.oneGameData.salvos.forEach(salvo => {
 							if (salvo.gamePlayerId == this.viewingPlayerId) {
-								mySalvos.push(salvo.locations);
+								this.mySalvos.push(salvo.locations);
 							}
 						});
-						const allMySalvos = [].concat.apply([], mySalvos);
-						if (allMySalvos.includes(salvoLoc)) {
+						this.allMySalvos = [].concat.apply([], this.mySalvos);
+						if (this.allMySalvos.includes(salvoLoc)) {
 							alert("You already attack this place")
 						} else {
 							this.setSalvo(salvoLoc);
@@ -698,8 +710,8 @@ var oneGame = new Vue({
 			if (this.oneGameData.opponentShipsSet == true) {
 				if ((this.oneGameData.lastTurn.myLastTurn != null && this.oneGameData.lastTurn.opponentLastTurn == null) ||
 					this.oneGameData.lastTurn.myLastTurn > this.oneGameData.lastTurn.opponentLastTurn) {
-						this.myTurn = false;
-						this.opponentsTurn = true;
+					this.myTurn = false;
+					this.opponentsTurn = true;
 
 					this.interval = setInterval(() => {
 						window.location.reload()

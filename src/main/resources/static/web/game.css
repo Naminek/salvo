@@ -222,3 +222,7 @@
     justify-content: center;
 }
 
+.salvoHover {
+    background-color: rgba(248, 201, 114, 0.822);
+    border-color: rgba(248, 201, 114, 0.822);
+}
