@@ -469,6 +469,7 @@ var oneGame = new Vue({
 			}
 		},
 		salvoHover(salvoLoc) {
+			if(this.oneGameData.ships.length > 0 && this.oneGameData.opponentShipsSet == true)
 			if(this.allMySalvos.includes(salvoLoc)) {
 				document.querySelector("#salvo" + salvoLoc).classList.remove("salvoHover");
 			} else {
