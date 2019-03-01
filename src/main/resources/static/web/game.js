@@ -515,6 +515,7 @@ var oneGame = new Vue({
 				this.salvoLocationsArray.splice(index, 1);
 				document.querySelector("#salvo" + salvoLocation).classList.remove("salvoLocation");
 				console.log(this.salvoLocationsArray);
+				this.salvosAreChosen = false;
 			} else {
 				if (this.salvoLocationsArray.length == 5) {
 					alert("You can't choose more than 5 locations")
@@ -525,7 +526,7 @@ var oneGame = new Vue({
 				}
 				if (this.salvoLocationsArray.length == 5) {
 					this.salvosAreChosen = true;
-				}
+				} 
 			}
 			this.showingSalvoLocations = this.salvoLocationsArray.join(",");
 		},
@@ -656,23 +657,7 @@ var oneGame = new Vue({
 				}
 			}
 		},
-		// showAttackingPlayer() {
-		// 	if (this.oneGameData.ships.length > 0 && this.oneGameData.opponentShipsSet == true) {
-		// 		this.opponentShipPlaced = true;
-		// 		if ((this.oneGameData.lastTurn.myLastTurn != null && this.oneGameData.lastTurn.opponentLastTurn == null) ||
-		// 			this.oneGameData.lastTurn.myLastTurn > this.oneGameData.lastTurn.opponentLastTurn) {
-		// 			this.attackingPlayer = "Your opponent's turn";
-		// 			document.querySelector("#attacking_player").classList.remove("attacking_player_me");
-		// 			document.querySelector("#attacking_player").classList.add("attacking_player_opponent");
-		// 		} else if (this.oneGameData.lastTurn.myLastTurn == null || this.oneGameData.lastTurn.myLastTurn <= this.oneGameData.lastTurn.opponentLastTurn) {
-		// 			this.attackingPlayer = "Your turn";
-		// 			console.log(document.getElementById("attacking_player"))
-		// 			console.log(document.querySelector("#attacking_player"));
-		// 			document.querySelector("#attacking_player").classList.remove("attacking_player_opponent");
-		// 			document.querySelector("#attacking_player").classList.add("attacking_player_me");
-		// 		}
-		// 	}
-		// },
+		
 		alertWinner() {
 			if (this.hitResults[0].attack.length > 0 && this.hitResults[1].attack.length > 0 && (this.oneGameData.lastTurn.myLastTurn == this.oneGameData.lastTurn.opponentLastTurn)) {
 				if (this.hitResults[0].attack[this.hitResults[0].attack.length - 1].gameIsOver == true ||
